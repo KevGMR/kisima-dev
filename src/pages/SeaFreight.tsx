@@ -1,40 +1,55 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  Ship, 
-  Clock, 
-  Shield, 
-  Package, 
-  CheckCircle, 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Ship,
+  Clock,
+  Shield,
+  Package,
+  CheckCircle,
   ArrowRight,
   DollarSign,
   Archive,
-  Phone
+  Phone,
 } from "lucide-react";
 
 const benefits = [
   {
     title: "Cost Effective",
-    description: "Most economical shipping option for larger shipments and household goods",
-    icon: DollarSign
+    description:
+      "Most economical shipping option for larger shipments and household goods",
+    icon: DollarSign,
   },
   {
-    title: "Large Capacity", 
-    description: "Ship large items, furniture, and bulk orders that won't fit in air freight",
-    icon: Archive
+    title: "Large Capacity",
+    description:
+      "Ship large items, furniture, and bulk orders that won't fit in air freight",
+    icon: Archive,
   },
   {
     title: "Consolidation Service",
-    description: "Combine multiple purchases into one shipment to save on shipping costs",
-    icon: Package
+    description:
+      "Combine multiple purchases into one shipment to save on shipping costs",
+    icon: Package,
   },
   {
     title: "Secure Transit",
-    description: "Professional sea freight handling with full insurance coverage included",
-    icon: Shield
-  }
+    description:
+      "Professional sea freight handling with full insurance coverage included",
+    icon: Shield,
+  },
 ];
 
 const features = [
@@ -45,34 +60,41 @@ const features = [
   "Door-to-door delivery service",
   "Insurance coverage up to £1,000",
   "Real-time tracking updates",
-  "Professional cargo handling"
+  "Professional cargo handling",
 ];
 
 const faqItems = [
   {
-    question: "How long does sea freight take from UK to Kenya?",
-    answer: "Sea freight typically takes 4-6 weeks from our UK warehouse to delivery in Kenya, depending on vessel schedules, customs clearance, and final destination."
+    question:
+      "How long does sea freight take from international locations to your country?",
+    answer:
+      "Sea freight typically takes 4-6 weeks from our international warehouse to deliver in your country, depending on vessel schedules, customs clearance, and final destination.",
   },
   {
     question: "What can I ship via sea freight?",
-    answer: "Sea freight is perfect for larger items like furniture, household goods, electronics, clothing in bulk, books, and any items where speed isn't critical. Some restrictions apply for hazardous materials."
+    answer:
+      "Sea freight is perfect for larger items like furniture, household goods, electronics, clothing in bulk, books, and any items where speed isn't critical. Some restrictions apply for hazardous materials.",
   },
   {
     question: "How is sea freight pricing calculated?",
-    answer: "Sea freight pricing is based on volume (cubic meters) or weight, whichever is higher, plus customs clearance fees and delivery charges. We offer transparent pricing with detailed breakdowns."
+    answer:
+      "Sea freight pricing is based on volume (cubic meters) or weight, whichever is higher, plus customs clearance fees and delivery charges. We offer transparent pricing with detailed breakdowns.",
   },
   {
     question: "Can I consolidate multiple purchases?",
-    answer: "Yes! Our consolidation service allows you to combine multiple purchases into one shipment, significantly reducing per-item shipping costs. We hold items for up to 60 days."
+    answer:
+      "Yes! Our consolidation service allows you to combine multiple purchases into one shipment, significantly reducing per-item shipping costs. We hold items for up to 60 days.",
   },
   {
     question: "Is sea freight safe for valuable items?",
-    answer: "Absolutely. All sea freight shipments include insurance up to £1,000, and we use professional packing methods. Additional insurance is available for high-value items."
+    answer:
+      "Absolutely. All sea freight shipments include insurance up to £1,000, and we use professional packing methods. Additional insurance is available for high-value items.",
   },
   {
     question: "Do you handle customs clearance for sea freight?",
-    answer: "Yes, we handle all customs documentation and clearance procedures in Kenya. Our experienced team ensures smooth processing of your sea freight shipments."
-  }
+    answer:
+      "Yes, we handle all customs documentation and clearance procedures in listed countries. Our experienced team ensures smooth processing of your sea freight shipments.",
+  },
 ];
 
 export default function SeaFreight() {
@@ -89,21 +111,33 @@ export default function SeaFreight() {
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Sea Freight Services
-                <span className="block text-accent">UK to Kenya</span>
+                <span className="block text-accent">
+                  International to your doorstep
+                </span>
               </h1>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Cost-effective sea freight delivery in approximately 6 weeks. 
-                Perfect for larger shipments, household goods, and when you want to maximize value.
+                Cost-effective sea freight delivery in approximately 6 weeks.
+                Perfect for larger shipments, household goods, and when you want
+                to maximize value.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="cta" size="lg" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get Sea Freight Quote
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
                 </Button>
-                <Button variant="outline" size="lg" className="bg-white/10 border-white text-white hover:bg-white hover:text-primary" asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-white/10 border-white text-white hover:bg-white hover:text-primary"
+                  asChild
+                >
                   <a href="tel:+442030898178">
                     <Phone className="mr-2 h-4 w-4" />
                     Speak to Our Team
@@ -135,7 +169,9 @@ export default function SeaFreight() {
                   <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-4">
                     <Ship className="h-8 w-8 text-accent" />
                   </div>
-                  <CardTitle className="text-white text-xl">Sea Freight Cargo</CardTitle>
+                  <CardTitle className="text-white text-xl">
+                    Sea Freight Cargo
+                  </CardTitle>
                   <CardDescription className="text-white/80">
                     Professional ocean freight service with consolidation
                   </CardDescription>
@@ -143,7 +179,10 @@ export default function SeaFreight() {
                 <CardContent>
                   <ul className="space-y-3">
                     {features.slice(0, 4).map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2 text-white/90">
+                      <li
+                        key={index}
+                        className="flex items-center gap-2 text-white/90"
+                      >
                         <CheckCircle className="h-4 w-4 text-accent" />
                         <span className="text-sm">{feature}</span>
                       </li>
@@ -164,13 +203,17 @@ export default function SeaFreight() {
               Why Choose Our Sea Freight Service?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Economical, reliable ocean freight transportation perfect for larger shipments
+              Economical, reliable ocean freight transportation perfect for
+              larger shipments
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit) => (
-              <Card key={benefit.title} className="text-center group hover:shadow-lg transition-all duration-300">
+              <Card
+                key={benefit.title}
+                className="text-center group hover:shadow-lg transition-all duration-300"
+              >
                 <CardHeader>
                   <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                     <benefit.icon className="h-8 w-8 text-primary" />
@@ -205,10 +248,14 @@ export default function SeaFreight() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-8">
                 <Button variant="cta" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get Detailed Quote
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
@@ -221,7 +268,7 @@ export default function SeaFreight() {
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Timeline & Sample Rates
               </h3>
-              
+
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -236,7 +283,7 @@ export default function SeaFreight() {
                       <Badge variant="secondary">1-3 days</Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Ocean transit to Mombasa</span>
+                      <span>Ocean transit to your country's port</span>
                       <Badge variant="secondary">3-4 weeks</Badge>
                     </div>
                     <div className="flex justify-between items-center">
@@ -249,7 +296,9 @@ export default function SeaFreight() {
                     </div>
                     <div className="border-t pt-3 flex justify-between items-center font-semibold">
                       <span>Total delivery time</span>
-                      <Badge className="bg-accent text-accent-foreground">~6 weeks</Badge>
+                      <Badge className="bg-accent text-accent-foreground">
+                        ~6 weeks
+                      </Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -258,24 +307,33 @@ export default function SeaFreight() {
               <Card>
                 <CardHeader>
                   <CardTitle>Sample Sea Freight Rates</CardTitle>
-                  <CardDescription>Indicative pricing - request quote for exact rates</CardDescription>
+                  <CardDescription>
+                    Indicative pricing - request quote for exact rates
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span>Up to 50kg</span>
-                      <span className="font-semibold text-accent">From £45</span>
+                      <span className="font-semibold text-accent">
+                        From £45
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Up to 100kg</span>
-                      <span className="font-semibold text-accent">From £75</span>
+                      <span className="font-semibold text-accent">
+                        From £75
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Up to 200kg</span>
-                      <span className="font-semibold text-accent">From £120</span>
+                      <span className="font-semibold text-accent">
+                        From £120
+                      </span>
                     </div>
                     <div className="text-xs text-muted-foreground pt-2">
-                      * Rates include basic insurance. Consolidation service available.
+                      * Rates include basic insurance. Consolidation service
+                      available.
                     </div>
                   </div>
                 </CardContent>
@@ -299,7 +357,11 @@ export default function SeaFreight() {
 
           <Accordion type="single" collapsible className="space-y-4">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+              <AccordionItem
+                key={index}
+                value={`item-${index}`}
+                className="border border-border rounded-lg px-6"
+              >
                 <AccordionTrigger className="text-left hover:no-underline">
                   {item.question}
                 </AccordionTrigger>
@@ -316,22 +378,40 @@ export default function SeaFreight() {
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ship Cost-Effectively to Kenya
+            Ship Cost-Effectively to Your Country
           </h2>
           <p className="text-xl mb-8 text-white/90">
             Get your personalized sea freight quote for the best value shipping.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="cta" size="xl" className="bg-accent hover:bg-accent-hover" asChild>
-              <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="cta"
+              size="xl"
+              className="bg-accent hover:bg-accent-hover"
+              asChild
+            >
+              <a
+                href="https://quote.kisimacargo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Get Sea Freight Quote
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            
-            <Button variant="outline" size="xl" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" asChild>
-              <a href="https://app.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+
+            <Button
+              variant="outline"
+              size="xl"
+              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              asChild
+            >
+              <a
+                href="https://app.kisimacargo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Track Your Shipment
               </a>
             </Button>

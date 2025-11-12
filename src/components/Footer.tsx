@@ -1,5 +1,12 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Facebook,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
 import kisimLogo from "@/assets/kisima-logo.png";
 
 const footerLinks = {
@@ -13,7 +20,11 @@ const footerLinks = {
     { name: "About Us", href: "/about" },
     { name: "Blog", href: "/blog" },
     { name: "Contact Us", href: "/contact" },
-    { name: "Track Shipment", href: "https://app.kisimacargo.com", external: true },
+    {
+      name: "Track Shipment",
+      href: "https://app.kisimacargo.com",
+      external: true,
+    },
   ],
   legal: [
     { name: "Privacy Policy", href: "/privacy-policy" },
@@ -34,30 +45,37 @@ export default function Footer() {
               <img src={kisimLogo} alt="Kisima Cargo" className="h-8" />
             </div>
             <p className="text-sm text-secondary-foreground/80 leading-relaxed">
-              Fast, transparent, door-to-door shipping from UK to Kenya. 
-              Consolidation, customs clearance and delivery made simple.
+              Fast, transparent, door-to-door shipping from anywhere in the
+              world. Consolidation, customs clearance and delivery made simple.
             </p>
-            
+
             {/* Contact Info - Head Office */}
             <div className="space-y-3">
-              <h4 className="font-semibold text-accent text-xs uppercase tracking-wide">Kenya (Head Office)</h4>
+              <h4 className="font-semibold text-accent text-xs uppercase tracking-wide">
+                Kenya (Head Office)
+              </h4>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-accent flex-shrink-0" />
-                  <a href="tel:+254795554137" className="hover:text-accent transition-colors">
+                  <a
+                    href="tel:+254795554137"
+                    className="hover:text-accent transition-colors"
+                  >
                     +254 795 554 137
                   </a>
                 </div>
                 <div className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
-                  <a 
-                    href="https://maps.google.com/?q=Warehouse+No.+2+Shell+Petrol+Station+Lunga+Lunga+Road+Industrial+Area+Nairobi" 
-                    target="_blank" 
+                  <a
+                    href="https://maps.google.com/?q=Warehouse+No.+2+Shell+Petrol+Station+Lunga+Lunga+Road+Industrial+Area+Nairobi"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-accent transition-colors leading-relaxed"
                   >
-                    Warehouse No. 2, Shell Petrol Station,<br />
-                    Lunga Lunga Road, Industrial Area,<br />
+                    Warehouse No. 2, Shell Petrol Station,
+                    <br />
+                    Lunga Lunga Road, Industrial Area,
+                    <br />
                     Nairobi, Kenya
                   </a>
                 </div>
@@ -66,18 +84,24 @@ export default function Footer() {
 
             {/* UK Office */}
             <div className="space-y-2">
-              <h4 className="font-semibold text-accent text-xs uppercase tracking-wide">United Kingdom</h4>
+              <h4 className="font-semibold text-accent text-xs uppercase tracking-wide">
+                United Kingdom
+              </h4>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center gap-2">
                   <Phone className="h-4 w-4 text-accent flex-shrink-0" />
-                  <a href="tel:+442030898178" className="hover:text-accent transition-colors">
+                  <a
+                    href="tel:+442030898178"
+                    className="hover:text-accent transition-colors"
+                  >
                     +44 20 3089 8178
                   </a>
                 </div>
                 <div className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
                   <span className="leading-relaxed text-secondary-foreground/70">
-                    Unit 7 Adler Industrial Estate,<br />
+                    Unit 7 Adler Industrial Estate,
+                    <br />
                     Betam Road, Hayes
                   </span>
                 </div>
@@ -87,23 +111,35 @@ export default function Footer() {
             {/* Email */}
             <div className="flex items-center gap-2 text-sm pt-2">
               <Mail className="h-4 w-4 text-accent" />
-              <a href="mailto:info@kisimacargo.com" className="hover:text-accent transition-colors">
+              <a
+                href="mailto:info@kisimacargo.com"
+                className="hover:text-accent transition-colors"
+              >
                 info@kisimacargo.com
               </a>
             </div>
 
             {/* Social Links */}
             <div className="flex space-x-4 pt-2">
-              <a href="#" className="text-secondary-foreground/60 hover:text-accent transition-colors">
+              <a
+                href="#"
+                className="text-secondary-foreground/60 hover:text-accent transition-colors"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-secondary-foreground/60 hover:text-accent transition-colors">
+              {/* <a href="#" className="text-secondary-foreground/60 hover:text-accent transition-colors">
                 <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-secondary-foreground/60 hover:text-accent transition-colors">
+              </a> */}
+              <a
+                href="#"
+                className="text-secondary-foreground/60 hover:text-accent transition-colors"
+              >
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a href="#" className="text-secondary-foreground/60 hover:text-accent transition-colors">
+              <a
+                href="#"
+                className="text-secondary-foreground/60 hover:text-accent transition-colors"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
@@ -128,34 +164,51 @@ export default function Footer() {
 
           {/* Global Offices */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-accent">Global Offices</h3>
+            <h3 className="font-semibold text-lg mb-4 text-accent">
+              Global Offices
+            </h3>
             <div className="space-y-4 text-sm">
               <div>
-                <h4 className="font-semibold text-secondary-foreground mb-1">UAE (Dubai)</h4>
+                <h4 className="font-semibold text-secondary-foreground mb-1">
+                  UAE (Dubai)
+                </h4>
                 <p className="text-secondary-foreground/70 text-xs leading-relaxed">
-                  Al Zaroni Building M:05,<br />
+                  Al Zaroni Building M:05,
+                  <br />
                   Near Gold Souk Gate 1, Al Ras, Deira
                 </p>
-                <a href="tel:+971544218463" className="text-accent hover:underline text-xs">
+                <a
+                  href="tel:+971544218463"
+                  className="text-accent hover:underline text-xs"
+                >
                   +971 54 421 8463
                 </a>
               </div>
-              
+
               <div>
-                <h4 className="font-semibold text-secondary-foreground mb-1">South Africa</h4>
+                <h4 className="font-semibold text-secondary-foreground mb-1">
+                  South Africa
+                </h4>
                 <p className="text-secondary-foreground/70 text-xs leading-relaxed">
-                  Freight City, Unit 4,<br />
+                  Freight City, Unit 4,
+                  <br />
                   597 Innes Road, Jet Park, Johannesburg
                 </p>
               </div>
-              
+
               <div>
-                <h4 className="font-semibold text-secondary-foreground mb-1">China (Guangdong)</h4>
+                <h4 className="font-semibold text-secondary-foreground mb-1">
+                  China (Guangdong)
+                </h4>
                 <p className="text-secondary-foreground/70 text-xs leading-relaxed">
-                  Warehouse No. 07, Building C1,<br />
+                  Warehouse No. 07, Building C1,
+                  <br />
                   Dunhao Logistics Center, Foshan City
                 </p>
-                <a href="tel:+8619065400105" className="text-accent hover:underline text-xs">
+                <a
+                  href="tel:+8619065400105"
+                  className="text-accent hover:underline text-xs"
+                >
                   +86 190 6540 0105
                 </a>
               </div>
@@ -164,10 +217,12 @@ export default function Footer() {
 
           {/* Newsletter & CTA */}
           <div>
-            <h3 className="font-semibold text-lg mb-4 text-accent">Get Started</h3>
+            <h3 className="font-semibold text-lg mb-4 text-accent">
+              Get Started
+            </h3>
             <div className="space-y-4">
               <p className="text-sm text-secondary-foreground/80">
-                Ready to ship from UK to Kenya? Get a personalized quote today.
+                Ready to ship internationally? Get a personalized quote today.
               </p>
               <div className="space-y-2">
                 <a
@@ -195,9 +250,10 @@ export default function Footer() {
         <div className="border-t border-secondary-foreground/20 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-secondary-foreground/60">
-              © {new Date().getFullYear()} Kisima Cargo Ltd. All rights reserved.
+              © {new Date().getFullYear()} Kisima Cargo Ltd. All rights
+              reserved.
             </div>
-            
+
             <div className="flex flex-wrap items-center gap-4 text-sm">
               {footerLinks.legal.map((link, index) => (
                 <span key={link.name} className="flex items-center gap-4">

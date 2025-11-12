@@ -1,103 +1,137 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  ShoppingCart, 
-  Package, 
-  Truck, 
-  CheckCircle, 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  ShoppingCart,
+  Package,
+  Truck,
+  CheckCircle,
   ArrowRight,
   Search,
   CreditCard,
   Home as HomeIcon,
   Phone,
-  Star
+  Star,
 } from "lucide-react";
 
 const benefits = [
   {
     title: "Personal Shopping",
-    description: "We shop for you from any UK retailer, ensuring you get exactly what you want",
-    icon: Search
+    description:
+      "We shop for you from any International retailer, ensuring you get exactly what you want",
+    icon: Search,
   },
   {
-    title: "Secure Payment", 
-    description: "Safe and secure payment processing with fraud protection and buyer guarantees",
-    icon: CreditCard
+    title: "Secure Payment",
+    description:
+      "Safe and secure payment processing with fraud protection and buyer guarantees",
+    icon: CreditCard,
   },
   {
     title: "Consolidation",
-    description: "Combine multiple purchases into one shipment to save on shipping costs",
-    icon: Package
+    description:
+      "Combine multiple purchases into one shipment to save on shipping costs",
+    icon: Package,
   },
   {
     title: "Door-to-Door",
-    description: "Complete service from UK stores directly to your doorstep in Kenya",
-    icon: HomeIcon
-  }
+    description:
+      "Complete service from international stores directly to your doorstep in your country",
+    icon: HomeIcon,
+  },
 ];
 
 const steps = [
   {
     title: "Browse & Select",
-    description: "Find items on UK websites or send us your shopping list"
+    description: "Find items on UK websites or send us your shopping list",
   },
   {
     title: "We Purchase",
-    description: "Our team buys the items using our UK address and payment methods"
+    description:
+      "Our team buys the items using our UK address and payment methods",
   },
   {
     title: "Consolidate",
-    description: "Items are collected at our warehouse and consolidated for shipping"
+    description:
+      "Items are collected at our warehouse and consolidated for shipping",
   },
   {
     title: "Ship & Deliver",
-    description: "Choose air or sea freight and receive items at your door in Kenya"
-  }
+    description:
+      "Choose air or sea freight and receive items at your door in your country",
+  },
 ];
 
 const features = [
-  "Personal shopping from any UK retailer",
-  "Access to UK-only deals and sales",
+  "Personal shopping from any international retailer",
+  "Access to international-only deals and sales",
   "Secure payment processing",
   "Item inspection and quality check",
   "Free storage for up to 60 days",
   "Consolidation to reduce shipping costs",
   "Insurance coverage included",
-  "Real-time updates on your orders"
+  "Real-time updates on your orders",
 ];
 
 const popularStores = [
-  "Amazon UK", "ASOS", "Next", "John Lewis", "M&S", "Argos", 
-  "Currys", "Very", "H&M", "Zara", "Boots", "Superdrug"
+  "Amazon UK",
+  "ASOS",
+  "Next",
+  "John Lewis",
+  "M&S",
+  "Argos",
+  "Currys",
+  "Very",
+  "H&M",
+  "Zara",
+  "Boots",
+  "Superdrug",
 ];
 
 const faqItems = [
   {
     question: "How does the buying service work?",
-    answer: "Simply send us the links to items you want to buy, or provide a detailed description. We'll purchase them using our UK address and payment methods, then consolidate and ship them to you in Kenya."
+    answer:
+      "Simply send us the links to items you want to buy, or provide a detailed description. We'll purchase them using our International address and payment methods, then consolidate and ship them to you in your country of choice.",
   },
   {
     question: "What stores can you buy from?",
-    answer: "We can purchase from virtually any UK online retailer including Amazon UK, ASOS, Next, John Lewis, M&S, and thousands of others. If a store ships within the UK, we can usually buy from them."
+    answer:
+      "We can purchase from virtually any international online retailer including Amazon UK, ASOS, Next, John Lewis, M&S, and thousands of others. If a store ships internationally, we can usually buy from them.",
   },
   {
     question: "How much does the buying service cost?",
-    answer: "We charge a small service fee (typically 5-10% of item value) plus shipping costs. The exact fee depends on the complexity of the purchase and total order value."
+    answer:
+      "We charge a small service fee (typically 5-10% of item value) plus shipping costs. The exact fee depends on the complexity of the purchase and total order value.",
   },
   {
     question: "Can you help me find specific items?",
-    answer: "Absolutely! Our team can help you research and find specific products, compare prices, and even wait for sales or special offers to get you the best deals."
+    answer:
+      "Absolutely! Our team can help you research and find specific products, compare prices, and even wait for sales or special offers to get you the best deals.",
   },
   {
     question: "How long can you store my items?",
-    answer: "We offer free storage for up to 60 days, allowing you to accumulate multiple purchases before shipping. This helps you save significantly on shipping costs through consolidation."
+    answer:
+      "We offer free storage for up to 60 days, allowing you to accumulate multiple purchases before shipping. This helps you save significantly on shipping costs through consolidation.",
   },
   {
     question: "What if an item is out of stock or unavailable?",
-    answer: "If an item is unavailable, we'll contact you immediately with alternatives or refund options. We always keep you informed and never make substitutions without your approval."
-  }
+    answer:
+      "If an item is unavailable, we'll contact you immediately with alternatives or refund options. We always keep you informed and never make substitutions without your approval.",
+  },
 ];
 
 export default function BuyingShipping() {
@@ -114,21 +148,33 @@ export default function BuyingShipping() {
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Buying & Shipping
-                <span className="block text-accent">From UK to Kenya</span>
+                <span className="block text-accent">
+                  From international stores to you
+                </span>
               </h1>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Can't buy directly from UK stores? We'll shop for you! 
-                Complete buying and shipping service from any UK retailer to your door in Kenya.
+                Can't buy directly from international stores? We'll shop for
+                you! Complete buying and shipping service from any international
+                retailer to you
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="cta" size="lg" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Start Shopping Service
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
                 </Button>
-                <Button variant="outline" size="lg" className="bg-white/10 border-white text-white hover:bg-white hover:text-primary" asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-white/10 border-white text-white hover:bg-white hover:text-primary"
+                  asChild
+                >
                   <a href="tel:+442030898178">
                     <Phone className="mr-2 h-4 w-4" />
                     Speak to Shopping Team
@@ -160,15 +206,21 @@ export default function BuyingShipping() {
                   <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-4">
                     <ShoppingCart className="h-8 w-8 text-accent" />
                   </div>
-                  <CardTitle className="text-white text-xl">Personal Shopping Service</CardTitle>
+                  <CardTitle className="text-white text-xl">
+                    Personal Shopping Service
+                  </CardTitle>
                   <CardDescription className="text-white/80">
-                    We buy and ship from any UK store to Kenya
+                    We buy and ship from any international store to your
+                    doorstep
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-3">
                     {features.slice(0, 4).map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2 text-white/90">
+                      <li
+                        key={index}
+                        className="flex items-center gap-2 text-white/90"
+                      >
                         <CheckCircle className="h-4 w-4 text-accent" />
                         <span className="text-sm">{feature}</span>
                       </li>
@@ -189,13 +241,17 @@ export default function BuyingShipping() {
               Why Use Our Buying Service?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Access to UK-only deals, secure payments, and hassle-free delivery to Kenya
+              Access to International-only deals, secure payments, and
+              hassle-free delivery to your country
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit) => (
-              <Card key={benefit.title} className="text-center group hover:shadow-lg transition-all duration-300">
+              <Card
+                key={benefit.title}
+                className="text-center group hover:shadow-lg transition-all duration-300"
+              >
                 <CardHeader>
                   <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                     <benefit.icon className="h-8 w-8 text-primary" />
@@ -221,7 +277,11 @@ export default function BuyingShipping() {
               How Our Buying Service Works
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Simple 4-step process to get any UK product delivered to Kenya
+              Simple 4-step process to get any International product delivered
+              to you
+            </p>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              (ie. from UK retailers to Kenya)
             </p>
           </div>
 
@@ -258,15 +318,21 @@ export default function BuyingShipping() {
               Popular UK Stores We Shop From
             </h2>
             <p className="text-xl text-muted-foreground">
-              We can buy from virtually any UK retailer that ships within the UK
+              We can buy from virtually any international retailer that ships
+              within their country
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
             {popularStores.map((store, index) => (
-              <Card key={index} className="text-center p-4 hover:shadow-md transition-all duration-300">
+              <Card
+                key={index}
+                className="text-center p-4 hover:shadow-md transition-all duration-300"
+              >
                 <CardContent className="p-2">
-                  <span className="text-sm font-medium text-foreground">{store}</span>
+                  <span className="text-sm font-medium text-foreground">
+                    {store}
+                  </span>
                 </CardContent>
               </Card>
             ))}
@@ -274,7 +340,8 @@ export default function BuyingShipping() {
 
           <div className="text-center">
             <p className="text-muted-foreground mb-6">
-              Don't see your favorite store? We can buy from almost any UK retailer.
+              Don't see your favorite store? We can buy from almost any
+              international retailer.
             </p>
             <Button variant="outline" asChild>
               <a href="/contact">Ask About Other Stores</a>
@@ -300,10 +367,14 @@ export default function BuyingShipping() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-8">
                 <Button variant="cta" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Start Your Order
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
@@ -316,11 +387,13 @@ export default function BuyingShipping() {
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Service Fees & Benefits
               </h3>
-              
+
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle>Service Fee Structure</CardTitle>
-                  <CardDescription>Transparent pricing for our buying service</CardDescription>
+                  <CardDescription>
+                    Transparent pricing for our buying service
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
@@ -390,7 +463,11 @@ export default function BuyingShipping() {
 
           <Accordion type="single" collapsible className="space-y-4">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+              <AccordionItem
+                key={index}
+                value={`item-${index}`}
+                className="border border-border rounded-lg px-6"
+              >
                 <AccordionTrigger className="text-left hover:no-underline">
                   {item.question}
                 </AccordionTrigger>
@@ -407,31 +484,44 @@ export default function BuyingShipping() {
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Start Shopping from UK?
+            Ready to Start Shopping from internationally?
           </h2>
           <p className="text-xl mb-8 text-white/90">
-            Let us handle your UK shopping while you relax. Professional service with complete transparency.
+            Let us handle your international shopping while you relax.
+            Professional service with complete transparency.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="cta" size="xl" className="bg-accent hover:bg-accent-hover" asChild>
-              <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="cta"
+              size="xl"
+              className="bg-accent hover:bg-accent-hover"
+              asChild
+            >
+              <a
+                href="https://quote.kisimacargo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Start Shopping Service
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            
-            <Button variant="outline" size="xl" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" asChild>
-              <a href="/contact">
-                Get Shopping Advice
-              </a>
+
+            <Button
+              variant="outline"
+              size="xl"
+              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              asChild
+            >
+              <a href="/contact">Get Shopping Advice</a>
             </Button>
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-6 justify-center items-center text-sm text-white/80">
             <div className="flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />
-              <span>1000+ UK stores available</span>
+              <span>1000+ International stores available</span>
             </div>
             <div className="flex items-center gap-2">
               <Package className="h-4 w-4" />

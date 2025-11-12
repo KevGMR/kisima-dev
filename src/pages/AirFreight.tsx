@@ -1,40 +1,55 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { 
-  Plane, 
-  Clock, 
-  Shield, 
-  Package, 
-  CheckCircle, 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  Plane,
+  Clock,
+  Shield,
+  Package,
+  CheckCircle,
   ArrowRight,
   Zap,
   Globe,
-  Phone
+  Phone,
 } from "lucide-react";
 
 const benefits = [
   {
     title: "Express Speed",
-    description: "Fastest delivery option with shipments reaching Kenya in approximately 3 working days",
-    icon: Zap
+    description:
+      "Fastest delivery option with shipments reaching anywhere in approximately 3 working days",
+    icon: Zap,
   },
   {
-    title: "Real-time Tracking", 
-    description: "Track your shipment every step of the way with detailed status updates",
-    icon: Globe
+    title: "Real-time Tracking",
+    description:
+      "Track your shipment every step of the way with detailed status updates",
+    icon: Globe,
   },
   {
     title: "Secure Handling",
-    description: "Professional handling of high-value and fragile items with full insurance coverage",
-    icon: Shield
+    description:
+      "Professional handling of high-value and fragile items with full insurance coverage",
+    icon: Shield,
   },
   {
     title: "Priority Service",
-    description: "Premium service with dedicated customer support and priority processing",
-    icon: Package
-  }
+    description:
+      "Premium service with dedicated customer support and priority processing",
+    icon: Package,
+  },
 ];
 
 const features = [
@@ -45,34 +60,40 @@ const features = [
   "Door-to-door delivery service",
   "Insurance coverage up to £1,000",
   "24/7 customer support",
-  "Competitive air freight rates"
+  "Competitive air freight rates",
 ];
 
 const faqItems = [
   {
     question: "How long does air freight take from UK to Kenya?",
-    answer: "Air freight typically takes 3-5 working days from our UK warehouse to delivery in Kenya, depending on customs clearance and final destination."
+    answer:
+      "Air freight typically takes 3-5 working days from our UK warehouse to delivery in Kenya, depending on customs clearance and final destination.",
   },
   {
     question: "What can I ship via air freight?",
-    answer: "You can ship most items including electronics, clothing, documents, small household items, and personal effects. Prohibited items include hazardous materials, liquids over 100ml, and restricted goods."
+    answer:
+      "You can ship most items including electronics, clothing, documents, small household items, and personal effects. Prohibited items include hazardous materials, liquids over 100ml, and restricted goods.",
   },
   {
     question: "How is air freight pricing calculated?",
-    answer: "Air freight pricing is based on either actual weight or volumetric weight (whichever is higher), plus customs clearance fees and delivery charges. We provide transparent pricing with no hidden fees."
+    answer:
+      "Air freight pricing is based on either actual weight or volumetric weight (whichever is higher), plus customs clearance fees and delivery charges. We provide transparent pricing with no hidden fees.",
   },
   {
     question: "Is insurance included with air freight?",
-    answer: "Basic insurance up to £1,000 is included. Additional insurance coverage can be purchased for high-value items at competitive rates."
+    answer:
+      "Basic insurance up to £1,000 is included. Additional insurance coverage can be purchased for high-value items at competitive rates.",
   },
   {
     question: "Can you handle customs clearance?",
-    answer: "Yes, we handle all customs documentation and clearance procedures in Kenya. Our experienced team ensures smooth and fast customs processing."
+    answer:
+      "Yes, we handle all customs documentation and clearance procedures in your country. Our experienced team ensures smooth and fast customs processing.",
   },
   {
     question: "Do you provide door-to-door delivery?",
-    answer: "Yes, we offer complete door-to-door delivery service anywhere in Kenya. Track your shipment from our UK warehouse to your doorstep."
-  }
+    answer:
+      "Yes, we offer complete door-to-door delivery service anywhere in your country. Track your shipment from our International warehouse to your doorstep.",
+  },
 ];
 
 export default function AirFreight() {
@@ -89,21 +110,33 @@ export default function AirFreight() {
               </Badge>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Air Freight Services
-                <span className="block text-accent">UK to Kenya</span>
+                <span className="block text-accent">
+                  International to your doorstep
+                </span>
               </h1>
               <p className="text-xl text-white/90 mb-8 leading-relaxed">
-                Fast, reliable air freight delivery in approximately 3 working days. 
-                Perfect for urgent shipments and high-value items with full tracking and insurance.
+                Fast, reliable air freight delivery in approximately 3 working
+                days. Perfect for urgent shipments and high-value items with
+                full tracking and insurance.
               </p>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="cta" size="lg" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get Air Freight Quote
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </a>
                 </Button>
-                <Button variant="outline" size="lg" className="bg-white/10 border-white text-white hover:bg-white hover:text-primary" asChild>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-white/10 border-white text-white hover:bg-white hover:text-primary"
+                  asChild
+                >
                   <a href="tel:+442030898178">
                     <Phone className="mr-2 h-4 w-4" />
                     Call for Urgent Shipping
@@ -123,7 +156,9 @@ export default function AirFreight() {
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-accent">£1K</div>
-                  <div className="text-sm text-white/80">Insurance Included</div>
+                  <div className="text-sm text-white/80">
+                    Insurance Included
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,7 +170,9 @@ export default function AirFreight() {
                   <div className="w-16 h-16 bg-accent/20 rounded-full flex items-center justify-center mb-4">
                     <Plane className="h-8 w-8 text-accent" />
                   </div>
-                  <CardTitle className="text-white text-xl">Express Air Freight</CardTitle>
+                  <CardTitle className="text-white text-xl">
+                    Express Air Freight
+                  </CardTitle>
                   <CardDescription className="text-white/80">
                     Professional air cargo service with full tracking
                   </CardDescription>
@@ -143,7 +180,10 @@ export default function AirFreight() {
                 <CardContent>
                   <ul className="space-y-3">
                     {features.slice(0, 4).map((feature, index) => (
-                      <li key={index} className="flex items-center gap-2 text-white/90">
+                      <li
+                        key={index}
+                        className="flex items-center gap-2 text-white/90"
+                      >
                         <CheckCircle className="h-4 w-4 text-accent" />
                         <span className="text-sm">{feature}</span>
                       </li>
@@ -164,13 +204,17 @@ export default function AirFreight() {
               Why Choose Our Air Freight Service?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Fast, secure, and reliable air cargo transportation with professional handling
+              Fast, secure, and reliable air cargo transportation with
+              professional handling
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit) => (
-              <Card key={benefit.title} className="text-center group hover:shadow-lg transition-all duration-300">
+              <Card
+                key={benefit.title}
+                className="text-center group hover:shadow-lg transition-all duration-300"
+              >
                 <CardHeader>
                   <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
                     <benefit.icon className="h-8 w-8 text-primary" />
@@ -205,10 +249,14 @@ export default function AirFreight() {
                   </div>
                 ))}
               </div>
-              
+
               <div className="mt-8">
                 <Button variant="cta" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get Detailed Quote
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </a>
@@ -221,7 +269,7 @@ export default function AirFreight() {
               <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
                 Timeline & Sample Rates
               </h3>
-              
+
               <Card className="mb-6">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -232,11 +280,11 @@ export default function AirFreight() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span>Collection from UK</span>
+                      <span>Collection from international stores</span>
                       <Badge variant="secondary">Same day</Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Flight to Nairobi</span>
+                      <span>Flight to your country</span>
                       <Badge variant="secondary">1-2 days</Badge>
                     </div>
                     <div className="flex justify-between items-center">
@@ -249,7 +297,9 @@ export default function AirFreight() {
                     </div>
                     <div className="border-t pt-3 flex justify-between items-center font-semibold">
                       <span>Total delivery time</span>
-                      <Badge className="bg-accent text-accent-foreground">~3 working days</Badge>
+                      <Badge className="bg-accent text-accent-foreground">
+                        ~3 working days
+                      </Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -258,24 +308,33 @@ export default function AirFreight() {
               <Card>
                 <CardHeader>
                   <CardTitle>Sample Air Freight Rates</CardTitle>
-                  <CardDescription>Indicative pricing - request quote for exact rates</CardDescription>
+                  <CardDescription>
+                    Indicative pricing - request quote for exact rates
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span>Up to 5kg</span>
-                      <span className="font-semibold text-accent">From £25</span>
+                      <span className="font-semibold text-accent">
+                        From £25
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Up to 10kg</span>
-                      <span className="font-semibold text-accent">From £45</span>
+                      <span className="font-semibold text-accent">
+                        From £45
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span>Up to 20kg</span>
-                      <span className="font-semibold text-accent">From £85</span>
+                      <span className="font-semibold text-accent">
+                        From £85
+                      </span>
                     </div>
                     <div className="text-xs text-muted-foreground pt-2">
-                      * Rates include basic insurance. Additional services may apply.
+                      * Rates include basic insurance. Additional services may
+                      apply.
                     </div>
                   </div>
                 </CardContent>
@@ -299,7 +358,11 @@ export default function AirFreight() {
 
           <Accordion type="single" collapsible className="space-y-4">
             {faqItems.map((item, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+              <AccordionItem
+                key={index}
+                value={`item-${index}`}
+                className="border border-border rounded-lg px-6"
+              >
                 <AccordionTrigger className="text-left hover:no-underline">
                   {item.question}
                 </AccordionTrigger>
@@ -316,22 +379,40 @@ export default function AirFreight() {
       <section className="py-20 bg-gradient-to-r from-primary to-secondary text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Need Fast Air Freight to Kenya?
+            Need Fast Air Freight to your country?
           </h2>
           <p className="text-xl mb-8 text-white/90">
             Get your personalized air freight quote and ship with confidence.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="cta" size="xl" className="bg-accent hover:bg-accent-hover" asChild>
-              <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="cta"
+              size="xl"
+              className="bg-accent hover:bg-accent-hover"
+              asChild
+            >
+              <a
+                href="https://quote.kisimacargo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Get Air Freight Quote
                 <ArrowRight className="ml-2 h-5 w-5" />
               </a>
             </Button>
-            
-            <Button variant="outline" size="xl" className="bg-transparent border-white text-white hover:bg-white hover:text-primary" asChild>
-              <a href="https://app.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+
+            <Button
+              variant="outline"
+              size="xl"
+              className="bg-transparent border-white text-white hover:bg-white hover:text-primary"
+              asChild
+            >
+              <a
+                href="https://app.kisimacargo.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Track Your Shipment
               </a>
             </Button>
@@ -340,7 +421,7 @@ export default function AirFreight() {
           <div className="mt-8 flex flex-col sm:flex-row gap-6 justify-center items-center text-sm text-white/80">
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
-              <span>Call: (+44) 20 3089 8178</span>
+              <span>Call:(+254) 795 554 137</span>
             </div>
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4" />
