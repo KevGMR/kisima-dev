@@ -7,17 +7,17 @@ import kisimLogo from "@/assets/kisima-logo.png";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { 
-    name: "Services", 
+  {
+    name: "Services",
     href: "#",
     dropdown: [
       { name: "Buying & Shipping", href: "/buying-shipping" },
       { name: "Air Freight", href: "/air-freight" },
       { name: "Sea Freight", href: "/sea-freight" },
       { name: "Customs Clearance", href: "/customs-clearance" },
-    ]
+    ],
   },
-  { name: "Track & Trace", href: "https://app.kisimacargo.com", external: true },
+  { name: "Track & Trace", href: "/tracking-shipment", external: true },
   { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
@@ -32,7 +32,7 @@ export default function Header() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -53,19 +53,24 @@ export default function Header() {
   return (
     <>
       {/* Main Header */}
-      <header className={cn(
-        "sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
-        isScrolled && "shadow-md"
-      )}>
+      <header
+        className={cn(
+          "sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-300",
+          isScrolled && "shadow-md"
+        )}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2">
-                <img 
-                  src={kisimLogo} 
-                  alt="Kisima Cargo Logo" 
-                  className={cn("transition-all duration-300", isScrolled ? "h-8" : "h-10")}
+                <img
+                  src={kisimLogo}
+                  alt="Kisima Cargo Logo"
+                  className={cn(
+                    "transition-all duration-300",
+                    isScrolled ? "h-8" : "h-10"
+                  )}
                 />
               </Link>
             </div>
@@ -74,7 +79,11 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <div className="hidden md:block">
                 <Button variant="quote" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Get a Quote
                   </a>
                 </Button>
@@ -127,20 +136,28 @@ export default function Header() {
                       rel={item.external ? "noopener noreferrer" : undefined}
                       className={cn(
                         "block px-3 py-2 text-base font-medium text-foreground hover:bg-muted hover:text-primary transition-colors",
-                        location.pathname === item.href && "text-primary bg-muted"
+                        location.pathname === item.href &&
+                          "text-primary bg-muted"
                       )}
                       onClick={closeMobileMenu}
                     >
-                      {item.name === "Track & Trace" ? "Track Shipment" : item.name}
+                      {item.name === "Track & Trace"
+                        ? "Track Shipment"
+                        : item.name}
                     </Link>
                   )}
                 </div>
               ))}
-              
+
               {/* Mobile CTA */}
               <div className="pt-4 pb-2 md:hidden">
                 <Button variant="quote" className="w-full" asChild>
-                  <a href="https://quote.kisimacargo.com" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
+                  <a
+                    href="https://quote.kisimacargo.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={closeMobileMenu}
+                  >
                     Get a Quote
                   </a>
                 </Button>

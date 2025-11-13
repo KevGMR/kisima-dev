@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kisima Cargo | Shipment Cost Calculator</title>
+  <style>
+    :root { --brand-orange:#f15a29; --brand-blue:#0a4a8a; --muted:#f3f4f6; --ink:#111 }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#fff;color:var(--ink);margin:0}
+    .wrap{max-width:1060px;margin:32px auto;padding:0 16px}
+    header{text-align:center;margin-bottom:16px}
+    .logo{width:160px;height:64px;margin:0 auto 8px;background:var(--brand-blue);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;letter-spacing:.5px}
+    .notice{background:var(--brand-orange);color:#fff;padding:12px 16px;border-radius:10px;font-size:14px}
+    .panel{background:var(--brand-blue);color:#fff;border-radius:12px;padding:18px;margin-top:16px}
+    h2{margin:0 0 12px;font-size:22px;text-align:center}
+    .section-title{font-weight:700;font-size:14px;margin:16px 0 8px}
+    .field{background:#ffffff1a;border-radius:12px;padding:12px;margin-bottom:12px}
+    label{font-size:13px;color:#e5e7eb;display:block;margin-bottom:6px}
+    select,input{width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid #cbd5e1;background:#fff;color:var(--ink);font-size:16px}
+    input::placeholder{color:#6b7280}
+    input:focus,select:focus{outline:3px solid #dbeafe;border-color:#60a5fa}
+    .row{display:grid;gap:12px}
+    @media(min-width:760px){.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}}
+    .radio{display:flex;gap:16px;justify-content:center;margin-bottom:8px}
+    .radio label{color:#fff;font-weight:600;cursor:pointer}
+    .pill{display:inline-block;background:#fff;color:var(--brand-blue);padding:6px 10px;border-radius:999px;font-size:12px;margin:4px}
+    .info-line{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:6px 0}
+    .actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+    button{padding:12px 16px;border:0;border-radius:10px;font-weight:800;cursor:pointer;transition:background .15s ease}
+    .btn-primary{background:var(--brand-orange);color:#fff}
+    .btn-primary:hover{background:#d14820}
+    .btn-muted{background:#e5e7eb;color:#111}
+    .btn-muted:hover{background:#d1d5db}
+    .items{display:grid;gap:12px;margin-top:16px}
+    .item{background:var(--muted);color:#111;border-radius:12px;padding:12px;position:relative}
+    .item h4{margin:0 0 8px;color:var(--brand-blue)}
+    .remove{position:absolute;top:10px;right:10px;background:var(--brand-orange);color:#fff;border-radius:8px;padding:4px 8px;font-size:12px;cursor:pointer;border:0}
+    .remove:hover{background:#d14820}
+    .result{background:#22c55e;color:#fff;border-radius:10px;padding:12px;font-weight:800;margin-top:10px;text-align:center}
+    .summary{background:#f3f4f6;border-radius:12px;padding:12px;color:#111;margin-top:10px}
+    .grid-line{display:grid;grid-template-columns:1fr auto;gap:8px;padding:6px 0;border-bottom:1px solid #e5e7eb}
+    .grid-line:last-child{border-bottom:0}
+    .currency{font-variant-numeric:tabular-nums}
+    .small{font-size:12px;color:#374151}
+    footer{text-align:center;margin-top:10px;font-size:12px;color:#6b7280}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">KISIMA CARGO</div>
+      <div class="notice">Because of many dynamic variables involved in freight costing, this calculator gives an approximate cost. Contact Kisima Cargo branches for an accurate quotation.</div>
+    </header>
+
+    <div class="panel">
+      <h2>Calculate Your Approximate Freight Cost</h2>
+
+      <div class="section-title">Choose Shipping Mode</div>
+      <div class="radio">
+        <label><input type="radio" name="mode" value="air" checked> Air Freight</label>
+        <label><input type="radio" name="mode" value="sea"> Sea Freight</label>
+      </div>
+
+      <div class="row two" style="margin-top:12px">
+        <div class="field"><label for="origin">Sending goods from</label>
+          <select id="origin">
+            <option value="">Select origin country</option>
+            <option value="uk">United Kingdom (Air)</option>
+            <option value="china-sea">China (Sea)</option>
+            <option value="europe">Europe (Air)</option>
+            <option value="turkey">Turkey (Air)</option>
+            <option value="south-africa">South Africa (Air)</option>
+            <option value="china-air">China (Air)</option>
+            <option value="usa">United States (Air)</option>
+            <option value="dubai-air">Dubai (Air)</option>
+            <option value="uk-sea">United Kingdom (Sea)</option>
+            <option value="india">India (Air)</option>
+            <option value="dubai-sea">Dubai (Sea)</option>
+          </select>
+        </div>
+        <div class="field"><label>Sending goods to</label><input value="Kenya" disabled></div>
+      </div>
+
+      <div class="info-line" id="laneMeta"></div>
+
+      <div class="section-title">Package Details</div>
+      <div class="row three">
+        <div class="field"><label for="weight">Weight (kg)</label><input type="number" id="weight" placeholder="e.g. 10.5" min="0" step="0.1"></div>
+        <div class="field"><label for="length">Length (cm)</label><input type="number" id="length" placeholder="e.g. 40" min="0" step="0.1"></div>
+        <div class="field"><label for="width">Width (cm)</label><input type="number" id="width" placeholder="e.g. 30" min="0" step="0.1"></div>
+      </div>
+      <div class="row two">
+        <div class="field"><label for="height">Height (cm)</label><input type="number" id="height" placeholder="e.g. 25" min="0" step="0.1"></div>
+        <div class="field"><label for="value">Declared Value (EUR)</label><input type="number" id="value" placeholder="e.g. 150" min="0" step="0.01"></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="addBtn">Add Package</button>
+        <button class="btn-muted" id="calcBtn">Calculate Total Cost</button>
+      </div>
+
+      <div class="items" id="packageList"></div>
+
+      <div id="results" class="hidden">
+        <div class="result" id="totalCost"></div>
+        <div class="summary" id="breakdown"></div>
+      </div>
+    </div>
+
+    <footer><p>Kisima Cargo - Your trusted freight partner to Kenya</p></footer>
+  </div>
+
+  <script>
+    const lanes={
+      'uk':{currency:'€',rate:6.5,handling:25,unit:'kg',mode:'air',duration:'3–4 working days'},
+      'china-sea':{currency:'KSh',rate:60000,handling:0,unit:'CBM',mode:'sea',duration:'45 working days'},
+      'europe':{currency:'€',rate:10,handling:30,unit:'kg',mode:'air',duration:'4–5 working days'},
+      'turkey':{currency:'€',rate:8,handling:0,unit:'kg',mode:'air',duration:'4–5 working days'},
+      'south-africa':{currency:'€',rate:8,handling:25,unit:'kg',mode:'air',duration:'3–4 working days'},
+      'china-air':{currency:'€',rate:10.5,rateRestricted:13,handling:0,unit:'kg',mode:'air',duration:'7–10 working days'},
+      'usa':{currency:'€',rate:15,handling:0,unit:'kg',mode:'air',duration:'7 working days'},
+      'dubai-air':{currency:'€',rate:9,handling:0,unit:'kg',mode:'air',duration:'4–5 working days'},
+      'uk-sea':{currency:'€',rate:2.5,handling:15,unit:'kg',mode:'sea',duration:'30–45 working days'},
+      'india':{currency:'€',rate:10,handling:0,unit:'kg',mode:'air',duration:'7 working days'},
+      'dubai-sea':{currency:'KSh',rate:62000,handling:0,unit:'CBM',mode:'sea',duration:'40 working days'}
+    };
+
+    let packages=[];let packageCounter=0;
+
+    function updateLaneMeta(){
+      const origin=document.getElementById('origin').value;
+      const meta=document.getElementById('laneMeta');
+      if(!origin||!lanes[origin]){meta.innerHTML='';return}
+      const lane=lanes[origin];
+      meta.innerHTML=`<span class='pill'>Rate: ${lane.currency}${lane.rate}/${lane.unit}</span><span class='pill'>Handling: ${lane.currency}${lane.handling}</span><span class='pill'>Transit: ${lane.duration}</span>`;
+    }
+
+    function addPackage(){
+      const w=parseFloat(document.getElementById('weight').value)||0;
+      const L=parseFloat(document.getElementById('length').value)||0;
+      const W=parseFloat(document.getElementById('width').value)||0;
+      const H=parseFloat(document.getElementById('height').value)||0;
+      const v=parseFloat(document.getElementById('value').value)||0;
+      const origin=document.getElementById('origin').value;
+      if(!origin){toast('Please select an origin.','error');return}
+      if(w<=0||L<=0||W<=0||H<=0){toast('Enter valid package dimensions.','error');return}
+      const id=++packageCounter;
+      const vol=(L*W*H)/5000;
+      const cbm=(L*W*H)/1_000_000;
+      packages.push({id,weight:w,length:L,width:W,height:H,value:v,vol:vol,cbm:cbm});
+      renderPackages();
+      clearForm();
+      toast('Package added.','success');
+    }
+
+    function renderPackages(){
+      const el=document.getElementById('packageList');
+      if(!packages.length){el.innerHTML='';return}
+      el.innerHTML=packages.map(p=>`<div class='item'><h4>Package ${p.id}</h4><button class='remove' onclick='removePackage(${p.id})'>Remove</button><div class='small'>Weight: ${p.weight}kg | Size: ${p.length}×${p.width}×${p.height}cm<br>Volumetric: ${p.vol.toFixed(2)}kg | Volume: ${p.cbm.toFixed(3)} CBM<br>Declared Value: €${p.value.toFixed(2)}</div></div>`).join('');
+    }
+
+    function removePackage(id){packages=packages.filter(p=>p.id!==id);renderPackages();toast('Package removed.','info')}
+
+    function calculateCost(){
+      if(!packages.length){toast('Add at least one package first.','error');return}
+      const origin=document.getElementById('origin').value;
+      if(!lanes[origin]){toast('Select a valid origin.','error');return}
+      const lane=lanes[origin];
+      let total=0,qty=0;
+      if(lane.mode==='air'){
+        packages.forEach(p=>{qty+=Math.max(p.weight,p.vol)});
+      } else {
+        packages.forEach(p=>{qty+=p.cbm});
+      }
+      total=qty*lane.rate+lane.handling;
+      const handling=50;
+      const customs=75;
+      const grand=total+handling+customs;
+      displayResults(lane.currency,lane.mode,qty,total,handling,customs,grand,lane.duration);
+    }
+
+    function displayResults(curr,mode,qty,freight,handling,customs,total,duration){
+      const unit=mode==='air'?'kg':'CBM';
+      const res=document.getElementById('results');
+      document.getElementById('totalCost').textContent=`Total Estimated Cost: ${curr}${total.toFixed(2)}`;
+      document.getElementById('breakdown').innerHTML=`<div class='grid-line'><span>Freight Cost (${qty.toFixed(2)} ${unit})</span><span class='currency'>${curr}${freight.toFixed(2)}</span></div><div class='grid-line'><span>Handling Fee</span><span class='currency'>${curr}${handling.toFixed(2)}</span></div><div class='grid-line'><span>Customs Clearance</span><span class='currency'>${curr}${customs.toFixed(2)}</span></div><div class='grid-line' style='font-weight:800;border-top:2px solid #e5e7eb;margin-top:8px;padding-top:8px'><span>Total</span><span class='currency'>${curr}${total.toFixed(2)}</span></div><div style='margin-top:12px' class='small'>Estimated transit time: ${duration}. Rates are subject to change.</div>`;
+      res.classList.remove('hidden');
+      res.scrollIntoView({behavior:'smooth'});
+    }
+
+    function clearForm(){['weight','length','width','height','value'].forEach(id=>document.getElementById(id).value='')}
+
+    function toast(msg,type){const el=document.createElement('div');el.style.cssText=`position:fixed;top:20px;right:20px;padding:12px 16px;border-radius:10px;color:#fff;font-weight:700;z-index:1000;background:${type==='error'?'#ef4444':type==='success'?'#22c55e':'#3b82f6'};box-shadow:0 10px 20px rgba(0,0,0,.15)`;el.textContent=msg;document.body.appendChild(el);setTimeout(()=>el.remove(),2800)}
+
+    document.getElementById('origin').addEventListener('change',updateLaneMeta);
+    document.getElementById('addBtn').addEventListener('click',addPackage);
+    document.getElementById('calcBtn').addEventListener('click',calculateCost);
+    ['weight','length','width','height','value'].forEach(id=>{document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter'){addPackage()}})});
+    updateLaneMeta();
+  </script>
+</body>
+</html>

@@ -22,7 +22,7 @@ import {
   ArrowRight,
   CheckCircle,
 } from "lucide-react";
-import heroImage from "@/assets/hero-import-export.jpg";
+import HeroSlider from "@/components/HeroSlider";
 
 const services = [
   {
@@ -118,72 +118,8 @@ const trustFeatures = [
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section
-        className="relative h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${heroImage})` }}
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/70 to-transparent"></div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center lg:text-left">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              Ship from anywhere in the world —<br />
-              <span className="text-accent">
-                Fast, Transparent & Door-to-Door
-              </span>
-            </h1>
-
-            <p className="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed">
-              Consolidation, customs clearance and delivery — we make
-              international shopping and shipping simple.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button variant="hero" size="xl" asChild>
-                <a
-                  href="https://quote.kisimacargo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Get a Quote
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </a>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="xl"
-                className="bg-white/10 border-white text-white hover:bg-white hover:text-secondary"
-                asChild
-              >
-                <a
-                  href="https://app.kisimacargo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Track Shipment
-                </a>
-              </Button>
-            </div>
-
-            {/* Trust indicators */}
-            <div className="mt-8 flex flex-wrap gap-4 justify-center lg:justify-start">
-              {trustFeatures.slice(0, 3).map((feature, index) => (
-                <Badge
-                  key={index}
-                  variant="secondary"
-                  className="bg-white/20 text-white border-white/30"
-                >
-                  <CheckCircle className="h-3 w-3 mr-1" />
-                  {feature}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Slider */}
+      <HeroSlider />
 
       {/* Services Section */}
       <section className="py-20 bg-gradient-to-b from-background to-muted/30">

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kisima Cargo | Shipment Tracking</title>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <!-- Include header component -->
+      <div class="logo">KISIMA CARGO</div>
+      <div class="notice">Track your shipment easily with Kisima Cargo.</div>
+    </header>
+
+    <div class="panel">
+      <h2>Track Your Shipment</h2>
+
+      <div class="section-title">Enter Tracking Number</div>
+      <div class="field">
+        <label for="trackingNumber">Tracking Number</label>
+        <input type="text" id="trackingNumber" placeholder="Enter your tracking number">
+      </div>
+
+      <div class="actions">
+        <button class="btn-primary" id="trackBtn">Track Shipment</button>
+      </div>
+
+      <div id="trackingResults" class="hidden">
+        <div class="result" id="trackingStatus"></div>
+        <div class="summary" id="trackingDetails"></div>
+      </div>
+    </div>
+
+    <footer>
+      <!-- Include footer component -->
+      <p>Kisima Cargo - Your trusted freight partner to Kenya</p>
+    </footer>
+  </div>
+
+  <script src="../js/common.js"></script>
+  <script src="../js/tracking.js"></script>
+</body>
+</html>
