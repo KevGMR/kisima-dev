@@ -82,7 +82,7 @@ export default function HeroSlider() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Button variant="hero" size="xl" asChild>
               <a
-                href="https://quote.kisimacargo.com"
+                href="https://wa.me/254795554137"
                 target="_blank"
                 rel="noopener noreferrer"
               >

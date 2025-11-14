@@ -294,7 +294,7 @@ export default function Contact() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild className="btn-primary text-lg px-8 py-6">
               <a
-                href="https://quote.kisimacargo.com"
+                href="https://wa.me/254795554137"
                 target="_blank"
                 rel="noopener noreferrer"
               >

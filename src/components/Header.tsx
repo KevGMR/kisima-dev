@@ -80,7 +80,7 @@ export default function Header() {
               <div className="hidden md:block">
                 <Button variant="quote" asChild>
                   <a
-                    href="https://quote.kisimacargo.com"
+                    href="https://wa.me/254795554137"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -153,7 +153,7 @@ export default function Header() {
               <div className="pt-4 pb-2 md:hidden">
                 <Button variant="quote" className="w-full" asChild>
                   <a
-                    href="https://quote.kisimacargo.com"
+                    href="https://wa.me/254795554137"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={closeMobileMenu}

@@ -269,7 +269,7 @@ export default function Home() {
             </p>
             <Button variant="cta" size="lg" asChild>
               <a
-                href="https://quote.kisimacargo.com"
+                href="https://wa.me/254795554137"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -377,7 +377,7 @@ export default function Home() {
               asChild
             >
               <a
-                href="https://quote.kisimacargo.com"
+                href="https://wa.me/254795554137"
                 target="_blank"
                 rel="noopener noreferrer"
               >

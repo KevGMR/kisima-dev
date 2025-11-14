@@ -123,7 +123,7 @@ export default function AirFreight() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button variant="cta" size="lg" asChild>
                   <a
-                    href="https://quote.kisimacargo.com"
+                    href="https://wa.me/254795554137"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -253,7 +253,7 @@ export default function AirFreight() {
               <div className="mt-8">
                 <Button variant="cta" asChild>
                   <a
-                    href="https://quote.kisimacargo.com"
+                    href="https://wa.me/254795554137"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -393,7 +393,7 @@ export default function AirFreight() {
               asChild
             >
               <a
-                href="https://quote.kisimacargo.com"
+                href="https://wa.me/254795554137"
                 target="_blank"
                 rel="noopener noreferrer"
               >
