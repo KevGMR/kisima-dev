@@ -1,0 +1,106 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes, helpRoutes } from "@/config/routes";
+
+const title = "Customs Clearance Kenya | Import Support | Kisima Cargo";
+const description = "Customs clearance support for imports into Kenya. Understand documents, duties and how Kisima Cargo helps shipments clear smoothly.";
+const canonicalPath = "/customs-clearance";
+const waHref = whatsappLink("Hello Kisima Cargo. I need customs clearance support for an import to Kenya.");
+
+const faqs = [
+  { q: "What is customs clearance?", a: "Customs clearance is the process of declaring imported goods to Kenya's customs authority, paying any applicable duty and VAT, and obtaining release of the cargo." },
+  { q: "Do you clear shipments for non-customers?", a: "Customs clearance is offered as part of a Kisima Cargo shipping arrangement. If your cargo is arriving under another shipper, contact us to discuss options." },
+  { q: "What documents do I need to provide?", a: "Commercial invoice, packing list, transport document (bill of lading or airway bill). Additional certificates (CoC/PVoC, Certificate of Origin) may apply to specific goods." },
+  { q: "Who pays duty and VAT?", a: "The importer of record is legally responsible. We confirm amounts due before release so there are no surprises." },
+  { q: "How long does clearance take?", a: "Most shipments clear within a few working days of arrival, assuming complete documentation and no inspection." },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Customs Clearance Kenya",
+    serviceType: "Customs brokerage",
+    provider: { "@type": "Organization", name: site.name, url: site.productionUrl },
+    areaServed: { "@type": "Country", name: "Kenya" },
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Service</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Customs clearance in Kenya</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Documentation, submission and clearance handled in Nairobi. We prepare and file on your behalf, confirm any applicable duty or VAT before release, and keep you updated through the process.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Talk on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">What we handle</h2>
+      <ul class="space-y-3">
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Documentation review and preparation (invoice, packing list, transport documents).</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Import Declaration Form (IDF) filed with Kenya customs.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Customs submission, duty confirmation and coordination of inspections if required.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Arrangement of release for collection or delivery.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">Documents & customs</h2>
+      <p>
+        Complete documentation avoids delays. Before your cargo ships, we review the invoice, packing list and transport documents for accuracy. Where specific goods require additional certificates, we advise in advance.
+      </p>
+      <p>
+        <a href={helpRoutes["customs-clearance-kenya"].path} class="text-primary hover:underline font-medium">Read: Customs clearance in Kenya →</a>
+        <br/>
+        <a href={helpRoutes["import-documents-kenya"].path} class="text-primary hover:underline font-medium">Read: Import documents for Kenya →</a>
+        <br/>
+        <a href={helpRoutes["prohibited-goods"].path} class="text-primary hover:underline font-medium">Read: Prohibited and restricted goods →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Customs clearance FAQ</h2>
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Need customs support?</h2>
+      <p class="text-lg text-white/85 mb-8">Contact us before or during your shipment for clearance coordination.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Ask on WhatsApp</a>
+        <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

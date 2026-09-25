@@ -1,0 +1,125 @@
+---
+/**
+ * src/pages/tools/shipping-calculator.astro
+ * ===========================================================================
+ * Shipping calculator page.
+ *
+ * Mounts the Calculator React island. All page content other than the
+ * calculator itself is static HTML for crawlability.
+ *
+ * Brief refs: Section 4 (calculator spec), Section 6 (metadata), Section 7
+ *             (AEO/GEO content standards).
+ * ===========================================================================
+ */
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Calculator from "@/components/react/Calculator.tsx";
+
+const title = "Shipping Cost Calculator Kenya | Kisima Cargo";
+const description = "Estimate shipping costs to Kenya by air or sea. Enter route, weight and dimensions for an instant estimate from Kisima Cargo.";
+
+const faqs = [
+  {
+    q: "How is the estimate calculated?",
+    a: "For air freight, we compare actual weight to volumetric weight (length × width × height ÷ the route-specific divisor) and use whichever is higher. For sea freight, we use CBM (cubic metres). The estimate is the chargeable quantity multiplied by the current route rate, with a minimum charge applied where relevant.",
+  },
+  {
+    q: "Is this a confirmed quote?",
+    a: "No. This is an estimate based on the dimensions and weight you provide. A confirmed quote takes into account the exact cargo, documentation, current rates and any applicable duties.",
+  },
+  {
+    q: "Why do you need dimensions as well as weight?",
+    a: "For air freight, space is charged as well as weight. A large lightweight package can attract a higher charge than its actual scale weight suggests. Dimensions let us calculate volumetric weight correctly.",
+  },
+  {
+    q: "Do I need to enter my phone number?",
+    a: "No. You see the estimate first. If you want a confirmed quote afterwards, we'll ask for contact details at that stage.",
+  },
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Kisima Cargo Shipping Calculator",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  description,
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "KES",
+  },
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: f.a,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/tools/shipping-calculator"
+  structuredData={[structuredData, faqSchema]}
+>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-2">
+          Tools
+        </p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+          Shipping cost calculator
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl">
+          Get a quick estimate for shipping to Kenya by air or sea. No sign-up
+          required — you'll see the estimate before we ask for anything.
+        </p>
+      </header>
+
+      <Calculator client:load />
+
+      <section class="mt-16">
+        <h2 class="text-2xl font-heading font-semibold mb-6">
+          How this calculator works
+        </h2>
+
+        <div class="space-y-6">
+          {faqs.map((item) => (
+            <div class="border-b border-border pb-6">
+              <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+              <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mt-12 rounded-lg border border-border bg-muted/30 p-6">
+        <h2 class="text-lg font-heading font-semibold mb-3">
+          Need a confirmed quote?
+        </h2>
+        <p class="text-sm text-muted-foreground mb-4">
+          A confirmed quote takes into account exact dimensions, documentation,
+          current rates and any applicable duties. Request one from our team.
+        </p>
+        <a
+          href="/request-quote"
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors"
+        >
+          Request a quote
+        </a>
+      </section>
+
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,73 @@
+{
+  "$ref": "#/definitions/routes",
+  "definitions": {
+    "routes": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "string"
+        },
+        "lede": {
+          "type": "string"
+        },
+        "commonCargo": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "routeNotes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "faqs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q",
+              "a"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lastReviewed": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number",
+          "default": 99
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "origin",
+        "lede",
+        "commonCargo",
+        "documents",
+        "routeNotes",
+        "faqs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

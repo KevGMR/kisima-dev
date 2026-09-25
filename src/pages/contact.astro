@@ -1,0 +1,194 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes } from "@/config/routes";
+
+const title = "Contact Kisima Cargo | Nairobi, Kenya";
+const description = "Contact Kisima Cargo for international shipping, quotations, tracking and customs support into Kenya.";
+const canonicalPath = "/contact";
+
+const waHref = whatsappLink("Hello Kisima Cargo. I would like to get in touch.");
+
+const offices = [
+  {
+    country: "Kenya",
+    label: "Head Office",
+    address: ["Warehouse No. 2, Shell Petrol Station,", "Lunga Lunga Road, Industrial Area,", "Nairobi, Kenya"],
+    phone: "+254 795 554 137",
+    phoneE164: "+254795554137",
+    email: "info@kisimacargo.com",
+    mapLink: "https://maps.google.com/?q=Warehouse+No.+2+Shell+Petrol+Station+Lunga+Lunga+Road+Industrial+Area+Nairobi",
+    hours: "Mon–Fri: 8:00 AM – 6:00 PM · Sat: 9:00 AM – 1:00 PM",
+  },
+  {
+    country: "United Kingdom",
+    label: "Hayes",
+    address: ["Unit 7 Adler Industrial Estate,", "Betam Road, Hayes"],
+    phone: "+44 20 3089 8178",
+    phoneE164: "+442030898178",
+    email: "info@kisimacargo.com",
+    mapLink: "https://maps.google.com/?q=Unit+7+Adler+Industrial+Estate+Betam+Road+Hayes",
+    hours: "Mon–Fri: 9:00 AM – 5:00 PM",
+  },
+  {
+    country: "UAE",
+    label: "Dubai",
+    address: ["Al Zaroni Building M:05,", "Near Gold Souk Gate 1,", "Al Ras, Deira"],
+    phone: "+971 54 421 8463",
+    phoneE164: "+971544218463",
+    email: "info@kisimacargo.com",
+    mapLink: "https://maps.google.com/?q=Al+Zaroni+Building+M05+Al+Ras+Deira+Dubai",
+    hours: "Sun–Thu: 9:00 AM – 6:00 PM",
+  },
+  {
+    country: "South Africa",
+    label: "Johannesburg",
+    address: ["Freight City, Unit 4,", "597 Innes Road, Jet Park,", "Johannesburg"],
+    phone: null,
+    phoneE164: null,
+    email: "info@kisimacargo.com",
+    mapLink: "https://maps.google.com/?q=Freight+City+Unit+4+597+Innes+Road+Jet+Park+Johannesburg",
+    hours: "Mon–Fri: 8:00 AM – 5:00 PM",
+  },
+  {
+    country: "China",
+    label: "Guangdong",
+    address: ["Warehouse No. 07, Building C1,", "Dunhao Logistics Center,", "Foshan City, Guangdong"],
+    phone: "+86 190 6540 0105",
+    phoneE164: "+8619065400105",
+    email: "info@kisimacargo.com",
+    mapLink: "https://maps.google.com/?q=Warehouse+No+07+Building+C1+Dunhao+Logistics+Center+Foshan",
+    hours: "Mon–Fri: 9:00 AM – 6:00 PM",
+  },
+];
+
+const structuredData = offices.map((o) => ({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: `${site.name} — ${o.country}`,
+  url: site.productionUrl,
+  ...(o.phoneE164 ? { telephone: o.phoneE164 } : {}),
+  email: o.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: o.address.slice(0, -1).join(" "),
+    addressLocality: o.label,
+    addressCountry: o.country === "Kenya" ? "KE" : o.country === "United Kingdom" ? "GB" : o.country === "UAE" ? "AE" : o.country === "South Africa" ? "ZA" : "CN",
+  },
+}));
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Contact</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Get in touch</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          We're here to help with shipping, quotes, tracking and customs questions.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">WhatsApp us</a>
+          <a href={`tel:${site.contact.phoneE164}`} class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Call {site.contact.phoneDisplay}</a>
+          <a href={`mailto:${site.contact.email}`} class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Email us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8">Our offices</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {offices.map((o) => (
+          <div class="rounded-xl border border-border p-6">
+            <h3 class="font-heading font-semibold text-lg mb-1">{o.country}</h3>
+            <p class="text-xs text-accent uppercase tracking-wide font-medium mb-3">{o.label}</p>
+            <address class="not-italic text-sm text-muted-foreground leading-relaxed mb-4">
+              {o.address.map((line, i) => (<>{line}{i < o.address.length - 1 && <br />}</>))}
+            </address>
+            <div class="space-y-2 text-sm">
+              {o.phone && (
+                <div>
+                  <a href={`tel:${o.phoneE164}`} class="text-primary hover:underline">{o.phone}</a>
+                </div>
+              )}
+              <div>
+                <a href={`mailto:${o.email}`} class="text-primary hover:underline">{o.email}</a>
+              </div>
+              <div class="text-xs text-muted-foreground pt-2 border-t border-border">
+                {o.hours}
+              </div>
+              <div class="pt-2">
+                <a href={o.mapLink} target="_blank" rel="noopener noreferrer" class="text-xs text-accent hover:underline">View on map →</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Send us a message</h2>
+      <p class="text-muted-foreground mb-8">
+        For quotes, use the <a href={coreRoutes.requestQuote.path} class="text-primary hover:underline">quote request form</a>. For anything else, send us a message below.
+      </p>
+
+      <!--
+        Netlify Forms: the `data-netlify="true"` attribute makes Netlify process this form.
+        A hidden input preserves the form name. Submission handling is configured in Netlify UI.
+        TODO: Configure recipient email in Netlify UI before launch.
+      -->
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="space-y-5"
+      >
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden">
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">First name <span class="text-destructive">*</span></span>
+            <input name="firstName" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Last name <span class="text-destructive">*</span></span>
+            <input name="lastName" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Email <span class="text-destructive">*</span></span>
+            <input name="email" type="email" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Phone</span>
+            <input name="phone" type="tel" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <label class="block">
+          <span class="text-sm font-medium mb-1.5 block">Subject <span class="text-destructive">*</span></span>
+          <input name="subject" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium mb-1.5 block">Message <span class="text-destructive">*</span></span>
+          <textarea name="message" rows={6} required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"></textarea>
+        </label>
+
+        <button type="submit" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
+          Send message
+        </button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

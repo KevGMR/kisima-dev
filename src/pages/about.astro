@@ -1,0 +1,89 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+import { coreRoutes, toolRoutes, originRoutes } from "@/config/routes";
+
+const title = "About Kisima Cargo | International Shipping to Kenya";
+const description = "Kisima Cargo provides air freight, sea freight, consolidation, customs support and delivery solutions into Kenya.";
+const canonicalPath = "/about";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/about`,
+  mainEntity: {
+    "@type": "Organization",
+    name: site.name,
+    url: site.productionUrl,
+  },
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">About</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">
+          International shipping into Kenya, made straightforward
+        </h1>
+        <p class="text-lg text-white/90 leading-relaxed">
+          Kisima Cargo provides air freight, sea freight, consolidation, customs support and delivery into Kenya — from China, the UK, USA, UAE, South Africa and other supported markets.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">What we do</h2>
+      <p>
+        Kisima Cargo handles the operational side of importing into Kenya — receiving at origin-country warehouses, consolidating multiple suppliers into one shipment, booking air or sea freight, clearing customs, and delivering or holding for collection in Nairobi.
+      </p>
+      <p>
+        Our services are designed for both individuals receiving personal shipments and businesses importing stock, machinery, electronics, clothing and other goods.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8">Where we operate</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {Object.values(originRoutes).map((r) => (
+          <a href={r.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-5 py-6 text-center transition-all">
+            <span class="block text-sm font-medium group-hover:text-primary transition-colors">{r.label}</span>
+            <span class="block text-xs text-muted-foreground mt-1">to Kenya</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">How we work</h2>
+      <p>
+        We keep the process transparent. Rates are quoted clearly with handling and any minimums shown separately. Customs duty and VAT are confirmed before release so there are no surprises. Any additional services are quoted before they're applied.
+      </p>
+      <p>
+        Where we quote a transit window, it's realistic — not aspirational. If something changes, we tell you.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Talk to us</h2>
+      <p class="text-muted-foreground mb-6">
+        If you have a shipment in mind, or you want to understand how a specific import would work, get in touch.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Contact us</a>
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md border border-border px-6 py-3 text-base font-medium hover:bg-background transition-colors">Get shipping estimate</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

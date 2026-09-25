@@ -78,17 +78,17 @@ export const site = {
 
   /** Contact — PLACEHOLDERS. Replace with verified details before launch. */
   contact: {
-    phoneDisplay: "+254 7XX XXX XXX", // TODO: verified number (brief Section 12)
-    phoneE164: "+2547XXXXXXXX",       // TODO: verified number, E.164
-    email: "info@kismacargo.com",     // TODO: verified inbox
+    phoneDisplay: "+254 795 554 137",
+    phoneE164: "+254795554137",
+    email: "info@kisimacargo.com",
     whatsappNumber: RAW_WHATSAPP,     // digits only, no + or spaces
     addressLocality: "Nairobi",
     addressCountry: "KE",
     // TODO: full verified address(es) for LocalBusiness schema
     address: {
-      street: "",
+      street: "Warehouse No. 2, Shell Petrol Station, Lunga Lunga Road",
       city: "Nairobi",
-      region: "",
+      region: "Nairobi County",
       postalCode: "",
       country: "KE",
     },

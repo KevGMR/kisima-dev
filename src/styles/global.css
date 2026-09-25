@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* src/styles/global.css
+ * ===========================================================================
+ * Kisima Cargo — global stylesheet
+ *
+ * NOTE: @tailwind base/components/utilities ARE declared here because
+ *       astro.config.mjs uses applyBaseStyles: false.
+ *
+ *       IMPORTANT: do NOT set applyBaseStyles: true in astro.config.mjs.
+ *       The @astrojs/tailwind integration does not inject these directives
+ *       for you — leaving them out causes a PostCSS error.
+ *
+ * Everything else — theme tokens, base element styles, component classes —
+ * is preserved verbatim from the previous src/index.css.
+ *
+ * Brand:
+ *   Primary  #215dab  (blue)
+ *   Accent   #e57b25  (orange)
+ *   Deep     #133868  (navy)
+ * ===========================================================================
+ */
+
+/* ---------------------------------------------------------------------------
+ * Theme tokens
+ * ------------------------------------------------------------------------- */
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --background: 0 0% 100%;
+    --foreground: 213 71% 22%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 213 71% 22%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 71% 22%;
+
+    /* Kisima Primary Blue #215dab */
+    --primary: 213 67% 40%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 213 67% 35%;
+
+    /* Kisima Deep Blue #133868 */
+    --secondary: 213 71% 22%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Kisima Orange Accent #e57b25 */
+    --accent: 26 79% 52%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 26 79% 47%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 213 20% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 213 67% 40%;
+
+    --radius: 8px;
+
+    /* Logistics-specific semantic colors */
+    --trust: 213 67% 40%;
+    --success: 120 60% 45%;
+    --warning: 45 93% 58%;
+    --info: 204 94% 58%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(213 67% 40%), hsl(213 71% 22%));
+    --gradient-accent: linear-gradient(135deg, hsl(26 79% 52%), hsl(26 79% 47%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(213 67% 40% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(213 67% 40% / 0.1), 0 2px 4px -1px hsl(213 67% 40% / 0.06);
+    --shadow-lg: 0 10px 15px -3px hsl(213 67% 40% / 0.1), 0 4px 6px -2px hsl(213 67% 40% / 0.05);
+    --shadow-xl: 0 20px 25px -5px hsl(213 67% 40% / 0.1), 0 10px 10px -5px hsl(213 67% 40% / 0.04);
+
+    /* Typography */
+    --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* Animation timing */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* shadcn sidebar tokens (retained for shadcn/ui compatibility) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2% 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 213 71% 22%;
+    --foreground: 0 0% 100%;
+
+    --card: 213 71% 25%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 213 71% 25%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 213 67% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 213 67% 50%;
+
+    --secondary: 213 67% 40%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 213 60% 30%;
+    --muted-foreground: 213 20% 70%;
+
+    --accent: 26 79% 55%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 26 79% 60%;
+
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 213 60% 30%;
+    --input: 213 60% 30%;
+    --ring: 213 67% 45%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2% 91.2% 59.8%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Base element styles
+ * ------------------------------------------------------------------------- */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    scroll-behavior: smooth;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  h4 {
+    @apply text-lg md:text-xl;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Component classes
+ * ------------------------------------------------------------------------- */
+@layer components {
+  /* Hero section */
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .accent-gradient {
+    background: var(--gradient-accent);
+  }
+
+  .subtle-gradient {
+    background: var(--gradient-subtle);
+  }
+
+  /* Card elevation */
+  .card-elevated {
+    box-shadow: var(--shadow-lg);
+    @apply transition-all duration-300 hover:shadow-xl;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+  }
+
+  /* CTA buttons */
+  .btn-primary {
+    @apply bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-lg font-semibold transition-all duration-300;
+  }
+
+  /* Trust indicators */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-full text-sm font-medium text-muted-foreground;
+  }
+
+  /* Animations */
+  .fade-in {
+    @apply animate-in fade-in-0 duration-700;
+  }
+
+  .slide-up {
+    @apply animate-in slide-in-from-bottom-4 duration-700;
+  }
+
+  .scale-in {
+    @apply animate-in zoom-in-95 duration-500;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Accessibility — reduced motion
+ *
+ * Change Brief Section 3 requires "restrained motion". This honours the
+ * user's OS-level preference automatically.
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

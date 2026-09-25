@@ -19,4 +19,4 @@ Disallow: /lovable/
 Disallow: /.lovable/
 
 # Sitemap — always points at the canonical production domain, even on staging.
-Sitemap: https://kismacargo.com/sitemap.xml
+Sitemap: https://kismacargo.com/sitemap-index.xml

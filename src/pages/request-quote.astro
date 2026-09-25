@@ -1,0 +1,171 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { originRoutes, toolRoutes, coreRoutes } from "@/config/routes";
+
+const title = "Request a Shipping Quote | Kisima Cargo";
+const description = "Request a confirmed shipping quotation to Kenya. Share your route, cargo and services and Kisima Cargo will respond.";
+const canonicalPath = "/request-quote";
+
+const waHref = whatsappLink("Hello Kisima Cargo. I would like a shipping quote.");
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/request-quote`,
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Quote</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Request a shipping quote</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Share your route, cargo details and any additional services you need. We'll come back with a confirmed price and transit window.
+        </p>
+        <p class="text-sm text-white/80">
+          Prefer to talk? <a href={waHref} target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 decoration-white/50 hover:decoration-white">Message us on WhatsApp</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-muted-foreground mb-8">
+        For a quick estimate before requesting a formal quote, use the <a href={toolRoutes.shippingCalculator.path} class="text-primary hover:underline">shipping calculator</a>.
+      </p>
+
+      <form
+        name="quote-request"
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+        class="space-y-5"
+      >
+        <input type="hidden" name="form-name" value="quote-request" />
+        <p class="hidden">
+          <label>Don't fill this out: <input name="bot-field" /></label>
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">First name <span class="text-destructive">*</span></span>
+            <input name="firstName" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Last name <span class="text-destructive">*</span></span>
+            <input name="lastName" type="text" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Email <span class="text-destructive">*</span></span>
+            <input name="email" type="email" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Phone / WhatsApp <span class="text-destructive">*</span></span>
+            <input name="phone" type="tel" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Shipping from <span class="text-destructive">*</span></span>
+            <select name="origin" required class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm">
+              <option value="">Select origin</option>
+              {Object.values(originRoutes).map((r) => (<option value={r.label}>{r.label}</option>))}
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Shipping to</span>
+            <input name="destination" type="text" value="Kenya" readonly class="w-full rounded-md border border-input bg-muted px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Method</span>
+            <select name="method" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm">
+              <option value="">Not sure / decide later</option>
+              <option value="air">Air freight</option>
+              <option value="sea">Sea freight</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Cargo type</span>
+            <input name="cargoType" type="text" placeholder="e.g. clothing, electronics, machinery" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Approx. total weight (kg)</span>
+            <input name="weight" type="number" min="0" step="0.1" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">No. of packages</span>
+            <input name="packages" type="number" min="0" step="1" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Approx. total CBM</span>
+            <input name="cbm" type="number" min="0" step="0.01" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" />
+          </label>
+        </div>
+
+        <label class="block">
+          <span class="text-sm font-medium mb-1.5 block">Additional services</span>
+          <div class="flex flex-wrap gap-2">
+            <label class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs">
+              <input type="checkbox" name="services" value="supplier-pickup" /> Supplier pickup
+            </label>
+            <label class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs">
+              <input type="checkbox" name="services" value="consolidation" /> Consolidation
+            </label>
+            <label class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs">
+              <input type="checkbox" name="services" value="customs" /> Customs assistance
+            </label>
+            <label class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs">
+              <input type="checkbox" name="services" value="door-delivery" /> Door delivery
+            </label>
+            <label class="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs">
+              <input type="checkbox" name="services" value="insurance" /> Insurance enquiry
+            </label>
+          </div>
+        </label>
+
+        <label class="block">
+          <span class="text-sm font-medium mb-1.5 block">Anything else we should know?</span>
+          <textarea name="notes" rows={5} placeholder="Specific items, deadlines, special requirements..." class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm"></textarea>
+        </label>
+
+        <button type="submit" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
+          Request quote
+        </button>
+
+        <p class="text-xs text-muted-foreground pt-2">
+          We'll respond within 1 business day. Your information is used only to prepare your quote.
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-xl font-heading font-semibold mb-4">Not sure of the details yet?</h2>
+      <p class="text-muted-foreground mb-6">
+        It's fine to submit with best-estimate numbers. We'll confirm the actuals when cargo is received.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Estimate first</a>
+        <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

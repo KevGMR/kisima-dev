@@ -1,0 +1,201 @@
+---
+/**
+ * src/layouts/BaseLayout.astro
+ * ===========================================================================
+ * Root layout for every public page.
+ *
+ * Replaces the hardcoded <head> in the original index.html.
+ *
+ * Provides:
+ *   - Per-page <title> and <meta description>
+ *   - Self-referencing canonical
+ *   - noindex on staging (via site.noindex, driven by VITE_SITE_ENV)
+ *   - Open Graph + Twitter card tags
+ *   - Favicon + OG image paths that actually resolve (from /public, not /src)
+ *   - Organization schema by default
+ *   - Page-specific structured data via `structuredData` prop
+ *   - Extra <head> tags via `<slot name="head" />` for edge cases
+ *
+ * Change Brief refs: Sections 2, 6, 7, 11.
+ *
+ * Usage:
+ *   <BaseLayout
+ *     title="Shipping from China to Kenya | Kisima Cargo"
+ *     description="Ship cargo from China to Kenya by air and sea..."
+ *     canonicalPath="/routes/shipping-from-china-to-kenya"
+ *     structuredData={[orgSchema, routeSchema]}
+ *   >
+ *     <h1>Shipping from China to Kenya</h1>
+ *     ...
+ *   </BaseLayout>
+ * ===========================================================================
+ */
+
+import { site, absoluteUrl, IS_PRODUCTION } from "@/config/site";
+import "@/styles/global.css";
+import Header from "@/components/astro/Header.astro";
+import MobileActionBar from "@/components/astro/MobileActionBar.astro";
+import Footer from "@/components/astro/Footer.astro";
+
+interface Props {
+  /** Page <title>. If omitted, uses site.defaultTitle. */
+  title?: string;
+  /** Meta description. Required in practice — will warn if missing. */
+  description?: string;
+  /** Canonical path (e.g. "/air-freight"). Used to build canonical + og:url. */
+  canonicalPath: string;
+  /** Override the default OG image. Path relative to /public, e.g. "/og/china.jpg". */
+  ogImage?: string;
+  /** Optional noindex override. Defaults to site.noindex (staging = true). */
+  noindex?: boolean;
+  /** One or more JSON-LD objects. Serialised into <script type="application/ld+json">. */
+  structuredData?: object | object[];
+  /** Optional body class. */
+  bodyClass?: string;
+  /** Show the site header. Default true. */
+  showHeader?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath,
+  ogImage = site.og.image,
+  noindex = site.noindex,
+  structuredData,
+  bodyClass = "",
+  showHeader = true,
+} = Astro.props;
+
+// Warn at build time if description is missing on a page that should have it.
+if (!description && import.meta.env.DEV) {
+  console.warn(`[BaseLayout] Missing description for ${canonicalPath}`);
+}
+
+const fullTitle = title ?? site.defaultTitle;
+const finalDescription = description ?? site.defaultDescription;
+const canonical = absoluteUrl(canonicalPath);
+const ogImageUrl = ogImage.startsWith("http")
+  ? ogImage
+  : absoluteUrl(ogImage);
+
+// ---------------------------------------------------------------------------
+// Structured data
+//
+// Organization schema is emitted on every page so Google and AI systems can
+// identify Kisima Cargo consistently. Page-specific schemas are merged in.
+// ---------------------------------------------------------------------------
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.name,
+  url: site.productionUrl,
+  logo: absoluteUrl("/og/logo-512.png"), // TODO: add real 512x512 logo
+  description: site.shortDescription,
+  sameAs: [
+    // TODO: verify and add real social URLs before launch
+    // "https://www.facebook.com/...",
+    // "https://www.instagram.com/...",
+  ],
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      telephone: site.contact.phoneE164,
+      email: site.contact.email,
+      areaServed: ["KE", "GB", "CN", "AE", "US", "ZA"],
+      availableLanguage: ["English", "Swahili"],
+    },
+  ],
+};
+
+const allSchemas: object[] = [organizationSchema];
+if (structuredData) {
+  if (Array.isArray(structuredData)) {
+    allSchemas.push(...structuredData);
+  } else {
+    allSchemas.push(structuredData);
+  }
+}
+---
+
+<!doctype html>
+<html lang="en-KE">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Primary -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={finalDescription} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Robots — noindex on staging, index on production -->
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {noindex && <meta name="googlebot" content="noindex, nofollow" />}
+
+    <!-- Author / ownership -->
+    <meta name="author" content={site.name} />
+
+    <!-- Favicons (from /public — never /src) -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <!-- Add favicon.svg once available:
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={finalDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={site.og.type} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={site.og.imageAlt} />
+    <meta property="og:locale" content={site.og.locale} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content={site.og.twitterCard} />
+    {site.og.twitterSite && (
+      <meta name="twitter:site" content={site.og.twitterSite} />
+    )}
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={finalDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Structured data -->
+    {allSchemas.map((schema) => (
+      <script
+        type="application/ld+json"
+        set:html={JSON.stringify(schema)}
+      />
+    ))}
+
+    <!-- Extra head tags injected by individual pages (e.g. preloads, one-off meta) -->
+    <slot name="head" />
+    <!--
+      Analytics placeholder.
+      GA4 is loaded here once the property ID is available (brief Section 11).
+      Until then, no analytics scripts run — keeps the build clean.
+    -->
+    {IS_PRODUCTION && (
+      <script is:inline>
+        // GA4 loader placeholder — no-op until GA4_ID is configured.
+        // window.dataLayer = window.dataLayer || [];
+        // function gtag(){dataLayer.push(arguments);}
+        // gtag('js', new Date());
+        // gtag('config', 'G-XXXXXXXXXX');
+      </script>
+    )}
+  </head>
+
+  <body class={bodyClass}>
+    {showHeader && <Header />}
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MobileActionBar />
+  </body>
+</html>

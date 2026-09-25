@@ -1,0 +1,117 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes, originRoutes } from "@/config/routes";
+
+const title = "Shop & Ship to Kenya | Kisima Cargo";
+const description = "Buy from international online stores and ship to Kenya with Kisima Cargo. Consolidation, customs support and delivery.";
+const canonicalPath = "/shop-and-ship";
+const waHref = whatsappLink("Hello Kisima Cargo. I would like information about Shop & Ship.");
+
+const faqs = [
+  { q: "What is Shop & Ship?", a: "Shop & Ship lets you buy from online stores that don't ship to Kenya directly. We receive your order at our origin warehouse, consolidate if you have multiple orders, and ship it to Kenya." },
+  { q: "Do you buy items on my behalf?", a: "In some cases yes — particularly when the store won't accept an international payment method or won't ship to a business address. Ask us about the specific store." },
+  { q: "Which stores can I order from?", a: "Any store that ships to our receiving warehouse in the origin country. That covers most major online retailers in the UK, US, China and UAE." },
+  { q: "How long do you hold my items?", a: "We hold cargo for a period at the origin warehouse so you can accumulate multiple orders before shipping. Ask for the current hold window on your route." },
+  { q: "How is Shop & Ship charged?", a: "Freight is charged normally (chargeable weight for air, CBM for sea). If we purchase on your behalf, a service fee may apply. Any fee is disclosed upfront." },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Shop & Ship to Kenya",
+    serviceType: "Personal shopping and freight forwarding",
+    provider: { "@type": "Organization", name: site.name, url: site.productionUrl },
+    areaServed: { "@type": "Country", name: "Kenya" },
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Service</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Shop & Ship to Kenya</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Buy from international online stores that don't ship to Kenya directly. We receive at our origin warehouse, consolidate multiple orders, and ship to your address in Kenya.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Talk on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">How Shop & Ship works</h2>
+      <ol class="space-y-4 list-none">
+        <li class="flex gap-4"><span class="text-accent font-heading font-bold text-lg shrink-0">01</span><span>You order from an international store and send to our origin warehouse.</span></li>
+        <li class="flex gap-4"><span class="text-accent font-heading font-bold text-lg shrink-0">02</span><span>We receive, record and hold your order at the warehouse.</span></li>
+        <li class="flex gap-4"><span class="text-accent font-heading font-bold text-lg shrink-0">03</span><span>You accumulate additional orders if you want them consolidated.</span></li>
+        <li class="flex gap-4"><span class="text-accent font-heading font-bold text-lg shrink-0">04</span><span>We ship to Kenya, clear customs, and deliver or hold for collection.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">Where Shop & Ship works best</h2>
+      <ul class="space-y-3">
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Retailers that don't ship internationally, or charge high direct international rates.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Shopping across multiple stores and wanting one combined shipment.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Brands that only accept local payment methods.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Sample orders or single-item purchases that would be uneconomic alone.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Shop & Ship origins</h2>
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {Object.values(originRoutes).map((r) => (
+          <li>
+            <a href={r.path} class="group block rounded-lg border border-border hover:border-accent hover:shadow-sm px-4 py-4 text-center transition-all">
+              <span class="text-sm font-medium group-hover:text-primary transition-colors">{r.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Shop & Ship FAQ</h2>
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Start shopping from anywhere</h2>
+      <p class="text-lg text-white/85 mb-8">Get our receiving address and start sending orders to Kenya.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get receiving address</a>
+        <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Contact us</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

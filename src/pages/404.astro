@@ -1,0 +1,137 @@
+---
+/**
+ * src/pages/404.astro
+ * ===========================================================================
+ * Real 404 page.
+ *
+ * Brief Section 6: "Real 404 status for missing pages, not a soft-404
+ * homepage response."
+ *
+ * Astro emits this as dist/404.html, which Netlify serves with an actual
+ * 404 HTTP status for any unmatched path — provided the SPA fallback in
+ * netlify.toml is removed (see netlify.toml patch).
+ *
+ * The page is noindex (via BaseLayout `noindex` prop) and offers the most
+ * likely next destinations instead of a dead end.
+ * ===========================================================================
+ */
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { coreRoutes, originRoutes, toolRoutes, helpLanding } from "@/config/routes";
+
+const title = "Page not found | Kisima Cargo";
+const description = "The page you were looking for could not be found. Browse our services, routes and tools, or contact Kisima Cargo.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/404"
+  noindex={true}
+>
+  <section class="py-20 md:py-28 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+      <p class="text-sm font-medium text-accent uppercase tracking-wide mb-4">
+        Error 404
+      </p>
+
+      <h1 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+        We couldn't find that page
+      </h1>
+
+      <p class="text-lg text-muted-foreground mb-10 max-w-xl mx-auto leading-relaxed">
+        The link may be broken, or the page may have moved. Here are some
+        places to pick up from.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mb-14">
+        <a
+          href="/"
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Back to home
+        </a>
+        <a
+          href={coreRoutes.contact.path}
+          class="inline-flex items-center justify-center rounded-md border border-border px-6 py-3 text-base font-medium hover:bg-muted transition-colors"
+        >
+          Contact us
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left max-w-2xl mx-auto">
+
+        <div>
+          <h2 class="font-heading font-semibold text-base uppercase tracking-wide text-muted-foreground mb-3">
+            Tools
+          </h2>
+          <ul class="space-y-2">
+            <li>
+              <a href={toolRoutes.shippingCalculator.path} class="text-primary hover:underline">
+                Shipping calculator
+              </a>
+            </li>
+            <li>
+              <a href={toolRoutes.trackShipment.path} class="text-primary hover:underline">
+                Track a shipment
+              </a>
+            </li>
+            <li>
+              <a href={coreRoutes.requestQuote.path} class="text-primary hover:underline">
+                Request a quote
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-heading font-semibold text-base uppercase tracking-wide text-muted-foreground mb-3">
+            Popular routes
+          </h2>
+          <ul class="space-y-2">
+            {Object.values(originRoutes).map((route) => (
+              <li>
+                <a href={route.path} class="text-primary hover:underline">
+                  {route.label} to Kenya
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-heading font-semibold text-base uppercase tracking-wide text-muted-foreground mb-3">
+            Services
+          </h2>
+          <ul class="space-y-2">
+            <li><a href={coreRoutes.airFreight.path} class="text-primary hover:underline">Air freight</a></li>
+            <li><a href={coreRoutes.seaFreight.path} class="text-primary hover:underline">Sea freight</a></li>
+            <li><a href={coreRoutes.customsClearance.path} class="text-primary hover:underline">Customs clearance</a></li>
+            <li><a href={coreRoutes.cargoConsolidation.path} class="text-primary hover:underline">Consolidation</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="font-heading font-semibold text-base uppercase tracking-wide text-muted-foreground mb-3">
+            Help
+          </h2>
+          <ul class="space-y-2">
+            <li>
+              <a href={helpLanding.path} class="text-primary hover:underline">
+                Help Centre
+              </a>
+            </li>
+            <li>
+              <a href={coreRoutes.about.path} class="text-primary hover:underline">
+                About Kisima Cargo
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>

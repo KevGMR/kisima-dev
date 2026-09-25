@@ -1,0 +1,232 @@
+---
+/**
+ * src/pages/tools/track-shipment.astro
+ * ===========================================================================
+ * Shipment tracking page.
+ *
+ * Brief refs: Section 5 (tools), Section 9 (tracking help), Section 10
+ *             (mobile action bar destination).
+ *
+ * NOTE ON SCOPE:
+ *   This is an informational page, not a live lookup form. Kisima's tracking
+ *   system runs at app.kisimacargo.com and no public API is available at
+ *   time of writing (see "Inputs from Kisma" in the Change Brief, Section 12).
+ *
+ *   When a tracking API is available, this page should be upgraded to a
+ *   React island that calls it. The static explanation content below should
+ *   remain in place regardless.
+ * ===========================================================================
+ */
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+
+const title = "Track Your Shipment | Kisima Cargo";
+const description = "Track your Kisima Cargo shipment. Enter your reference in our tracking system, understand shipment statuses, and get help when a status hasn't changed.";
+
+const statuses = [
+  {
+    name: "Received",
+    meaning: "Your cargo has arrived at one of our origin warehouses and been logged in.",
+  },
+  {
+    name: "Consolidated",
+    meaning: "Your cargo has been grouped with other shipments and prepared for the next departure.",
+  },
+  {
+    name: "In transit",
+    meaning: "Your cargo is on the way to Kenya — either on a flight or on a vessel.",
+  },
+  {
+    name: "Arrived",
+    meaning: "Your cargo has landed or docked in Kenya and is awaiting clearance.",
+  },
+  {
+    name: "Customs",
+    meaning: "Documentation and clearance are being handled at the Kenya port or airport.",
+  },
+  {
+    name: "Ready for collection",
+    meaning: "Clearance is complete. Your cargo can be collected from our Nairobi warehouse or is out for delivery.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Where do I find my tracking reference?",
+    a: "Your reference is sent to you by WhatsApp or email when your cargo is received at one of our warehouses. It usually starts with KC. If you don't have it, contact us with your name, phone number and supplier details.",
+  },
+  {
+    q: "What if the tracking status hasn't changed in a while?",
+    a: "Some stages — particularly customs clearance and ocean transit — can take longer than the status update frequency suggests. If a status hasn't changed for more than 5 working days, contact us on WhatsApp with your reference so we can check.",
+  },
+  {
+    q: "Can I track multiple packages at once?",
+    a: "Yes. Each package or consolidated shipment has its own reference. Look them up individually in the tracking system.",
+  },
+  {
+    q: "Does tracking show customs duty or charges?",
+    a: "No. Tracking shows movement and status. Any applicable duties or clearance charges are communicated separately before release.",
+  },
+  {
+    q: "Is my tracking information private?",
+    a: "Yes. Tracking references are unique to each shipment. We do not display personal or commercial details in the tracking view.",
+  },
+];
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/tools/track-shipment`,
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+const waHref = whatsappLink(
+  "Hello Kisima Cargo. I would like help tracking my shipment."
+);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/tools/track-shipment"
+  structuredData={[structuredData, faqSchema]}
+>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-2">
+          Tools
+        </p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+          Track your shipment
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl">
+          Follow your cargo from origin to Kenya. Enter your Kisima reference in
+          our tracking system, or contact us if you need help.
+        </p>
+      </header>
+
+      <!-- Primary CTA: external tracking system -->
+      <section class="rounded-xl border border-border bg-muted/30 p-6 md:p-8 mb-14">
+        <h2 class="text-xl font-heading font-semibold mb-3">
+          Open the tracking system
+        </h2>
+        <p class="text-muted-foreground mb-5">
+          The tracking system opens in a new tab. You'll be asked for the
+          reference number we sent you.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="https://app.kisimacargo.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+          >
+            Open tracking system
+          </a>
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center rounded-md border border-border px-6 py-3 text-base font-medium hover:bg-muted transition-colors"
+          >
+            Get help on WhatsApp
+          </a>
+        </div>
+      </section>
+
+      <!-- Where to find reference -->
+      <section class="mb-14">
+        <h2 class="text-2xl font-heading font-semibold mb-4">
+          Where do I find my tracking reference?
+        </h2>
+        <p class="text-muted-foreground leading-relaxed mb-4">
+          When your cargo is received at one of our warehouses, we send you a
+          reference by WhatsApp or email. It usually starts with <strong>KC</strong>
+          followed by a sequence of letters and numbers.
+        </p>
+        <p class="text-muted-foreground leading-relaxed">
+          If you cannot find it, contact us with your name, phone number and the
+          supplier or store you ordered from, and we will look it up.
+        </p>
+      </section>
+
+      <!-- What the statuses mean -->
+      <section class="mb-14">
+        <h2 class="text-2xl font-heading font-semibold mb-6">
+          What each status means
+        </h2>
+        <ul class="space-y-4">
+          {statuses.map((s) => (
+            <li class="border-l-2 border-accent pl-5">
+              <h3 class="font-heading font-semibold mb-1">{s.name}</h3>
+              <p class="text-muted-foreground leading-relaxed text-sm">{s.meaning}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <!-- If status hasn't changed -->
+      <section class="rounded-lg border border-border bg-muted/30 p-6 mb-14">
+        <h2 class="text-xl font-heading font-semibold mb-3">
+          Status hasn't changed in a while?
+        </h2>
+        <p class="text-muted-foreground mb-4">
+          Some stages — particularly customs and ocean transit — take longer
+          than others. If a status hasn't updated in more than <strong>5 working
+          days</strong>, contact us with your reference.
+        </p>
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors"
+        >
+          Ask about my shipment
+        </a>
+      </section>
+
+      <!-- FAQ -->
+      <section class="mb-12">
+        <h2 class="text-2xl font-heading font-semibold mb-6">
+          Common questions
+        </h2>
+        <div class="space-y-6">
+          {faqs.map((item) => (
+            <div class="border-b border-border pb-6">
+              <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+              <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="text-sm text-muted-foreground">
+        <p>
+          Cannot find your reference at all? Call our Nairobi office at{" "}
+          <a href={`tel:${site.contact.phoneE164}`} class="text-primary hover:underline">
+            {site.contact.phoneDisplay}
+          </a>{" "}
+          or email{" "}
+          <a href={`mailto:${site.contact.email}`} class="text-primary hover:underline">
+            {site.contact.email}
+          </a>.
+        </p>
+      </section>
+
+    </div>
+  </section>
+</BaseLayout>

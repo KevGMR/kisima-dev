@@ -1,0 +1,123 @@
+---
+/**
+ * src/pages/help/index.astro
+ * ===========================================================================
+ * Help Centre landing page.
+ * ===========================================================================
+ */
+
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+
+const title = "Help Centre | Shipping to Kenya | Kisima Cargo";
+const description = "Find simple answers about international shipping, costs, customs, packaging, tracking and importing into Kenya.";
+
+const articles = await getCollection("help");
+const sorted = articles.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+// Group by category
+const byCategory = sorted.reduce((acc, article) => {
+  const cat = article.data.category;
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(article);
+  return acc;
+}, {} as Record<string, typeof articles>);
+
+const categoryOrder = [
+  "Getting Started",
+  "Shipping Costs",
+  "Air Freight",
+  "Sea Freight",
+  "Customs & Documents",
+  "Restricted Goods",
+];
+
+const orderedCategories = categoryOrder.filter((c) => byCategory[c]);
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/help`,
+  isPartOf: {
+    "@type": "WebSite",
+    name: site.name,
+    url: site.productionUrl,
+  },
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/help"
+  structuredData={structuredData}
+>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-12">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-2">
+          Help Centre
+        </p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+          Shipping should not be confusing
+        </h1>
+        <p class="text-lg text-muted-foreground max-w-2xl">
+          Find simple answers about international shipping, costs, customs, packaging, tracking and importing into Kenya.
+        </p>
+      </header>
+
+      {orderedCategories.map((category) => (
+        <section class="mb-12">
+          <h2 class="text-xl font-heading font-semibold mb-4 pb-2 border-b border-border">
+            {category}
+          </h2>
+          <ul class="space-y-3">
+            {byCategory[category].map((article) => (
+              <li>
+                <a
+                  href={`/help/${article.id}`}
+                  class="group block rounded-lg border border-border hover:border-accent hover:shadow-sm p-5 transition-all"
+                >
+                  <h3 class="font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                    {article.data.label}
+                  </h3>
+                  <p class="text-sm text-muted-foreground leading-relaxed">
+                    {article.data.description}
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      <section class="mt-16 rounded-lg border border-border bg-muted/30 p-6">
+        <h2 class="text-lg font-heading font-semibold mb-3">
+          Still stuck?
+        </h2>
+        <p class="text-sm text-muted-foreground mb-4">
+          If your question isn't answered here, contact us directly.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/request-quote"
+            class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors"
+          >
+            Request a quote
+          </a>
+          <a
+            href="/contact"
+            class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors"
+          >
+            Contact us
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </section>
+</BaseLayout>

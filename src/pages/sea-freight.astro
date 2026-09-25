@@ -1,0 +1,121 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { originRoutes, toolRoutes, helpRoutes, coreRoutes } from "@/config/routes";
+
+const title = "Sea Freight to Kenya | International Shipping | Kisima Cargo";
+const description = "Sea freight and LCL shipping to Kenya. Understand CBM, consolidation, transit ranges and costs before you ship with Kisima Cargo.";
+const canonicalPath = "/sea-freight";
+const waHref = whatsappLink("Hello Kisima Cargo. I would like a quote for sea freight to Kenya.");
+
+const faqs = [
+  { q: "What is sea freight?", a: "Sea freight is cargo transported by ship. It is the more economical method for larger and heavier cargo, but slower than air freight." },
+  { q: "When should I use sea freight?", a: "Sea freight suits larger volumes, bulky cargo, heavy items, and cases where cost per unit matters more than transit speed." },
+  { q: "How is sea freight charged?", a: "Sea freight is charged per CBM (cubic metre): length × width × height × quantity in metres, multiplied by the current sea rate." },
+  { q: "What is LCL?", a: "LCL stands for Less than Container Load — your cargo shares a container with other shippers' cargo, charged per CBM." },
+  { q: "What is FCL?", a: "FCL stands for Full Container Load — you book an entire container, charged per container. FCL usually makes sense above a certain volume." },
+  { q: "Can I consolidate multiple orders in one sea shipment?", a: "Yes. Consolidation is one of the main ways to reduce sea freight cost, since your CBM is shared with other cargo rather than booked as a whole container." },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Sea Freight to Kenya",
+    serviceType: "Sea freight forwarding",
+    provider: { "@type": "Organization", name: site.name, url: site.productionUrl },
+    areaServed: { "@type": "Country", name: "Kenya" },
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Service</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Sea freight to Kenya</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Cost-effective ocean freight from supported origins into Kenya. Suited to larger, heavier or bulkier cargo where cost per CBM matters more than transit speed.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Talk on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">Who sea freight suits</h2>
+      <ul class="space-y-3">
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Bulk and volume shipments where per-unit cost is the priority.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Heavy or oversized cargo that air freight cannot economically move.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Non-urgent inventory, household goods and building materials.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Consolidated orders from multiple suppliers that can wait for departure.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">How sea freight is charged</h2>
+      <p>
+        Sea freight is charged on <strong class="text-foreground">CBM</strong> (cubic metre): length × width × height × quantity in metres. That CBM is multiplied by the current sea rate for your route.
+      </p>
+      <p>
+        LCL shipments share a container with other cargo. FCL shipments book the container exclusively. Consolidation combines multiple suppliers' cargo into one shipment and one clearance.
+      </p>
+      <p>
+        <a href={helpRoutes["what-is-cbm"].path} class="text-primary hover:underline font-medium">Read: What is CBM in shipping? →</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Sea freight routes into Kenya</h2>
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {Object.values(originRoutes).map((r) => (
+          <li>
+            <a href={r.path} class="group block rounded-lg border border-border hover:border-accent hover:shadow-sm px-4 py-4 text-center transition-all">
+              <span class="text-sm font-medium group-hover:text-primary transition-colors">{r.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Sea freight FAQ</h2>
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Ship by sea to Kenya</h2>
+      <p class="text-lg text-white/85 mb-8">Get an estimate or request a confirmed sea freight quote.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Request a quote</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

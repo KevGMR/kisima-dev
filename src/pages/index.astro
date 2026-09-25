@@ -1,0 +1,665 @@
+---
+/**
+ * src/pages/index.astro
+ * ===========================================================================
+ * Kisima Cargo homepage.
+ *
+ * Structure follows Brief Section 3 exactly — 13 sections in order:
+ *   1.  Hero
+ *   2.  Quick estimator  (placeholder until Calculator is built)
+ *   3.  Popular routes
+ *   4.  How Kisima works
+ *   5.  Air vs sea
+ *   6.  Business shipping
+ *   7.  Why Kisima
+ *   8.  Tracking
+ *   9.  Shipping guides
+ *   10. Customer stories  (placeholder until real testimonials exist)
+ *   11. FAQ
+ *   12. Final CTA
+ *   13. Footer  (handled by BaseLayout)
+ *
+ * Content rules applied:
+ *   - No unverified prices.
+ *   - No unverified stats.
+ *   - Multi-origin positioning (not UK-only).
+ *   - Each section answers one question and offers one action.
+ * ===========================================================================
+ */
+
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink, whatsappMessages } from "@/config/site";
+import {
+  coreRoutes,
+  originRoutes,
+  businessRoutes,
+  toolRoutes,
+  helpRoutes,
+  helpLanding,
+} from "@/config/routes";
+
+const title = site.defaultTitle;
+const description = site.defaultDescription;
+
+// ---------------------------------------------------------------------------
+// Section data
+// ---------------------------------------------------------------------------
+
+const trustBar = [
+  "Air Freight",
+  "Sea Freight",
+  "Consolidation",
+  "Customs Support",
+  "Door-to-Door",
+];
+
+const popularRoutes = Object.values(originRoutes);
+
+const howItWorks = [
+  {
+    step: "01",
+    title: "You order or ship to us",
+    body: "Buy from a supplier or online store in any supported market, or send cargo to one of our receiving warehouses.",
+  },
+  {
+    step: "02",
+    title: "We receive and consolidate",
+    body: "Your cargo arrives at our warehouse. We check it, consolidate multiple suppliers into one shipment, and prepare documents.",
+  },
+  {
+    step: "03",
+    title: "We ship air or sea",
+    body: "You choose air for speed or sea for cost. We book the freight and keep you updated through transit.",
+  },
+  {
+    step: "04",
+    title: "We clear customs",
+    body: "We handle Kenya customs documentation and clearance, keeping you informed if any duty or documentation is required.",
+  },
+  {
+    step: "05",
+    title: "You collect or we deliver",
+    body: "Collect from our Nairobi warehouse, or choose door-to-door delivery to your address.",
+  },
+];
+
+const airVsSea = [
+  {
+    label: "Best for",
+    air: "Urgent shipments, high-value goods, smaller parcels",
+    sea: "Large volumes, bulky cargo, cost-sensitive shipments",
+  },
+  {
+    label: "Charging basis",
+    air: "Chargeable weight (actual vs volumetric, whichever is higher)",
+    sea: "CBM (cubic metres)",
+  },
+  {
+    label: "Typical transit",
+    air: "Days, depending on route",
+    sea: "Weeks, depending on route",
+  },
+  {
+    label: "Relative cost",
+    air: "Higher per kg",
+    sea: "Lower per CBM",
+  },
+];
+
+const businessCategories = Object.values(businessRoutes);
+
+const whyKisima = [
+  {
+    title: "Supported routes",
+    body: "China, UK, USA, UAE and South Africa into Kenya.",
+  },
+  {
+    title: "Real consolidation",
+    body: "Combine multiple suppliers into one shipment and one clearance.",
+  },
+  {
+    title: "Customs handled",
+    body: "Documentation and clearance managed in Nairobi.",
+  },
+  {
+    title: "Air and sea",
+    body: "Choose the mode that fits your timeline and your cargo.",
+  },
+  {
+    title: "Tracking",
+    body: "Follow your shipment from origin to Kenya.",
+  },
+  {
+    title: "Direct contact",
+    body: "Talk to a person on WhatsApp, phone or email.",
+  },
+];
+
+const guides = [
+  helpRoutes["getting-started"],
+  helpRoutes["shipping-costs"],
+  helpRoutes["volumetric-weight"],
+  helpRoutes["what-is-cbm"],
+  helpRoutes["customs-clearance-kenya"],
+  helpRoutes["import-documents-kenya"],
+].filter(Boolean);
+
+const faqs = [
+  {
+    q: "Which countries does Kisima Cargo ship from?",
+    a: "Kisima Cargo supports shipping from China, the United Kingdom, the USA, the UAE and South Africa into Kenya. Other origins may be possible — ask us on WhatsApp.",
+  },
+  {
+    q: "How much does it cost to ship to Kenya?",
+    a: "Cost depends on the route, the shipping method (air or sea), and the chargeable weight or CBM. Use our shipping calculator for an estimate, or request a quote for a confirmed price.",
+  },
+  {
+    q: "Should I use air freight or sea freight?",
+    a: "Air freight is faster and suits urgent or high-value shipments. Sea freight is cheaper per unit and suits larger, bulkier cargo. Our comparison table above explains the trade-offs.",
+  },
+  {
+    q: "Do you handle customs clearance in Kenya?",
+    a: "Yes. We prepare import documentation and manage customs clearance in Nairobi. Where duties apply, we tell you before release.",
+  },
+  {
+    q: "Can I track my shipment?",
+    a: "Yes. Use the track shipment tool with the reference you were given, or contact us on WhatsApp for an update.",
+  },
+  {
+    q: "Can you consolidate cargo from multiple suppliers?",
+    a: "Yes. Consolidation is one of our core services — we combine cargo from several suppliers into a single shipment and clearance to reduce cost.",
+  },
+];
+
+const waHref = whatsappLink(whatsappMessages.calculatorResult);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/"
+>
+
+  <!-- =====================================================================
+       1. HERO  — approx. 70vh
+       ===================================================================== -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+
+        <div class="lg:col-span-7 space-y-6">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight">
+            International shipping to Kenya made simple
+          </h1>
+
+          <p class="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl">
+            Ship from China, the UK, USA, UAE, South Africa and other supported
+            markets with Kisima Cargo. Get air and sea freight, consolidation,
+            customs support and delivery solutions in one place.
+          </p>
+
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3 pt-2">
+            <a
+              href={toolRoutes.shippingCalculator.path}
+              class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+            >
+              Get shipping estimate
+            </a>
+            <a
+              href={toolRoutes.trackShipment.path}
+              class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors"
+            >
+              Track shipment
+            </a>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors"
+            >
+              Talk to us on WhatsApp
+            </a>
+          </div>
+
+          <!-- Trust bar -->
+          <div class="pt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/80">
+            {trustBar.map((item) => (
+              <span class="inline-flex items-center gap-2">
+                <span class="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true"></span>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 hidden lg:block">
+          <div class="relative">
+            <img
+              src="/images/hero-import-export.jpg"
+              alt="Cargo being prepared for international shipping to Kenya"
+              class="w-full h-auto rounded-2xl shadow-2xl"
+              width="720"
+              height="540"
+              loading="eager"
+            />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       2. QUICK ESTIMATOR  — placeholder until Calculator island is built
+       ===================================================================== -->
+  <section class="py-12 md:py-16 bg-muted/40 border-b border-border">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-background rounded-2xl shadow-lg border border-border p-6 md:p-8">
+        <h2 class="text-2xl md:text-3xl font-heading font-semibold mb-2">
+          How much might my shipment cost?
+        </h2>
+        <p class="text-muted-foreground mb-6">
+          Get a quick estimate in under a minute. No sign-up required.
+        </p>
+
+        <!--
+          TODO: Replace this static block with the live Calculator island
+          (Phase 4). For now, it links straight to the calculator page.
+        -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Shipping from</span>
+            <select class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled>
+              <option>Select origin</option>
+              {Object.values(originRoutes).map((r) => (
+                <option>{r.label}</option>
+              ))}
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Method</span>
+            <select class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled>
+              <option>Air Freight</option>
+              <option>Sea Freight</option>
+            </select>
+          </label>
+          <label class="block">
+            <span class="text-sm font-medium mb-1.5 block">Approx. weight (kg)</span>
+            <input type="number" min="0" step="0.1" placeholder="e.g. 25" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled />
+          </label>
+        </div>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a
+            href={toolRoutes.shippingCalculator.path}
+            class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors"
+          >
+            Calculate estimate
+          </a>
+          <a
+            href={coreRoutes.requestQuote.path}
+            class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            Request a confirmed quote
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       3. POPULAR ROUTES
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Can Kisima ship from my country?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          We support the most common origins into Kenya. Pick yours to see route,
+          method and pricing context.
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {popularRoutes.map((route) => (
+          <li>
+            <a
+              href={route.path}
+              class="group block rounded-xl border border-border bg-background hover:border-accent hover:shadow-md p-5 h-full transition-all"
+            >
+              <span class="block font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                {route.label}
+              </span>
+              <span class="block text-sm text-muted-foreground">
+                to Kenya
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. HOW KISIMA WORKS
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-12">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          What happens after I start?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          A clear five-step process from supplier to your door.
+        </p>
+      </div>
+
+      <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        {howItWorks.map((step) => (
+          <li class="relative">
+            <span class="block font-heading font-bold text-3xl text-accent mb-3">
+              {step.step}
+            </span>
+            <h3 class="text-lg font-heading font-semibold mb-2">
+              {step.title}
+            </h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">
+              {step.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. AIR VS SEA
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Which method fits my shipment?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          Air and sea freight solve different problems. Here is how to choose.
+        </p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm md:text-base border-collapse">
+          <thead>
+            <tr class="border-b-2 border-border">
+              <th class="text-left py-3 pr-4 font-heading font-semibold"></th>
+              <th class="text-left py-3 pr-4 font-heading font-semibold">
+                Air Freight
+              </th>
+              <th class="text-left py-3 font-heading font-semibold">
+                Sea Freight
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {airVsSea.map((row) => (
+              <tr class="border-b border-border">
+                <td class="py-4 pr-4 font-medium align-top">{row.label}</td>
+                <td class="py-4 pr-4 text-muted-foreground align-top">{row.air}</td>
+                <td class="py-4 text-muted-foreground align-top">{row.sea}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={coreRoutes.airFreight.path}
+          class="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+        >
+          Learn about air freight →
+        </a>
+        <a
+          href={coreRoutes.seaFreight.path}
+          class="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+        >
+          Learn about sea freight →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. BUSINESS SHIPPING
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Can Kisima support my type of import?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          We regularly handle cargo for businesses and importers across these categories.
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        {businessCategories.map((cat) => (
+          <li>
+            <a
+              href={cat.path}
+              class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-4 py-5 text-center transition-all"
+            >
+              <span class="block text-sm font-medium group-hover:text-primary transition-colors">
+                {cat.label}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. WHY KISIMA
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Why ship with Kisima?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          Straightforward reasons, not slogans.
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {whyKisima.map((item) => (
+          <li class="rounded-xl border border-border p-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.title}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{item.body}</p>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-10">
+        <a
+          href={coreRoutes.requestQuote.path}
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Request a quote
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       8. TRACKING
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-secondary text-secondary-foreground">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+        Where is my shipment?
+      </h2>
+      <p class="text-lg text-secondary-foreground/80 mb-8 max-w-2xl mx-auto">
+        Enter your reference to see the current status of your cargo.
+      </p>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a
+          href={toolRoutes.trackShipment.path}
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Track shipment
+        </a>
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center rounded-md border-2 border-white/60 text-white hover:bg-white hover:text-secondary px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Ask on WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       9. SHIPPING GUIDES
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Can Kisima answer my import questions?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          Practical guides to shipping, costs and customs into Kenya.
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {guides.map((g) => (
+          <li>
+            <a
+              href={g.path}
+              class="group block rounded-xl border border-border bg-background hover:border-accent hover:shadow-md p-6 h-full transition-all"
+            >
+              <h3 class="font-heading font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
+                {g.label}
+              </h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">
+                {g.description}
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-8">
+        <a
+          href={helpLanding.path}
+          class="inline-flex items-center text-primary hover:underline font-medium"
+        >
+          Visit the full Help Centre →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       10. CUSTOMER STORIES  — placeholder section
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          Has Kisima done this for others?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          Real customer stories — coming soon.
+        </p>
+      </div>
+
+      <!--
+        TODO: Replace with genuine customer testimonials once approved by
+        Marketing (Brief Section 12 "Inputs from Kisma"). Do NOT invent
+        testimonials or add AggregateRating / Review structured data until
+        real, verifiable testimonials exist (Brief Section 11).
+      -->
+      <div class="rounded-xl border border-dashed border-border bg-background p-8 text-center">
+        <p class="text-muted-foreground italic">
+          Customer stories will appear here once verified testimonials are available.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       11. FAQ
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10">
+        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
+          What else should I know?
+        </h2>
+        <p class="text-lg text-muted-foreground">
+          The questions we hear most often.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-10">
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center text-primary hover:underline font-medium"
+        >
+          Ask a different question on WhatsApp →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       12. FINAL CTA
+       ===================================================================== -->
+  <section class="py-16 md:py-20 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+        What do I do now?
+      </h2>
+      <p class="text-lg text-white/85 mb-8">
+        Get an estimate, request a quote, or talk to us on WhatsApp.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a
+          href={toolRoutes.shippingCalculator.path}
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Get shipping estimate
+        </a>
+        <a
+          href={coreRoutes.requestQuote.path}
+          class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors"
+        >
+          Request a quote
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Footer — rendered by BaseLayout -->
+
+</BaseLayout>

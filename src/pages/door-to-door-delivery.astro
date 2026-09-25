@@ -1,0 +1,102 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes } from "@/config/routes";
+
+const title = "Door-to-Door Delivery Kenya | Kisima Cargo";
+const description = "Door-to-door shipping to Kenya — supplier pickup, freight, customs and last-mile delivery handled by Kisima Cargo.";
+const canonicalPath = "/door-to-door-delivery";
+const waHref = whatsappLink("Hello Kisima Cargo. I would like information about door-to-door delivery in Kenya.");
+
+const faqs = [
+  { q: "What does door-to-door mean?", a: "Door-to-door means the shipment is handled end-to-end — from supplier or origin warehouse, through freight and customs, to a delivery address of your choice in Kenya." },
+  { q: "Where in Kenya do you deliver?", a: "Delivery is arranged to addresses across Kenya. Remote or hard-to-reach destinations may need a specific quote — confirm with us before shipping." },
+  { q: "Is door-to-door always available?", a: "It depends on the origin, cargo and destination. Some shipments are better collected from our Nairobi warehouse. We'll advise per shipment." },
+  { q: "How is delivery priced?", a: "Delivery is quoted separately based on destination and cargo size. Where possible, it's bundled into your confirmed quote." },
+  { q: "Can I pick up from the warehouse instead?", a: "Yes. Collection from our Nairobi warehouse is always available as an alternative." },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Door-to-Door Delivery Kenya",
+    serviceType: "Freight delivery",
+    provider: { "@type": "Organization", name: site.name, url: site.productionUrl },
+    areaServed: { "@type": "Country", name: "Kenya" },
+    description,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+  },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Service</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Door-to-door delivery</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Full end-to-end handling — supplier or warehouse, freight, customs clearance, and final delivery to your address in Kenya.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Talk on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">What's included</h2>
+      <ul class="space-y-3">
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Supplier pickup or receiving at origin warehouse.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Freight (air or sea) and consolidation where applicable.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Customs clearance in Nairobi.</span></li>
+        <li class="flex gap-3"><span class="text-accent shrink-0 mt-1">•</span><span>Last-mile delivery to your address in Kenya.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">When to choose door-to-door</h2>
+      <p>
+        Door-to-door is the simplest option when you don't want to coordinate multiple stages, or when you're not able to collect from our Nairobi warehouse. It's also useful for larger or awkward cargo where arranging your own transport is difficult.
+      </p>
+      <p>
+        If you're local to Nairobi and want to control the final leg yourself, collection from our warehouse is available instead.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Door-to-door FAQ</h2>
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Ship door-to-door to Kenya</h2>
+      <p class="text-lg text-white/85 mb-8">Request a quote with delivery included.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Request a quote</a>
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Ask on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

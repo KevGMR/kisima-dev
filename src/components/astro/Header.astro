@@ -1,0 +1,224 @@
+---
+/**
+ * src/components/astro/Header.astro
+ * ===========================================================================
+ * Site-wide header.
+ *
+ * Design decisions:
+ *   - Zero JavaScript. Nav dropdowns use CSS :hover and :focus-within.
+ *   - All links are real <a href> — crawlable, extractable, keyboard-navigable.
+ *   - Mobile: nav collapses to a horizontal scroll bar. No hamburger, no state.
+ *     Persistent mobile actions (Calculate/Track/WhatsApp) live in the separate
+ *     MobileActionBar component (Brief Section 10).
+ *
+ * Brief refs: Section 3 (nav order, CTA hierarchy), Section 5 (nav structure),
+ *             Section 10 (compact header, three mobile actions).
+ * ===========================================================================
+ */
+
+import { site, whatsappLink, whatsappMessages } from "@/config/site";
+import { coreRoutes, originRoutes, businessRoutes, toolRoutes, helpLanding } from "@/config/routes";
+
+// ---------------------------------------------------------------------------
+// Navigation model — matches Brief Section 5 exactly.
+// ---------------------------------------------------------------------------
+const nav = [
+  {
+    label: "Ship",
+    items: [
+      { label: "Air Freight",        href: coreRoutes.airFreight.path },
+      { label: "Sea Freight",        href: coreRoutes.seaFreight.path },
+      { label: "Door-to-Door",       href: coreRoutes.doorToDoor.path },
+      { label: "Customs Clearance",  href: coreRoutes.customsClearance.path },
+      { label: "Shop & Ship",        href: coreRoutes.shopAndShip.path },
+      { label: "Consolidation",      href: coreRoutes.cargoConsolidation.path },
+    ],
+  },
+  {
+    label: "Routes",
+    items: Object.values(originRoutes).map((r) => ({
+      label: `${r.label} to Kenya`,
+      href: r.path,
+    })),
+  },
+  {
+    label: "Business",
+    items: Object.values(businessRoutes).map((b) => ({
+      label: b.label,
+      href: b.path,
+    })),
+  },
+  {
+    label: "Tools",
+    items: [
+      { label: "Shipping Calculator",     href: toolRoutes.shippingCalculator.path },
+      { label: "Volumetric Weight",       href: toolRoutes.volumetricWeightCalculator.path },
+      { label: "CBM Calculator",          href: toolRoutes.cbmCalculator.path },
+      { label: "Track Shipment",          href: toolRoutes.trackShipment.path },
+    ],
+  },
+  {
+    label: "Help Centre",
+    items: [
+      { label: "All help articles",        href: helpLanding.path },
+    ],
+  },
+];
+
+// Primary WhatsApp CTA (brief Section 3 — "Text CTA: Talk to us on WhatsApp")
+const waHref = whatsappLink(whatsappMessages.calculatorResult);
+---
+
+<a
+  href="#main"
+  class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded"
+>
+  Skip to content
+</a>
+
+<header
+  class="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/70"
+  data-header
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between gap-4">
+
+      <!-- Logo -->
+      <a href="/" class="flex items-center shrink-0" aria-label={`${site.name} home`}>
+        <img
+          src="/images/kisima-logo.png"
+          alt={`${site.name} logo`}
+          class="h-9 w-auto"
+          width="140"
+          height="36"
+          loading="eager"
+        />
+      </a>
+
+      <!-- Desktop nav (hidden on mobile) -->
+      <nav
+        class="hidden lg:flex items-center gap-1 flex-1 justify-center"
+        aria-label="Primary navigation"
+      >
+        {nav.map((group) => (
+          <div class="relative group">
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {group.label}
+              <svg
+                class="h-3 w-3 transition-transform group-hover:rotate-180"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <!-- Dropdown — pure CSS on hover/focus-within -->
+            <div
+              class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 absolute left-0 top-full pt-1 transition-opacity duration-150 ease-out"
+              role="menu"
+            >
+              <ul class="min-w-[200px] bg-popover border border-border rounded-lg shadow-lg py-2">
+                {group.items.map((item) => (
+                  <li role="none">
+                    <a
+                      href={item.href}
+                      class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors"
+                      role="menuitem"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </nav>
+
+      <!-- Desktop CTAs -->
+      <div class="hidden lg:flex items-center gap-2 shrink-0">
+        <a
+          href={toolRoutes.shippingCalculator.path}
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-4 py-2 text-sm font-semibold transition-colors"
+        >
+          Get shipping estimate
+        </a>
+        <a
+          href={waHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center rounded-md border border-border text-foreground hover:bg-muted px-3 py-2 text-sm font-medium transition-colors"
+          aria-label="Talk to us on WhatsApp"
+        >
+          WhatsApp
+        </a>
+      </div>
+
+      <!-- Mobile: compact actions (only two, third lives in MobileActionBar) -->
+      <div class="flex lg:hidden items-center gap-2 shrink-0">
+        <a
+          href={toolRoutes.shippingCalculator.path}
+          class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-3 py-2 text-xs font-semibold transition-colors"
+        >
+          Estimate
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!--
+    Mobile nav — horizontal scroll bar below the header.
+    No JS toggle: the brief requires the header to stay compact, and a
+    scroll bar is more usable on mobile than a hamburger for 5 categories.
+  -->
+  <nav
+    class="lg:hidden border-t border-border/40 overflow-x-auto whitespace-nowrap"
+    aria-label="Primary navigation (mobile)"
+  >
+    <ul class="flex items-center gap-1 px-4 py-2 min-w-max">
+      {nav.map((group) => (
+        <li>
+          <details class="group">
+            <summary
+              class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors cursor-pointer list-none"
+            >
+              {group.label}
+              <svg
+                class="h-3 w-3 transition-transform group-open:rotate-180"
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </summary>
+            <ul class="mt-1 ml-2 mb-2 space-y-0.5">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="block px-3 py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
