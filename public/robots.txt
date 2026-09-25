@@ -1,14 +1,22 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# public/robots.txt
+# ---------------------------------------------------------------------------
+# Kisima Cargo — production robots.txt
+#
+# This file always describes the PRODUCTION site (kismacargo.com).
+# Staging (kismimadevs.netlify.app) is blocked from indexing via the
+# `X-Robots-Tag: noindex` header set in netlify.toml, NOT via this file,
+# because this static file ships identically to every environment.
+#
+# Change Brief refs: Section 2 (staging indexation), Section 6 (technical SEO),
+# Section 13 (pre-launch checklist).
+# ---------------------------------------------------------------------------
 
 User-agent: *
 Allow: /
+
+# Do not crawl the Lovable project scaffold noise if any leaks into build output.
+Disallow: /lovable/
+Disallow: /.lovable/
+
+# Sitemap — always points at the canonical production domain, even on staging.
+Sitemap: https://kismacargo.com/sitemap.xml

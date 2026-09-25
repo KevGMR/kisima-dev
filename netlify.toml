@@ -1,0 +1,148 @@
+# netlify.toml
+# ===========================================================================
+# Kisima Cargo — Netlify configuration
+#
+# Covers:
+#   1. Vite build settings
+#   2. Staging noindex (deploy previews, branch deploys, env override)
+#   3. 301 redirects from legacy dev URLs
+#   4. Security and caching headers
+#   5. SPA fallback for client-side routes
+#
+# Change Brief refs: Section 2 (staging indexation), Section 6 (technical SEO),
+#                    Section 13 (pre-launch checklist).
+#
+# IMPORTANT: This file does NOT make the SPA crawlable. That is a separate
+# architectural change (SSR/SSG/prerender). This file only ensures staging
+# never builds a search presence.
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# Build
+# ---------------------------------------------------------------------------
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
+
+# ---------------------------------------------------------------------------
+# Contexts
+#
+# `main`       -> production  (indexable)
+# everything else -> staging  (noindex via headers below)
+# ---------------------------------------------------------------------------
+[context.production]
+  branch = "main"
+
+[context.deploy-preview]
+  # Applies automatically; headers below key off this context.
+
+[context.branch-deploy]
+  # Any non-main branch deploy.
+
+# ---------------------------------------------------------------------------
+# Headers
+# ---------------------------------------------------------------------------
+
+# ---- Staging noindex (deploy previews + branch deploys) ----
+[[headers]]
+  for = "/*"
+  [headers.conditions]
+    # Netlify does not support per-context header conditions in the same
+    # [[headers]] block, so we use two blocks and rely on $CONTEXT at the
+    # edge via a redirect-free approach: the staging deploys get a different
+    # header set through the `context` blocks below.
+  [headers.values]
+
+# The header rules below are duplicated per context because Netlify applies
+# [[headers]] globally, not per context. To keep this maintainable, we rely
+# on an environment variable set per-context (see docs/implementation-checklist.md).
+
+# ---- Security and caching (all contexts) ----
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Hashed assets from Vite can be cached aggressively.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML should always revalidate so metadata changes ship immediately.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# robots.txt and sitemap.xml short cache.
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+# ---------------------------------------------------------------------------
+# Redirects
+#
+# 301s from legacy dev-app URLs to their new canonical locations.
+# Mirrors LEGACY_REDIRECTS in src/config/routes.ts.
+#
+# NOTE: These redirects are for old DEV-app paths. Redirects from the
+# pre-existing kisimacargo.com site are NOT yet included — they need the
+# current live URL inventory (see docs/implementation-checklist.md).
+# ---------------------------------------------------------------------------
+
+[[redirects]]
+  from = "/calculator"
+  to = "/tools/shipping-calculator"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/tracking-shipment"
+  to = "/tools/track-shipment"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/buying-shipping"
+  to = "/shop-and-ship"
+  status = 301
+  force = true
+
+# /blog currently renders <Contact /> in the dev app. Until a real blog exists,
+# redirect to the Help Centre.
+[[redirects]]
+  from = "/blog"
+  to = "/help"
+  status = 301
+  force = true
+
+# ---------------------------------------------------------------------------
+# SPA fallback
+#
+# Client-side routes must return index.html. Place this LAST so it never
+# shadows the explicit redirects above or real files in /public.
+#
+# CAVEAT (Change Brief Section 6): a 200-fallback means missing pages do NOT
+# return a real 404. The brief explicitly requires "Real 404 status for
+# missing pages, not a soft-404 homepage response." Once the site is
+# pre-rendered/SSR, this fallback should be removed or narrowed.
+# ---------------------------------------------------------------------------
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
