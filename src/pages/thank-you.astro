@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { coreRoutes, toolRoutes } from "@/config/routes";
+
+const title = "Thank you | Kisima Cargo";
+const description = "Your message has been received.";
+const canonicalPath = "/thank-you";
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} noindex={true}>
+  <section class="py-20 md:py-28 bg-background">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm font-medium text-accent uppercase tracking-wide mb-4">Received</p>
+      <h1 class="text-3xl md:text-4xl font-heading font-bold mb-6">Thank you — we've got your message</h1>
+      <p class="text-lg text-muted-foreground mb-10 leading-relaxed">
+        We'll respond within one business day. If you need an answer sooner, message us on WhatsApp.
+      </p>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">Get an estimate</a>
+        <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors">Back to contact</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+
+const title = "Our Locations | Kisima Cargo";
+const description = "Kisima Cargo offices and receiving warehouses in Kenya, China, UAE, UK, USA and South Africa.";
+const canonicalPath = "/locations";
+
+const entries = await getCollection("locations");
+const sorted = entries.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/locations`,
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Locations</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Where we operate</h1>
+        <p class="text-lg text-white/90 leading-relaxed">
+          Receiving warehouses in {sorted.filter((l) => l.data.role.includes("Receiving")).length} origin countries and our head office in Nairobi, Kenya.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sorted.map((loc) => (
+          <li>
+            <a href={`/locations/${loc.id}`} class="group block rounded-xl border border-border hover:border-accent hover:shadow-md p-6 h-full transition-all">
+              <p class="text-xs text-accent uppercase tracking-wide font-medium mb-1">{loc.data.role}</p>
+              <h2 class="font-heading font-semibold text-xl mb-1 group-hover:text-primary transition-colors">{loc.data.label}</h2>
+              <p class="text-xs text-muted-foreground mb-3">{loc.data.country}</p>
+              <p class="text-sm text-muted-foreground leading-relaxed mb-4">{loc.data.lede}</p>
+              <address class="not-italic text-xs text-muted-foreground leading-relaxed">
+                {loc.data.address.join(" ")}
+              </address>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

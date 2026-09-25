@@ -1,0 +1,144 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { toolRoutes, helpRoutes, coreRoutes } from "@/config/routes";
+
+const title = "Volumetric Weight Calculator | Kisima Cargo";
+const description = "Calculate volumetric weight for air freight. Understand chargeable weight before you ship to Kenya with Kisima Cargo.";
+const canonicalPath = "/tools/volumetric-weight-calculator";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Volumetric Weight Calculator",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  description,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "KES" },
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-2">Tools</p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-4">Volumetric weight calculator</h1>
+        <p class="text-lg text-muted-foreground">
+          Enter your package dimensions to calculate volumetric weight and understand chargeable weight for air freight.
+        </p>
+      </header>
+
+      <!--
+        Vanilla JS calculator. No React. Uses the default divisor of 5000 —
+        the same used in the shipping calculator's placeholder routes. In the
+        future this may read from a shared config.
+      -->
+      <div id="vol-calc" class="rounded-xl border border-border bg-background p-6 md:p-8 space-y-6">
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Length (cm)</span>
+            <input id="vw-length" type="number" min="0.1" step="0.1" value="40" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Width (cm)</span>
+            <input id="vw-width" type="number" min="0.1" step="0.1" value="30" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Height (cm)</span>
+            <input id="vw-height" type="number" min="0.1" step="0.1" value="30" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Quantity</span>
+            <input id="vw-qty" type="number" min="1" step="1" value="1" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Actual weight (kg)</span>
+            <input id="vw-actual" type="number" min="0" step="0.1" value="5" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Volumetric divisor</span>
+            <input id="vw-divisor" type="number" min="1" step="1" value="5000" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+        </div>
+
+        <button id="vw-calc-btn" type="button" class="w-full rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
+          Calculate
+        </button>
+
+        <div id="vw-result" class="hidden rounded-lg border border-border bg-muted/30 p-6 space-y-3">
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p class="text-xs text-muted-foreground uppercase tracking-wide mb-1">Actual weight</p>
+              <p id="vw-r-actual" class="text-lg font-heading font-semibold">—</p>
+            </div>
+            <div>
+              <p class="text-xs text-muted-foreground uppercase tracking-wide mb-1">Volumetric weight</p>
+              <p id="vw-r-vol" class="text-lg font-heading font-semibold">—</p>
+            </div>
+            <div class="col-span-2 pt-3 border-t border-border">
+              <p class="text-xs text-muted-foreground uppercase tracking-wide mb-1">Chargeable weight</p>
+              <p id="vw-r-chargeable" class="text-2xl font-heading font-bold text-accent">—</p>
+              <p id="vw-r-basis" class="text-xs text-muted-foreground mt-1"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script is:inline>
+        (function () {
+          const $ = (id) => document.getElementById(id);
+          const btn = $("vw-calc-btn");
+          const result = $("vw-result");
+          if (!btn || !result) return;
+
+          btn.addEventListener("click", () => {
+            const L = parseFloat($("vw-length").value) || 0;
+            const W = parseFloat($("vw-width").value) || 0;
+            const H = parseFloat($("vw-height").value) || 0;
+            const Q = parseInt($("vw-qty").value, 10) || 1;
+            const actual = parseFloat($("vw-actual").value) || 0;
+            const divisor = parseFloat($("vw-divisor").value) || 5000;
+
+            if (L <= 0 || W <= 0 || H <= 0 || Q <= 0 || divisor <= 0) {
+              alert("Please enter positive dimensions, quantity and divisor.");
+              return;
+            }
+
+            const vol = (L * W * H * Q) / divisor;
+            const chargeable = Math.max(actual, vol);
+            const basis = vol > actual ? "Volumetric weight is higher" : "Actual weight is higher";
+
+            $("vw-r-actual").textContent = actual.toFixed(2) + " kg";
+            $("vw-r-vol").textContent = vol.toFixed(2) + " kg";
+            $("vw-r-chargeable").textContent = chargeable.toFixed(2) + " kg";
+            $("vw-r-basis").textContent = basis;
+            result.classList.remove("hidden");
+          });
+        })();
+      </script>
+
+      <section class="mt-12 space-y-4 text-muted-foreground leading-relaxed">
+        <h2 class="text-xl font-heading font-semibold text-foreground">How this works</h2>
+        <p>
+          Volumetric weight = (Length × Width × Height × Quantity) ÷ the route-specific divisor. Chargeable weight for air freight is the higher of actual weight and volumetric weight.
+        </p>
+        <p>
+          <a href={helpRoutes["volumetric-weight"].path} class="text-primary hover:underline font-medium">Read the full explanation →</a>
+        </p>
+      </section>
+
+      <section class="mt-10 rounded-lg border border-border bg-muted/30 p-6">
+        <p class="text-sm text-muted-foreground mb-4">Want a full shipping estimate including freight, handling and transit?</p>
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">
+          Use the shipping calculator
+        </a>
+      </section>
+
+    </div>
+  </section>
+</BaseLayout>

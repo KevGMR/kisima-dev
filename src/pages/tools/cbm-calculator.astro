@@ -1,0 +1,112 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { toolRoutes, helpRoutes, coreRoutes } from "@/config/routes";
+
+const title = "CBM Calculator | Sea Freight to Kenya | Kisima Cargo";
+const description = "Calculate CBM for sea freight. Estimate cubic meters for LCL shipments to Kenya with Kisima Cargo.";
+const canonicalPath = "/tools/cbm-calculator";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "CBM Calculator",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Any",
+  description,
+  offers: { "@type": "Offer", price: "0", priceCurrency: "KES" },
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-2">Tools</p>
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-4">CBM calculator</h1>
+        <p class="text-lg text-muted-foreground">
+          Calculate cubic metres (CBM) for sea freight. CBM is the charging basis for LCL shipments to Kenya.
+        </p>
+      </header>
+
+      <div id="cbm-calc" class="rounded-xl border border-border bg-background p-6 md:p-8 space-y-6">
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Length (cm)</span>
+            <input id="cbm-length" type="number" min="0.1" step="0.1" value="120" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Width (cm)</span>
+            <input id="cbm-width" type="number" min="0.1" step="0.1" value="80" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Height (cm)</span>
+            <input id="cbm-height" type="number" min="0.1" step="0.1" value="100" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+          <label class="block">
+            <span class="text-xs font-medium mb-1 block">Quantity</span>
+            <input id="cbm-qty" type="number" min="1" step="1" value="1" class="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          </label>
+        </div>
+
+        <button id="cbm-calc-btn" type="button" class="w-full rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
+          Calculate CBM
+        </button>
+
+        <div id="cbm-result" class="hidden rounded-lg border border-border bg-muted/30 p-6">
+          <p class="text-xs text-muted-foreground uppercase tracking-wide mb-1">Total CBM</p>
+          <p id="cbm-r-total" class="text-3xl font-heading font-bold text-accent">—</p>
+          <p id="cbm-r-detail" class="text-xs text-muted-foreground mt-2"></p>
+        </div>
+      </div>
+
+      <script is:inline>
+        (function () {
+          const $ = (id) => document.getElementById(id);
+          const btn = $("cbm-calc-btn");
+          const result = $("cbm-result");
+          if (!btn || !result) return;
+
+          btn.addEventListener("click", () => {
+            const L = (parseFloat($("cbm-length").value) || 0) / 100;
+            const W = (parseFloat($("cbm-width").value) || 0) / 100;
+            const H = (parseFloat($("cbm-height").value) || 0) / 100;
+            const Q = parseInt($("cbm-qty").value, 10) || 1;
+
+            if (L <= 0 || W <= 0 || H <= 0 || Q <= 0) {
+              alert("Please enter positive dimensions and quantity.");
+              return;
+            }
+
+            const single = L * W * H;
+            const total = single * Q;
+
+            $("cbm-r-total").textContent = total.toFixed(3) + " CBM";
+            $("cbm-r-detail").textContent =
+              "Single package: " + single.toFixed(3) + " CBM · Quantity: " + Q;
+            result.classList.remove("hidden");
+          });
+        })();
+      </script>
+
+      <section class="mt-12 space-y-4 text-muted-foreground leading-relaxed">
+        <h2 class="text-xl font-heading font-semibold text-foreground">How this works</h2>
+        <p>
+          CBM (cubic metre) = Length(m) × Width(m) × Height(m) × Quantity. Sea freight is charged per CBM. Cargo measured on its outer packed dimensions, including pallets.
+        </p>
+        <p>
+          <a href={helpRoutes["what-is-cbm"].path} class="text-primary hover:underline font-medium">Read the full explanation →</a>
+        </p>
+      </section>
+
+      <section class="mt-10 rounded-lg border border-border bg-muted/30 p-6">
+        <p class="text-sm text-muted-foreground mb-4">Want a full shipping estimate including rates, handling and transit?</p>
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">
+          Use the shipping calculator
+        </a>
+      </section>
+
+    </div>
+  </section>
+</BaseLayout>

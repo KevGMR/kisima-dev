@@ -1,0 +1,150 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes } from "@/config/routes";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("locations");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+
+const canonicalPath = `/locations/${entry.id}`;
+const title = `${d.label} | Kisima Cargo Locations`;
+const description = d.lede;
+
+const waHref = whatsappLink(`Hello Kisima Cargo. I have a question about your ${d.label} location.`);
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: `${site.name} — ${d.label}`,
+  url: `${site.productionUrl}${canonicalPath}`,
+  ...(d.phoneE164 ? { telephone: d.phoneE164 } : {}),
+  ...(d.email ? { email: d.email } : {}),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: d.address.slice(0, -1).join(", "),
+    addressLocality: d.label,
+    addressCountry: d.country === "Kenya" ? "KE"
+      : d.country === "United Kingdom" ? "GB"
+      : d.country === "UAE" ? "AE"
+      : d.country === "South Africa" ? "ZA"
+      : d.country === "USA" ? "US"
+      : d.country === "China" ? "CN"
+      : "",
+  },
+  ...(d.hours ? { openingHours: d.hours } : {}),
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.productionUrl },
+    { "@type": "ListItem", position: 2, name: "Locations", item: `${site.productionUrl}/locations` },
+    { "@type": "ListItem", position: 3, name: d.label, item: `${site.productionUrl}${canonicalPath}` },
+  ],
+};
+
+const structuredData = [localBusinessSchema, breadcrumbSchema];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+
+  <nav aria-label="Breadcrumb" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 text-xs text-muted-foreground">
+    <ol class="flex gap-2 items-center flex-wrap">
+      <li><a href="/" class="hover:text-primary">Home</a></li>
+      <li aria-hidden="true">›</li>
+      <li><a href="/locations" class="hover:text-primary">Locations</a></li>
+      <li aria-hidden="true">›</li>
+      <li class="text-foreground font-medium">{d.label}</li>
+    </ol>
+  </nav>
+
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">{d.role}</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Kisima Cargo {d.label}</h1>
+        <p class="text-lg text-white/90 leading-relaxed">{d.lede}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      {d.todoNote && (
+        <div class="mb-8 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+          <strong class="font-semibold">Note:</strong> {d.todoNote}
+        </div>
+      )}
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <div>
+          <h2 class="text-xl font-heading font-semibold mb-4">Address</h2>
+          <address class="not-italic text-muted-foreground leading-relaxed">
+            {d.address.map((line, i) => (<>{line}{i < d.address.length - 1 && <br />}</>))}
+          </address>
+          {d.mapLink && (
+            <a href={d.mapLink} target="_blank" rel="noopener noreferrer" class="inline-block mt-4 text-primary hover:underline font-medium text-sm">
+              View on map →
+            </a>
+          )}
+        </div>
+
+        <div>
+          <h2 class="text-xl font-heading font-semibold mb-4">Contact</h2>
+          <ul class="space-y-2 text-sm">
+            {d.phone && d.phoneE164 && (
+              <li><a href={`tel:${d.phoneE164}`} class="text-primary hover:underline">{d.phone}</a></li>
+            )}
+            {d.email && (
+              <li><a href={`mailto:${d.email}`} class="text-primary hover:underline">{d.email}</a></li>
+            )}
+            {d.hours && (
+              <li class="text-muted-foreground pt-2 border-t border-border">{d.hours}</li>
+            )}
+          </ul>
+        </div>
+      </div>
+
+      {d.services && d.services.length > 0 && (
+        <section class="mt-12">
+          <h2 class="text-2xl font-heading font-semibold mb-4">What happens here</h2>
+          <ul class="space-y-2">
+            {d.services.map((s) => (
+              <li class="flex gap-3 text-muted-foreground"><span class="text-accent shrink-0 mt-1">•</span><span>{s}</span></li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {d.lastReviewed && (
+        <p class="mt-10 text-xs text-muted-foreground">Last reviewed: {d.lastReviewed}</p>
+      )}
+
+      <section class="mt-12 rounded-lg border border-border bg-muted/30 p-6">
+        <h2 class="text-lg font-heading font-semibold mb-3">Need help?</h2>
+        <div class="flex flex-wrap gap-3">
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">Ask on WhatsApp</a>
+          <a href={coreRoutes.contact.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Contact us</a>
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Get an estimate</a>
+        </div>
+      </section>
+
+      <div class="mt-10">
+        <a href="/locations" class="inline-flex items-center text-primary hover:underline font-medium">← All locations</a>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>

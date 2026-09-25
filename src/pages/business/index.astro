@@ -1,0 +1,70 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+import { originRoutes, coreRoutes, toolRoutes } from "@/config/routes";
+
+const title = "Business Shipping to Kenya | Kisima Cargo";
+const description = "Shipping solutions for businesses importing to Kenya — clothing, electronics, machinery, auto parts, wholesale stock and e-commerce.";
+const canonicalPath = "/business";
+
+const entries = await getCollection("business");
+const sorted = entries.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/business`,
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Business</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">Business shipping to Kenya</h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          We handle imports for businesses across the most common commercial categories. Air and sea freight, consolidation, customs and delivery.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">Request a quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Categories we ship</h2>
+      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sorted.map((b) => (
+          <li>
+            <a href={`/business/${b.id}`} class="group block rounded-xl border border-border hover:border-accent hover:shadow-md p-6 h-full transition-all">
+              <h3 class="font-heading font-semibold text-xl mb-2 group-hover:text-primary transition-colors">{b.data.label}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{b.data.lede}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Origins we serve</h2>
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {Object.values(originRoutes).map((r) => (
+          <li>
+            <a href={r.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-4 py-4 text-center transition-all">
+              <span class="text-sm font-medium group-hover:text-primary transition-colors">{r.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

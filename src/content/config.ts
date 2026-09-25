@@ -140,4 +140,55 @@ const help = defineCollection({
   }),
 });
 
-export const collections = { routes, business, help };
+
+/* ---------------------------------------------------------------------------
+ * locations
+ * ------------------------------------------------------------------------- */
+const locations = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/locations" }),
+  schema: z.object({
+    /** Display label, e.g. "Nairobi". */
+    label: z.string(),
+
+    /** Country, e.g. "Kenya". */
+    country: z.string(),
+
+    /** Role label, e.g. "Head Office", "Receiving Warehouse". */
+    role: z.string(),
+
+    /** Short lede — 1-2 sentences. */
+    lede: z.string(),
+
+    /** Address lines, in display order. */
+    address: z.array(z.string()),
+
+    /** Optional phone in display format. */
+    phone: z.string().nullable().optional(),
+
+    /** Optional phone in E.164 (tel: link). */
+    phoneE164: z.string().nullable().optional(),
+
+    /** Optional email. */
+    email: z.string().nullable().optional(),
+
+    /** Optional opening hours. */
+    hours: z.string().nullable().optional(),
+
+    /** Optional Google Maps URL. */
+    mapLink: z.string().nullable().optional(),
+
+    /** Optional bullet list of what customers do at this location. */
+    services: z.array(z.string()).optional(),
+
+    /** Optional note if data is pending verification. */
+    todoNote: z.string().nullable().optional(),
+
+    /** Optional "last reviewed" date. */
+    lastReviewed: z.string().optional(),
+
+    /** Sort order in listings. Lower = earlier. */
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { routes, business, help, locations };

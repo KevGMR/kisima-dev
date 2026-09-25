@@ -1,0 +1,115 @@
+---
+/**
+ * src/pages/terms.astro
+ *
+ * TEMPLATE — must be reviewed by legal before launch.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+
+const title = "Terms of Service | Kisima Cargo";
+const description = "Terms governing use of the Kisima Cargo website and provision of shipping services.";
+const canonicalPath = "/terms";
+
+const lastUpdated = "2026-09-25";
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-3">Terms of Service</h1>
+        <p class="text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
+      </header>
+
+      <div class="prose prose-slate max-w-none space-y-8 text-muted-foreground leading-relaxed">
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">1. Agreement</h2>
+          <p>
+            By using this website or engaging {site.name} for shipping services, you agree to these terms. If you do not agree, please do not use the site or our services.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">2. Website content</h2>
+          <p>
+            Information on this website is provided for general guidance. Shipping estimates, transit times and sample content are indicative only and are not binding. A confirmed quotation provided by {site.name} in writing (including by email or WhatsApp) is the authoritative price and terms for a shipment.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">3. Quotes and estimates</h2>
+          <p>
+            The shipping calculator produces estimates based on the values you enter. Actual costs are confirmed after cargo is received, dimensions and weights are verified, and any duties or applicable charges are determined.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">4. Customer responsibilities</h2>
+          <ul class="space-y-2 list-disc pl-5">
+            <li>You must provide accurate descriptions, values and documentation for the cargo you ship.</li>
+            <li>You are responsible for ensuring goods are legal to import into Kenya and comply with applicable regulations.</li>
+            <li>You must not ship prohibited or restricted items without the required permits.</li>
+            <li>You must comply with customs and regulatory requirements in both the origin and destination countries.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">5. Prohibited and restricted goods</h2>
+          <p>
+            Certain goods cannot be shipped through {site.name}. Where a shipment contains prohibited or restricted items, we may be required to refuse, hold or return the shipment at your cost. Contact us before shipping if you are unsure about your items.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">6. Duties, taxes and customs</h2>
+          <p>
+            As the importer of record, you are responsible for any customs duty, VAT or other charges assessed by Kenya customs or the authorities in the origin country. We will inform you of amounts due before release where possible.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">7. Liability</h2>
+          <p>
+            Our liability for loss or damage is limited to the extent permitted by applicable law and by any insurance cover you have requested. We are not liable for indirect or consequential losses.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">8. Payment</h2>
+          <p>
+            Payment terms are confirmed in writing for each shipment. We may require prepayment for freight and duties before release.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">9. Governing law</h2>
+          <p>
+            These terms are governed by the laws of Kenya. Disputes will be subject to the jurisdiction of the Kenyan courts.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">10. Changes</h2>
+          <p>
+            We may update these terms from time to time. The "last updated" date at the top will change when we do.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">11. Contact</h2>
+          <p>
+            For questions about these terms, contact <a href={`mailto:${site.contact.email}`} class="text-primary hover:underline">{site.contact.email}</a>.
+          </p>
+        </section>
+
+        <p class="text-xs text-muted-foreground border-t border-border pt-6">
+          These terms are a general template. They must be reviewed by qualified legal counsel before being relied upon.
+        </p>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>

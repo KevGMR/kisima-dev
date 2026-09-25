@@ -1,0 +1,114 @@
+---
+/**
+ * src/pages/privacy-policy.astro
+ *
+ * TEMPLATE — must be reviewed by legal before launch.
+ * The text below reflects what the site actually does (Netlify Forms, no
+ * third-party tracking beyond the GA4 placeholder, no user accounts, no
+ * payment handling). It is NOT a substitute for legal advice.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site } from "@/config/site";
+
+const title = "Privacy Policy | Kisima Cargo";
+const description = "How Kisima Cargo collects, uses and protects personal information submitted through this website.";
+const canonicalPath = "/privacy-policy";
+
+const lastUpdated = "2026-09-25";
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath}>
+  <section class="py-12 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <header class="mb-10">
+        <h1 class="text-3xl md:text-4xl font-heading font-bold mb-3">Privacy Policy</h1>
+        <p class="text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
+      </header>
+
+      <div class="prose prose-slate max-w-none space-y-8 text-muted-foreground leading-relaxed">
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Who we are</h2>
+          <p>
+            {site.name} operates this website and provides international shipping services into Kenya. References to "we", "us" or "our" mean {site.name}.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">What we collect</h2>
+          <p>We collect personal information only when you choose to provide it. This includes:</p>
+          <ul class="space-y-2 list-disc pl-5">
+            <li><strong>Contact and quote requests</strong> — name, email, phone, shipping route, cargo details you enter into our forms.</li>
+            <li><strong>Communications</strong> — messages you send us by email, WhatsApp or phone.</li>
+            <li><strong>Site usage</strong> — standard server logs and, when enabled, aggregated analytics data such as page views and referrers. We do not currently run behavioural advertising or cross-site tracking.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">How we use it</h2>
+          <ul class="space-y-2 list-disc pl-5">
+            <li>To respond to quote requests and enquiries.</li>
+            <li>To arrange shipping, customs clearance and delivery.</li>
+            <li>To keep you updated on the status of your shipment.</li>
+            <li>To improve the website and our services.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Who we share it with</h2>
+          <p>
+            We share personal information only where necessary to provide the service you have requested — for example, with customs agents, freight carriers and delivery partners. We do not sell personal information to third parties.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">How long we keep it</h2>
+          <p>
+            We keep personal information for as long as needed to provide the service, meet legal and accounting obligations, and resolve any disputes. When no longer needed, information is securely deleted.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Your rights</h2>
+          <p>
+            Subject to applicable law, you may request access to, correction of, or deletion of personal information we hold about you. You may also object to specific uses. Contact us at <a href={`mailto:${site.contact.email}`} class="text-primary hover:underline">{site.contact.email}</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Cookies and analytics</h2>
+          <p>
+            This site uses minimal cookies. When analytics is enabled, we use it to understand which pages are useful; we do not use it to build profiles of individual visitors.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Security</h2>
+          <p>
+            We take reasonable technical and organisational measures to protect personal information. No transmission over the internet is completely secure, and we cannot guarantee absolute security.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Changes to this policy</h2>
+          <p>
+            We may update this policy from time to time. The "last updated" date at the top will change when we do.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-xl font-heading font-semibold text-foreground mb-3">Contact</h2>
+          <p>
+            For privacy questions, contact <a href={`mailto:${site.contact.email}`} class="text-primary hover:underline">{site.contact.email}</a> or call <a href={`tel:${site.contact.phoneE164}`} class="text-primary hover:underline">{site.contact.phoneDisplay}</a>.
+          </p>
+        </section>
+
+        <p class="text-xs text-muted-foreground border-t border-border pt-6">
+          This policy is a general template. It must be reviewed by qualified legal counsel before being relied upon.
+        </p>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>
