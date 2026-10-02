@@ -18,8 +18,12 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { site, whatsappLink } from "@/config/site";
 import { coreRoutes, toolRoutes } from "@/config/routes";
 
+interface Props {
+  entry: import("astro:content").CollectionEntry<"shippingCentre">;
+}
+
 export async function getStaticPaths() {
-  const entries = await getCollection("help");
+  const entries = await getCollection("shippingCentre");
   return entries.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },
@@ -29,7 +33,7 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const data = entry.data;
 
-const canonicalPath = `/help/${entry.id}`;
+const canonicalPath = `/shipping-centre/${entry.id}`;
 const title = data.title;
 const description = data.description;
 
@@ -72,7 +76,7 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: site.productionUrl },
-    { "@type": "ListItem", position: 2, name: "Help Centre", item: `${site.productionUrl}/help` },
+    { "@type": "ListItem", position: 2, name: "Help Centre", item: `${site.productionUrl}/shipping-centre` },
     { "@type": "ListItem", position: 3, name: data.label, item: `${site.productionUrl}${canonicalPath}` },
   ],
 };
@@ -91,7 +95,7 @@ const structuredData = [articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSch
     <ol class="flex gap-2 items-center flex-wrap">
       <li><a href="/" class="hover:text-primary">Home</a></li>
       <li aria-hidden="true">›</li>
-      <li><a href="/help" class="hover:text-primary">Help Centre</a></li>
+      <li><a href="/shipping-centre" class="hover:text-primary">Help Centre</a></li>
       <li aria-hidden="true">›</li>
       <li class="text-foreground font-medium">{data.label}</li>
     </ol>
@@ -204,7 +208,7 @@ const structuredData = [articleSchema, breadcrumbSchema, ...(faqSchema ? [faqSch
 
       <!-- Back to Help Centre -->
       <div class="mt-10">
-        <a href="/help" class="inline-flex items-center text-primary hover:underline font-medium">
+        <a href="/shipping-centre" class="inline-flex items-center text-primary hover:underline font-medium">
           ← Back to Help Centre
         </a>
       </div>

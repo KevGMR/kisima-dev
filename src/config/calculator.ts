@@ -1,220 +1,331 @@
 /**
  * src/config/calculator.ts
- * ---------------------------------------------------------------------------
+ * ===========================================================================
  * Shipping calculator configuration and pure calculation logic.
  *
- * Aligned with Change Brief Section 4 ("Shipping calculator specification").
+ * Supports two directions:
+ *   - import: origin country → Kenya
+ *   - export: Kenya → destination country
  *
  * ⚠️  CRITICAL — READ BEFORE EDITING RATES  ⚠️
  * ---------------------------------------------------------------------------
- * The rates, divisors, handling fees, customs fees and transit windows below
- * are PLACEHOLDER VALUES carried over from the existing development build.
- * They are NOT verified operational data.
+ * All rates, divisors, handling fees and transit windows below are
+ * PLACEHOLDER VALUES. They are NOT verified operational data.
  *
- * The Change Brief (Section 2) says:
- *   "Do not migrate unverified prices, departure days or transit times from
- *    the old website. Confirm all operational data first."
- *   "Store route rates, minimums, CBM rates, divisors, fees and transit
- *    windows in an admin-editable database."
+ * The Change Brief (both revisions) says:
+ *   - Do not migrate unverified prices, departure days or transit times.
+ *   - Store route rates in an admin-editable database.
  *
  * Therefore:
  *   1. Treat every value marked `// TODO: VERIFY` as non-production.
- *   2. Before launch, either (a) replace this file with data fetched from an
- *      admin database, or (b) update the values here with Operations-approved
- *      figures and record who approved them.
- *   3. Do NOT launch with these placeholders visible to end users.
- * ---------------------------------------------------------------------------
+ *   2. Before launch, replace this file with data fetched from an admin DB,
+ *      or update values here with Operations-approved figures.
+ *   3. Every route defaults to `active: false`. Nothing shows in the
+ *      calculator until Operations flips a route to `active: true`.
+ * ===========================================================================
  */
 
 import { z } from "zod";
 
 /* ---------------------------------------------------------------------------
- * Types — mirror the "Admin data required" table in the brief.
+ * Types
  * ------------------------------------------------------------------------- */
 
 export type ShippingMode = "air" | "sea";
-
-/** Volumetric divisor is per-route/service, never global. */
-export type VolumetricDivisor = number;
+export type Direction = "import" | "export";
 
 export interface RouteRate {
-  /** Stable internal key, e.g. "china-air", "uk-sea". */
   id: string;
-  /** Origin country slug matching src/config/routes.ts originRoutes keys. */
-  originSlug: string;
-  /** Display label, e.g. "China (Air)". */
+  /** Which direction this route serves. */
+  direction: Direction;
+  /** Import: origin country slug. Export: destination country slug. */
+  counterpartSlug: string;
+  /** Display label, e.g. "China → Kenya" or "Kenya → UK". */
   label: string;
-  /** Air or sea. One rate row = one mode. */
   mode: ShippingMode;
-  /** Currency the rate and fees are expressed in (ISO 4217, e.g. "EUR", "KES"). */
   currency: string;
-  /** Rate per kg (air) or per CBM (sea). TODO: VERIFY. */
   rate: number;
-  /** Optional elevated rate for restricted goods (air only). TODO: VERIFY. */
   rateRestricted?: number;
-  /** Minimum charge floor. Prevents invalid low estimates. TODO: VERIFY. */
   minimumCharge: number;
-  /** Handling / extra fee. Only applied when explicitly approved. TODO: VERIFY. */
   handlingFee: number;
-  /** Route/service-specific volumetric divisor (air only). TODO: VERIFY. */
-  volumetricDivisor: VolumetricDivisor;
-  /** Transit window in working days. TODO: VERIFY. */
+  volumetricDivisor: number;
   transit: { minDays: number; maxDays: number; display: string };
-  /** ISO date when this rate row becomes effective. TODO: VERIFY. */
   effectiveFrom: string;
-  /** ISO date when this rate row expires. Empty = open-ended. TODO: VERIFY. */
   effectiveTo: string;
-  /** Operations can pause a route or rate without deleting it. */
   active: boolean;
 }
 
 /* ---------------------------------------------------------------------------
  * Route rate table
- *
- * This is the SINGLE place rates live in the front-end for now.
- * Replace with DB fetch before production (brief Section 4).
  * ------------------------------------------------------------------------- */
 
 export const routeRates: Record<string, RouteRate> = {
-  /* --- Air --- */
-  uk: {
-    id: "uk",
-    originSlug: "uk",
-    label: "United Kingdom (Air)",
+  /* ===== IMPORTS INTO KENYA ===== */
+
+  "import-china-air": {
+    id: "import-china-air",
+    direction: "import",
+    counterpartSlug: "china",
+    label: "China → Kenya (Air)",
     mode: "air",
     currency: "EUR",
-    rate: 6.5,                 // TODO: VERIFY
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 25,           // TODO: VERIFY
-    volumetricDivisor: 5000,   // TODO: VERIFY
-    transit: { minDays: 3, maxDays: 4, display: "3–4 working days" }, // TODO: VERIFY
-    effectiveFrom: "",         // TODO: VERIFY
-    effectiveTo: "",           // TODO: VERIFY
-    active: false,             // disabled until verified
-  },
-  "china-air": {
-    id: "china-air",
-    originSlug: "china",
-    label: "China (Air)",
-    mode: "air",
-    currency: "EUR",
-    rate: 10.5,                // TODO: VERIFY
-    rateRestricted: 13,        // TODO: VERIFY
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 0,            // TODO: VERIFY
-    volumetricDivisor: 5000,   // TODO: VERIFY
-    transit: { minDays: 7, maxDays: 10, display: "7–10 working days" }, // TODO: VERIFY
+    rate: 10.5,
+    rateRestricted: 13,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 7, maxDays: 10, display: "7–10 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
-  usa: {
-    id: "usa",
-    originSlug: "usa",
-    label: "United States (Air)",
-    mode: "air",
-    currency: "EUR",
-    rate: 15,                  // TODO: VERIFY
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 0,            // TODO: VERIFY
-    volumetricDivisor: 5000,   // TODO: VERIFY
-    transit: { minDays: 7, maxDays: 7, display: "7 working days" }, // TODO: VERIFY
+  "import-china-sea": {
+    id: "import-china-sea",
+    direction: "import",
+    counterpartSlug: "china",
+    label: "China → Kenya (Sea)",
+    mode: "sea",
+    currency: "KES",
+    rate: 60000,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 0,
+    transit: { minDays: 45, maxDays: 45, display: "45 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
-  "dubai-air": {
-    id: "dubai-air",
-    originSlug: "uae",
-    label: "Dubai (Air)",
+  "import-uk-air": {
+    id: "import-uk-air",
+    direction: "import",
+    counterpartSlug: "uk",
+    label: "UK → Kenya (Air)",
     mode: "air",
     currency: "EUR",
-    rate: 9,                   // TODO: VERIFY
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 0,            // TODO: VERIFY
-    volumetricDivisor: 5000,   // TODO: VERIFY
-    transit: { minDays: 4, maxDays: 5, display: "4–5 working days" }, // TODO: VERIFY
+    rate: 6.5,
+    minimumCharge: 0,
+    handlingFee: 25,
+    volumetricDivisor: 5000,
+    transit: { minDays: 3, maxDays: 4, display: "3–4 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
-  "south-africa": {
-    id: "south-africa",
-    originSlug: "south-africa",
-    label: "South Africa (Air)",
+  "import-uk-sea": {
+    id: "import-uk-sea",
+    direction: "import",
+    counterpartSlug: "uk",
+    label: "UK → Kenya (Sea)",
+    mode: "sea",
+    currency: "EUR",
+    rate: 2.5,
+    minimumCharge: 0,
+    handlingFee: 15,
+    volumetricDivisor: 0,
+    transit: { minDays: 30, maxDays: 45, display: "30–45 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "import-usa-air": {
+    id: "import-usa-air",
+    direction: "import",
+    counterpartSlug: "usa",
+    label: "USA → Kenya (Air)",
     mode: "air",
     currency: "EUR",
-    rate: 8,                   // TODO: VERIFY
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 25,           // TODO: VERIFY
-    volumetricDivisor: 5000,   // TODO: VERIFY
-    transit: { minDays: 3, maxDays: 4, display: "3–4 working days" }, // TODO: VERIFY
+    rate: 15,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 7, maxDays: 7, display: "7 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "import-uae-air": {
+    id: "import-uae-air",
+    direction: "import",
+    counterpartSlug: "uae",
+    label: "UAE → Kenya (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 9,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 4, maxDays: 5, display: "4–5 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "import-uae-sea": {
+    id: "import-uae-sea",
+    direction: "import",
+    counterpartSlug: "uae",
+    label: "UAE → Kenya (Sea)",
+    mode: "sea",
+    currency: "KES",
+    rate: 62000,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 0,
+    transit: { minDays: 40, maxDays: 40, display: "40 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "import-south-africa-air": {
+    id: "import-south-africa-air",
+    direction: "import",
+    counterpartSlug: "south-africa",
+    label: "South Africa → Kenya (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 8,
+    minimumCharge: 0,
+    handlingFee: 25,
+    volumetricDivisor: 5000,
+    transit: { minDays: 3, maxDays: 4, display: "3–4 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
 
-  /* --- Sea --- */
-  "china-sea": {
-    id: "china-sea",
-    originSlug: "china",
-    label: "China (Sea)",
-    mode: "sea",
-    currency: "KES",
-    rate: 60000,               // TODO: VERIFY (per CBM)
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 0,            // TODO: VERIFY
-    volumetricDivisor: 0,      // N/A for sea (kept for type consistency)
-    transit: { minDays: 45, maxDays: 45, display: "45 working days" }, // TODO: VERIFY
+  /* ===== EXPORTS FROM KENYA ===== */
+
+  "export-uk-air": {
+    id: "export-uk-air",
+    direction: "export",
+    counterpartSlug: "uk",
+    label: "Kenya → UK (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 6.5,
+    minimumCharge: 0,
+    handlingFee: 25,
+    volumetricDivisor: 5000,
+    transit: { minDays: 3, maxDays: 5, display: "3–5 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
-  "uk-sea": {
-    id: "uk-sea",
-    originSlug: "uk",
-    label: "United Kingdom (Sea)",
+  "export-uk-sea": {
+    id: "export-uk-sea",
+    direction: "export",
+    counterpartSlug: "uk",
+    label: "Kenya → UK (Sea)",
     mode: "sea",
     currency: "EUR",
-    rate: 2.5,                 // TODO: VERIFY (per CBM)
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 15,           // TODO: VERIFY
+    rate: 2.5,
+    minimumCharge: 0,
+    handlingFee: 15,
     volumetricDivisor: 0,
-    transit: { minDays: 30, maxDays: 45, display: "30–45 working days" }, // TODO: VERIFY
+    transit: { minDays: 30, maxDays: 45, display: "30–45 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
-  "dubai-sea": {
-    id: "dubai-sea",
-    originSlug: "uae",
-    label: "Dubai (Sea)",
+  "export-usa-air": {
+    id: "export-usa-air",
+    direction: "export",
+    counterpartSlug: "usa",
+    label: "Kenya → USA (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 15,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 5, maxDays: 8, display: "5–8 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "export-uae-air": {
+    id: "export-uae-air",
+    direction: "export",
+    counterpartSlug: "uae",
+    label: "Kenya → UAE (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 9,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 3, maxDays: 5, display: "3–5 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "export-europe-air": {
+    id: "export-europe-air",
+    direction: "export",
+    counterpartSlug: "europe",
+    label: "Kenya → Europe (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 11,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 4, maxDays: 7, display: "4–7 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "export-europe-sea": {
+    id: "export-europe-sea",
+    direction: "export",
+    counterpartSlug: "europe",
+    label: "Kenya → Europe (Sea)",
     mode: "sea",
-    currency: "KES",
-    rate: 62000,               // TODO: VERIFY (per CBM)
-    minimumCharge: 0,          // TODO: VERIFY
-    handlingFee: 0,            // TODO: VERIFY
+    currency: "EUR",
+    rate: 3,
+    minimumCharge: 0,
+    handlingFee: 15,
     volumetricDivisor: 0,
-    transit: { minDays: 40, maxDays: 40, display: "40 working days" }, // TODO: VERIFY
+    transit: { minDays: 28, maxDays: 42, display: "28–42 working days" },
+    effectiveFrom: "",
+    effectiveTo: "",
+    active: false,
+  },
+  "export-africa-air": {
+    id: "export-africa-air",
+    direction: "export",
+    counterpartSlug: "africa",
+    label: "Kenya → Africa (Air)",
+    mode: "air",
+    currency: "EUR",
+    rate: 5.5,
+    minimumCharge: 0,
+    handlingFee: 0,
+    volumetricDivisor: 5000,
+    transit: { minDays: 2, maxDays: 5, display: "2–5 working days" },
     effectiveFrom: "",
     effectiveTo: "",
     active: false,
   },
 };
 
-/** Only routes marked `active: true` should be selectable in the UI. */
+/** All active routes (either direction). */
 export function activeRouteRates(): RouteRate[] {
   return Object.values(routeRates).filter((r) => r.active);
 }
 
-/** Lookup helper — returns undefined if the route is inactive or unknown. */
+/** Active routes filtered by direction. */
+export function activeRoutesByDirection(direction: Direction): RouteRate[] {
+  return Object.values(routeRates).filter((r) => r.active && r.direction === direction);
+}
+
+/** Lookup helper — returns undefined if inactive, unknown, or wrong direction. */
 export function getRouteRate(id: string): RouteRate | undefined {
   const r = routeRates[id];
   return r && r.active ? r : undefined;
 }
 
 /* ---------------------------------------------------------------------------
- * Pure calculation helpers (Change Brief Section 4, "Calculation logic")
+ * Calculation helpers (unchanged)
  * ------------------------------------------------------------------------- */
 
 export interface PackageInput {
@@ -223,7 +334,6 @@ export interface PackageInput {
   widthCm: number;
   heightCm: number;
   quantity: number;
-  /** Optional declared value for insurance enquiry. */
   declaredValue?: number;
 }
 
@@ -234,35 +344,17 @@ export interface ChargeableBreakdown {
   cbm: number;
 }
 
-/**
- * AIR FREIGHT
- *   Volumetric weight = (L × W × H × Qty) ÷ route-specific divisor
- *   Chargeable weight = the higher of actual vs volumetric
- *   Base estimate     = chargeable weight × rate per kg
- */
-export function calcAirChargeable(
-  pkg: PackageInput,
-  divisor: VolumetricDivisor
-): ChargeableBreakdown {
-  if (divisor <= 0) {
-    throw new Error("Air freight requires a positive volumetric divisor.");
-  }
+export function calcAirChargeable(pkg: PackageInput, divisor: number): ChargeableBreakdown {
+  if (divisor <= 0) throw new Error("Air freight requires a positive volumetric divisor.");
   const actualWeightKg = pkg.weightKg * pkg.quantity;
-  const volumetricWeightKg =
-    (pkg.lengthCm * pkg.widthCm * pkg.heightCm * pkg.quantity) / divisor;
+  const volumetricWeightKg = (pkg.lengthCm * pkg.widthCm * pkg.heightCm * pkg.quantity) / divisor;
   const chargeableWeightKg = Math.max(actualWeightKg, volumetricWeightKg);
   const cbm = (pkg.lengthCm * pkg.widthCm * pkg.heightCm * pkg.quantity) / 1_000_000;
   return { actualWeightKg, volumetricWeightKg, chargeableWeightKg, cbm };
 }
 
-/**
- * SEA FREIGHT
- *   CBM          = L(m) × W(m) × H(m) × Qty
- *   Base estimate = CBM × rate per CBM
- */
 export function calcSeaCBM(pkg: PackageInput): ChargeableBreakdown {
-  const cbm =
-    (pkg.lengthCm / 100) * (pkg.widthCm / 100) * (pkg.heightCm / 100) * pkg.quantity;
+  const cbm = (pkg.lengthCm / 100) * (pkg.widthCm / 100) * (pkg.heightCm / 100) * pkg.quantity;
   return {
     actualWeightKg: pkg.weightKg * pkg.quantity,
     volumetricWeightKg: 0,
@@ -273,43 +365,28 @@ export function calcSeaCBM(pkg: PackageInput): ChargeableBreakdown {
 
 export interface EstimateResult {
   routeId: string;
+  direction: Direction;
   mode: ShippingMode;
   currency: string;
   chargeableBasis: "kg" | "CBM";
   chargeableQty: number;
   freight: number;
   handling: number;
-  /** True if minimum charge was applied instead of the computed freight. */
   minimumApplied: boolean;
   total: number;
   transitDisplay: string;
-  /** Human-readable estimate reference for WhatsApp handoff. */
   reference: string;
-  /** Disclaimer shown with every estimate (brief Section 4). */
   disclaimer: string;
 }
 
-/**
- * Compute a full estimate for one route and one package.
- * For multi-package quotes, sum the `chargeableQty` first, then call
- * `estimateFromQty` (below).
- */
-export function calcEstimate(
-  rate: RouteRate,
-  pkg: PackageInput
-): EstimateResult {
-  const breakdown =
-    rate.mode === "air"
-      ? calcAirChargeable(pkg, rate.volumetricDivisor)
-      : calcSeaCBM(pkg);
-
-  const chargeableQty =
-    rate.mode === "air" ? breakdown.chargeableWeightKg : breakdown.cbm;
-
+export function calcEstimate(rate: RouteRate, pkg: PackageInput): EstimateResult {
+  const breakdown = rate.mode === "air"
+    ? calcAirChargeable(pkg, rate.volumetricDivisor)
+    : calcSeaCBM(pkg);
+  const chargeableQty = rate.mode === "air" ? breakdown.chargeableWeightKg : breakdown.cbm;
   return estimateFromQty(rate, chargeableQty);
 }
 
-/** Same as calcEstimate but starts from an already-summed chargeable qty. */
 export function estimateFromQty(rate: RouteRate, chargeableQty: number): EstimateResult {
   const rawFreight = chargeableQty * rate.rate;
   const minimumApplied = rate.minimumCharge > 0 && rawFreight < rate.minimumCharge;
@@ -319,6 +396,7 @@ export function estimateFromQty(rate: RouteRate, chargeableQty: number): Estimat
 
   return {
     routeId: rate.id,
+    direction: rate.direction,
     mode: rate.mode,
     currency: rate.currency,
     chargeableBasis: rate.mode === "air" ? "kg" : "CBM",
@@ -336,7 +414,6 @@ export function estimateFromQty(rate: RouteRate, chargeableQty: number): Estimat
   };
 }
 
-/** Short, human-readable estimate reference for the WhatsApp handoff. */
 export function generateReference(): string {
   const stamp = Date.now().toString(36).toUpperCase();
   const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
@@ -344,7 +421,7 @@ export function generateReference(): string {
 }
 
 /* ---------------------------------------------------------------------------
- * Validation (brief Section 13: "handles invalid, missing and extreme values")
+ * Validation (unchanged)
  * ------------------------------------------------------------------------- */
 
 export const packageSchema = z.object({
@@ -358,7 +435,6 @@ export const packageSchema = z.object({
 
 export type PackageSchemaInput = z.infer<typeof packageSchema>;
 
-/** Convenience: validate + return a friendly error message or null. */
 export function validatePackage(input: unknown): string | null {
   const parsed = packageSchema.safeParse(input);
   if (parsed.success) return null;
@@ -366,8 +442,7 @@ export function validatePackage(input: unknown): string | null {
 }
 
 /* ---------------------------------------------------------------------------
- * Additional services (brief Section 4, Step 3)
- * Toggleable, each optional, each with an "on request" default.
+ * Additional services (unchanged)
  * ------------------------------------------------------------------------- */
 
 export const additionalServices = [

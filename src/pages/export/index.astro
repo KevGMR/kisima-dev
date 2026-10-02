@@ -1,0 +1,253 @@
+---
+/**
+ * src/pages/export/index.astro
+ * Export from Kenya — landing page.
+ */
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import {
+  coreRoutes,
+  destinationRoutes,
+  toolRoutes,
+  shippingCentreLanding,
+} from "@/config/routes";
+
+const title = "Export from Kenya | Air & Sea Freight | Kisima Cargo";
+const description = "Shipping goods from Kenya to the world? Send commercial cargo, products and personal shipments from Kenya to supported international destinations.";
+const canonicalPath = "/export";
+
+const waHref = whatsappLink("Hello Kisima Cargo. I would like information about exporting from Kenya.");
+
+const faqs = [
+  {
+    q: "Which destinations does Kisima export to?",
+    a: "We currently support exports from Kenya to the UK, USA, UAE, Europe and other African markets. Other destinations may be possible — ask us on WhatsApp.",
+  },
+  {
+    q: "Can Kisima handle export customs clearance?",
+    a: "Yes. We prepare export documentation, file export declarations, and coordinate clearance at the Kenyan port or airport.",
+  },
+  {
+    q: "What documents are needed to export from Kenya?",
+    a: "Standard requirements include a commercial invoice, packing list, certificate of origin where applicable, and export declaration. Requirements vary by commodity and destination.",
+  },
+  {
+    q: "Do you export commercial and personal shipments?",
+    a: "Yes. We handle commercial exports (products for resale, machinery, agricultural goods) and personal exports (household goods, personal effects).",
+  },
+  {
+    q: "How is export pricing calculated?",
+    a: "Air freight is charged on chargeable weight (actual vs volumetric). Sea freight is charged on CBM. Destination charges may also apply.",
+  },
+  {
+    q: "Can I consolidate export cargo from multiple suppliers?",
+    a: "Yes. Consolidation combines multiple Kenya-based suppliers into one shipment and one export clearance.",
+  },
+];
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description,
+    url: `${site.productionUrl}/export`,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  },
+];
+
+const exportSteps = [
+  { step: "01", title: "Tell us what you're exporting", body: "Cargo type, volume, destination and timeframe." },
+  { step: "02", title: "Prepare documentation", body: "Commercial invoice, packing list, certificate of origin and export declaration." },
+  { step: "03", title: "Deliver to Kisima", body: "Deliver to our Nairobi warehouse, or arrange supplier pickup." },
+  { step: "04", title: "Export clearance", body: "Export declaration filed and cleared at the Kenyan port or airport." },
+  { step: "05", title: "Air or sea freight", body: "Booked to the destination country, tracked through transit." },
+  { step: "06", title: "Destination delivery", body: "Delivery or handoff at the destination, where available." },
+];
+
+const airVsSea = [
+  { label: "Best for", air: "Urgent exports, high-value goods, smaller consignments", sea: "Bulk cargo, heavy goods, cost-sensitive exports" },
+  { label: "Charging basis", air: "Chargeable weight (actual vs volumetric)", sea: "CBM (cubic metres)" },
+  { label: "Typical transit", air: "Days, depending on destination", sea: "Weeks, depending on destination" },
+  { label: "Relative cost", air: "Higher per kg", sea: "Lower per CBM" },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Export</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">
+          Export from Kenya
+        </h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Ship commercial cargo, products and personal shipments from Kenya to the UK, USA, UAE, Europe and other African markets. Air and sea freight, export clearance and destination delivery.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get export estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Talk on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why export through Kisima -->
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Why export through Kisima</h2>
+        <p class="text-lg text-muted-foreground">Outbound logistics with the same care as inbound.</p>
+      </div>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <li class="rounded-xl border border-border p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Global destinations</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">UK, USA, UAE, Europe and African markets currently supported.</p>
+        </li>
+        <li class="rounded-xl border border-border p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Export clearance</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Documentation and declaration handled in Nairobi.</p>
+        </li>
+        <li class="rounded-xl border border-border p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Consolidation</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Combine multiple Kenya suppliers into one shipment and one clearance.</p>
+        </li>
+        <li class="rounded-xl border border-border p-6">
+          <h3 class="font-heading font-semibold text-lg mb-2">Air and sea</h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">Choose the mode that fits your destination and timeline.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Export destinations -->
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Export destinations</h2>
+        <p class="text-lg text-muted-foreground">Pick a destination to see route-specific information and FAQ.</p>
+      </div>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {Object.values(destinationRoutes).map((route) => (
+          <li>
+            <a href={route.path} class="group block rounded-xl border border-border bg-background hover:border-accent hover:shadow-md p-5 h-full transition-all">
+              <span class="block font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">Kenya to {route.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Air vs Sea -->
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Air vs sea for exports</h2>
+        <p class="text-lg text-muted-foreground">How to choose the right method.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm md:text-base border-collapse">
+          <thead>
+            <tr class="border-b-2 border-border">
+              <th class="text-left py-3 pr-4 font-heading font-semibold"></th>
+              <th class="text-left py-3 pr-4 font-heading font-semibold">Air Freight</th>
+              <th class="text-left py-3 font-heading font-semibold">Sea Freight</th>
+            </tr>
+          </thead>
+          <tbody>
+            {airVsSea.map((row) => (
+              <tr class="border-b border-border">
+                <td class="py-4 pr-4 font-medium align-top">{row.label}</td>
+                <td class="py-4 pr-4 text-muted-foreground align-top">{row.air}</td>
+                <td class="py-4 text-muted-foreground align-top">{row.sea}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={coreRoutes.airFreight.path} class="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">Learn about air freight →</a>
+        <a href={coreRoutes.seaFreight.path} class="inline-flex items-center rounded-md border border-border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">Learn about sea freight →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Common export cargo -->
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Common export cargo from Kenya</h2>
+        <p class="text-lg text-muted-foreground">Categories we handle regularly.</p>
+      </div>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Agricultural products (where permitted)</li>
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Processed foods and packaged goods</li>
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Clothing and textiles</li>
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Handicrafts and artisan goods</li>
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Personal effects and household goods</li>
+        <li class="rounded-lg border border-border bg-background px-5 py-4 text-sm">Commercial samples and small consignments</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">How exporting from Kenya works</h2>
+        <p class="text-lg text-muted-foreground">A clear six-step process from Kenya to the destination.</p>
+      </div>
+      <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {exportSteps.map((s) => (
+          <li>
+            <span class="block font-heading font-bold text-3xl text-accent mb-3">{s.step}</span>
+            <h3 class="text-lg font-heading font-semibold mb-2">{s.title}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8">Export FAQ</h2>
+      <div class="space-y-6">
+        {faqs.map((item) => (
+          <div class="border-b border-border pb-6">
+            <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+            <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        ))}
+      </div>
+      <div class="mt-8">
+        <a href={shippingCentreLanding.path} class="inline-flex items-center text-primary hover:underline font-medium">Visit the Shipping Centre →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Ready to export from Kenya?</h2>
+      <p class="text-lg text-white/85 mb-8">Calculate an estimate or request a confirmed quote.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get export estimate</a>
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Request a quote</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

@@ -93,8 +93,8 @@ const business = defineCollection({
 /* ---------------------------------------------------------------------------
  * help
  * ------------------------------------------------------------------------- */
-const help = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/help" }),
+const shippingCentre = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/shippingCentre" }),
   schema: z.object({
     /** Category shown on the Help Centre landing page. */
     category: z.string(),
@@ -191,4 +191,29 @@ const locations = defineCollection({
   }),
 });
 
-export const collections = { routes, business, help, locations };
+
+/* ---------------------------------------------------------------------------
+ * exportRoutes
+ * ------------------------------------------------------------------------- */
+const exportRoutes = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/exportRoutes" }),
+  schema: z.object({
+    slug: z.string(),
+    destination: z.string(),
+    lede: z.string(),
+    whoFor: z.array(z.string()),
+    commonCargo: z.array(z.string()),
+    documents: z.array(z.string()),
+    routeNotes: z.array(z.string()),
+    faqs: z.array(
+      z.object({
+        q: z.string(),
+        a: z.string(),
+      })
+    ),
+    lastReviewed: z.string().optional(),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { routes, business, shippingCentre, locations, exportRoutes };

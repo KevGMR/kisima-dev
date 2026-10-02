@@ -13,7 +13,7 @@ import { site } from "@/config/site";
 const title = "Help Centre | Shipping to Kenya | Kisima Cargo";
 const description = "Find simple answers about international shipping, costs, customs, packaging, tracking and importing into Kenya.";
 
-const articles = await getCollection("help");
+const articles = await getCollection("shippingCentre");
 const sorted = articles.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
 // Group by category
@@ -40,7 +40,7 @@ const structuredData = {
   "@type": "CollectionPage",
   name: title,
   description,
-  url: `${site.productionUrl}/help`,
+  url: `${site.productionUrl}/shipping-centre`,
   isPartOf: {
     "@type": "WebSite",
     name: site.name,
@@ -52,7 +52,7 @@ const structuredData = {
 <BaseLayout
   title={title}
   description={description}
-  canonicalPath="/help"
+  canonicalPath="/shipping-centre"
   structuredData={structuredData}
 >
   <section class="py-12 md:py-16 bg-background">
@@ -79,7 +79,7 @@ const structuredData = {
             {byCategory[category].map((article) => (
               <li>
                 <a
-                  href={`/help/${article.id}`}
+                  href={`/shipping-centre/${article.id}`}
                   class="group block rounded-lg border border-border hover:border-accent hover:shadow-sm p-5 transition-all"
                 >
                   <h3 class="font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">

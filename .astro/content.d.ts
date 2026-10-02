@@ -170,11 +170,11 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
-"help": Record<string, {
+"exportRoutes": Record<string, {
   id: string;
   body?: string;
-  collection: "help";
-  data: InferEntrySchema<"help">;
+  collection: "exportRoutes";
+  data: InferEntrySchema<"exportRoutes">;
   rendered?: RenderedContent;
   filePath?: string;
 }>;
@@ -191,6 +191,14 @@ declare module 'astro:content' {
   body?: string;
   collection: "routes";
   data: InferEntrySchema<"routes">;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
+"shippingCentre": Record<string, {
+  id: string;
+  body?: string;
+  collection: "shippingCentre";
+  data: InferEntrySchema<"shippingCentre">;
   rendered?: RenderedContent;
   filePath?: string;
 }>;

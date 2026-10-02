@@ -1,30 +1,19 @@
 /**
  * src/components/react/Calculator.tsx
  * ===========================================================================
- * Shipping calculator — React island.
- *
- * Mounted on /tools/shipping-calculator. Uses calculator.ts for all rates,
- * divisors, minimum charges and calculation logic. No hardcoded values.
- *
- * Fixes the three bugs in the legacy Calculator.tsx (see docs/page-audit.md):
- *   1. lane.handling was displayed but ignored in the math → now uses rate.handlingFee.
- *   2. Hardcoded customs fee (75) was invented and route-agnostic → removed.
- *   3. The air/sea radio was orphaned state → mode is derived from the route.
- *
- * Respects the lead-capture rule (Brief Section 4): no phone number required
- * before showing an estimate.
- * ===========================================================================
+ * Shipping calculator — React island. Bidirectional (import / export).
  */
 
 import { useMemo, useState } from "react";
 import {
-  activeRouteRates,
+  activeRoutesByDirection,
   calcEstimate,
   estimateFromQty,
   validatePackage,
   additionalServices,
   type RouteRate,
   type ShippingMode,
+  type Direction,
   type EstimateResult,
   type AdditionalServiceId,
 } from "@/config/calculator";
@@ -33,7 +22,6 @@ import { trackEvent, storeCalculatorRef } from "@/lib/analytics";
 
 interface PackageEntry {
   id: string;
-  originSlug: string;
   weightKg: number;
   lengthCm: number;
   widthCm: number;
@@ -41,67 +29,83 @@ interface PackageEntry {
   quantity: number;
 }
 
-// ---------------------------------------------------------------------------
-// Label helpers
-// ---------------------------------------------------------------------------
 const modeLabel: Record<ShippingMode, string> = {
   air: "Air Freight",
   sea: "Sea Freight",
 };
 
 export default function Calculator() {
-  const routes = useMemo(() => activeRouteRates(), []);
+  const [direction, setDirection] = useState<Direction>("import");
 
-  const [selectedRouteId, setSelectedRouteId] = useState<string>(
-    routes[0]?.id ?? ""
+  const routes = useMemo(
+    () => activeRoutesByDirection(direction),
+    [direction]
   );
+
+  const [selectedRouteId, setSelectedRouteId] = useState<string>("");
   const [packages, setPackages] = useState<PackageEntry[]>([]);
   const [estimate, setEstimate] = useState<EstimateResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [services, setServices] = useState<Set<AdditionalServiceId>>(new Set());
 
-  // Current route (if any)
-  const route: RouteRate | undefined = useMemo(
-    () => routes.find((r) => r.id === selectedRouteId),
-    [routes, selectedRouteId]
-  );
+  const route: RouteRate | undefined = useMemo(() => {
+    const match = routes.find((r) => r.id === selectedRouteId);
+    if (match) return match;
+    return routes[0];
+  }, [routes, selectedRouteId]);
 
-  // ---------------------------------------------------------------------------
-  // If no routes are active, we can't calculate — show an honest message.
-  // ---------------------------------------------------------------------------
+  // Clear state when direction changes
+  function switchDirection(next: Direction) {
+    if (next === direction) return;
+    setDirection(next);
+    setSelectedRouteId("");
+    setEstimate(null);
+    setError(null);
+  }
+
+  // Empty state when no routes are active
   if (routes.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-background p-6 md:p-8">
-        <h2 className="text-xl font-heading font-semibold mb-3">
-          Rates currently under review
-        </h2>
-        <p className="text-muted-foreground mb-4">
-          Our shipping rates are being updated. Please request a quote or contact
-          us on WhatsApp for a confirmed price.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/request-quote"
-            className="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors"
+      <div className="rounded-xl border border-border bg-background p-6 md:p-8 space-y-6">
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => switchDirection("import")}
+            className={
+              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors " +
+              (direction === "import" ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent hover:text-accent")
+            }
           >
-            Request a quote
-          </a>
-          <a
-            href={whatsappLink("Hello Kisima Cargo. I would like a shipping quote.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
+            Import to Kenya
+          </button>
+          <button
+            type="button"
+            onClick={() => switchDirection("export")}
+            className={
+              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors " +
+              (direction === "export" ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent hover:text-accent")
+            }
           >
-            WhatsApp us
-          </a>
+            Export from Kenya
+          </button>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-heading font-semibold mb-3">
+            {direction === "import" ? "Import rates" : "Export rates"} currently under review
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            Our {direction === "import" ? "import" : "export"} rates are being updated. Please request a quote or contact us on WhatsApp for a confirmed price.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a href="/request-quote" className="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">Request a quote</a>
+            <a href={whatsappLink("Hello Kisima Cargo. I would like a shipping quote.")} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors">WhatsApp us</a>
+          </div>
         </div>
       </div>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // Handlers
-  // ---------------------------------------------------------------------------
   function handleAddPackage(form: HTMLFormElement) {
     setError(null);
     const data = new FormData(form);
@@ -119,19 +123,14 @@ export default function Calculator() {
       return;
     }
 
-    if (!route) {
-      setError("Please select an origin and method first.");
-      return;
-    }
-
     setPackages((prev) => [
       ...prev,
-      { id: crypto.randomUUID(), originSlug: route.originSlug, ...parsed },
+      { id: crypto.randomUUID(), ...parsed },
     ]);
     form.reset();
 
-    if (packages.length === 0) {
-      trackEvent("calculator_start", { route: route.id });
+    if (packages.length === 0 && route) {
+      trackEvent("calculator_start", { route: route.id, direction });
     }
   }
 
@@ -143,7 +142,7 @@ export default function Calculator() {
   function handleCalculate() {
     setError(null);
     if (!route) {
-      setError("Please select an origin and method first.");
+      setError("Please select a route first.");
       return;
     }
     if (packages.length === 0) {
@@ -151,7 +150,6 @@ export default function Calculator() {
       return;
     }
 
-    // Sum chargeable qty across all packages for the selected route's mode.
     let totalChargeable = 0;
     for (const pkg of packages) {
       const single = calcEstimate(route, {
@@ -164,13 +162,13 @@ export default function Calculator() {
       totalChargeable += single.chargeableQty;
     }
 
-    // Price once, applying minimum charge once.
     const result = estimateFromQty(route, totalChargeable);
     setEstimate(result);
     storeCalculatorRef(result.reference);
 
     trackEvent("calculator_complete", {
       route: route.id,
+      direction,
       mode: route.mode,
       chargeable_qty: Number(result.chargeableQty.toFixed(2)),
       total: Number(result.total.toFixed(2)),
@@ -187,23 +185,47 @@ export default function Calculator() {
     });
   }
 
-  // ---------------------------------------------------------------------------
-  // Render
-  // ---------------------------------------------------------------------------
   return (
     <div className="rounded-xl border border-border bg-background p-6 md:p-8 space-y-8">
 
-      {/* ---------------- Step 1: Route ---------------- */}
+      {/* Direction toggle */}
       <section>
-        <h2 className="text-lg font-heading font-semibold mb-3">
-          Step 1 · Choose route
-        </h2>
+        <h2 className="text-lg font-heading font-semibold mb-3">Step 1 · Direction</h2>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => switchDirection("import")}
+            className={
+              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors " +
+              (direction === "import" ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent hover:text-accent")
+            }
+            aria-pressed={direction === "import"}
+          >
+            Import to Kenya
+          </button>
+          <button
+            type="button"
+            onClick={() => switchDirection("export")}
+            className={
+              "rounded-full border px-4 py-1.5 text-sm font-medium transition-colors " +
+              (direction === "export" ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent hover:text-accent")
+            }
+            aria-pressed={direction === "export"}
+          >
+            Export from Kenya
+          </button>
+        </div>
+      </section>
+
+      {/* Route */}
+      <section>
+        <h2 className="text-lg font-heading font-semibold mb-3">Step 2 · Route & method</h2>
         <label className="block">
           <span className="text-sm font-medium mb-1.5 block">
-            Shipping from
+            {direction === "import" ? "Shipping from" : "Shipping to"}
           </span>
           <select
-            value={selectedRouteId}
+            value={route?.id ?? ""}
             onChange={(e) => {
               setSelectedRouteId(e.target.value);
               setEstimate(null);
@@ -212,21 +234,19 @@ export default function Calculator() {
           >
             {routes.map((r) => (
               <option key={r.id} value={r.id}>
-                {r.label} · {modeLabel[r.mode]}
+                {r.label}
               </option>
             ))}
           </select>
         </label>
         <p className="text-xs text-muted-foreground mt-2">
-          Destination: Kenya
+          {direction === "import" ? "Destination: Kenya" : "Origin: Kenya"}
         </p>
       </section>
 
-      {/* ---------------- Step 2: Cargo ---------------- */}
+      {/* Cargo */}
       <section>
-        <h2 className="text-lg font-heading font-semibold mb-3">
-          Step 2 · Add cargo
-        </h2>
+        <h2 className="text-lg font-heading font-semibold mb-3">Step 3 · Add cargo</h2>
 
         <form
           onSubmit={(e) => {
@@ -237,65 +257,26 @@ export default function Calculator() {
         >
           <label className="block">
             <span className="text-xs font-medium mb-1 block">Weight (kg)</span>
-            <input
-              name="weightKg"
-              type="number"
-              min="0.1"
-              step="0.1"
-              required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            />
+            <input name="weightKg" type="number" min="0.1" step="0.1" required className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <label className="block">
             <span className="text-xs font-medium mb-1 block">Length (cm)</span>
-            <input
-              name="lengthCm"
-              type="number"
-              min="1"
-              step="0.1"
-              required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            />
+            <input name="lengthCm" type="number" min="1" step="0.1" required className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <label className="block">
             <span className="text-xs font-medium mb-1 block">Width (cm)</span>
-            <input
-              name="widthCm"
-              type="number"
-              min="1"
-              step="0.1"
-              required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            />
+            <input name="widthCm" type="number" min="1" step="0.1" required className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <label className="block">
             <span className="text-xs font-medium mb-1 block">Height (cm)</span>
-            <input
-              name="heightCm"
-              type="number"
-              min="1"
-              step="0.1"
-              required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            />
+            <input name="heightCm" type="number" min="1" step="0.1" required className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <label className="block">
             <span className="text-xs font-medium mb-1 block">Quantity</span>
-            <input
-              name="quantity"
-              type="number"
-              min="1"
-              step="1"
-              defaultValue={1}
-              required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            />
+            <input name="quantity" type="number" min="1" step="1" defaultValue={1} required className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
           </label>
           <div className="flex items-end">
-            <button
-              type="submit"
-              className="w-full rounded-md bg-primary text-primary-foreground hover:bg-primary-hover px-4 py-2 text-sm font-semibold transition-colors"
-            >
+            <button type="submit" className="w-full rounded-md bg-primary text-primary-foreground hover:bg-primary-hover px-4 py-2 text-sm font-semibold transition-colors">
               Add package
             </button>
           </div>
@@ -304,19 +285,12 @@ export default function Calculator() {
         {packages.length > 0 && (
           <ul className="mt-4 space-y-2">
             {packages.map((pkg, i) => (
-              <li
-                key={pkg.id}
-                className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/30 px-4 py-2.5 text-sm"
-              >
+              <li key={pkg.id} className="flex items-center justify-between gap-3 rounded-md border border-border bg-muted/30 px-4 py-2.5 text-sm">
                 <span>
                   <strong>Package {i + 1}:</strong>{" "}
                   {pkg.weightKg}kg · {pkg.lengthCm}×{pkg.widthCm}×{pkg.heightCm}cm · ×{pkg.quantity}
                 </span>
-                <button
-                  type="button"
-                  onClick={() => handleRemovePackage(pkg.id)}
-                  className="text-xs text-muted-foreground hover:text-destructive transition-colors"
-                >
+                <button type="button" onClick={() => handleRemovePackage(pkg.id)} className="text-xs text-muted-foreground hover:text-destructive transition-colors">
                   Remove
                 </button>
               </li>
@@ -325,11 +299,9 @@ export default function Calculator() {
         )}
       </section>
 
-      {/* ---------------- Step 3: Additional services ---------------- */}
+      {/* Services */}
       <section>
-        <h2 className="text-lg font-heading font-semibold mb-3">
-          Step 3 · Additional services
-        </h2>
+        <h2 className="text-lg font-heading font-semibold mb-3">Step 4 · Additional services</h2>
         <div className="flex flex-wrap gap-2">
           {additionalServices.map((s) => {
             const active = services.has(s.id);
@@ -340,9 +312,7 @@ export default function Calculator() {
                 onClick={() => toggleService(s.id)}
                 className={
                   "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors " +
-                  (active
-                    ? "border-accent bg-accent/10 text-accent"
-                    : "border-border text-muted-foreground hover:border-accent hover:text-accent")
+                  (active ? "border-accent bg-accent/10 text-accent" : "border-border text-muted-foreground hover:border-accent hover:text-accent")
                 }
                 aria-pressed={active}
               >
@@ -351,33 +321,21 @@ export default function Calculator() {
             );
           })}
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
-          Additional services are quoted separately.
-        </p>
+        <p className="text-xs text-muted-foreground mt-2">Additional services are quoted separately.</p>
       </section>
 
-      {/* ---------------- Error ---------------- */}
       {error && (
-        <div
-          className="rounded-md border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive"
-          role="alert"
-        >
+        <div className="rounded-md border border-destructive/40 bg-destructive/5 px-4 py-3 text-sm text-destructive" role="alert">
           {error}
         </div>
       )}
 
-      {/* ---------------- Step 4: Calculate ---------------- */}
       <section>
-        <button
-          type="button"
-          onClick={handleCalculate}
-          className="w-full rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors"
-        >
+        <button type="button" onClick={handleCalculate} className="w-full rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
           Calculate estimate
         </button>
       </section>
 
-      {/* ---------------- Step 5: Result + conversion ---------------- */}
       {estimate && (
         <section className="rounded-lg border border-border bg-muted/30 p-6 space-y-4">
           <div>
@@ -388,29 +346,21 @@ export default function Calculator() {
               {formatMoney(estimate.total, estimate.currency)}
             </p>
             <p className="text-sm text-muted-foreground mt-1">
-              Based on {estimate.chargeableQty.toFixed(2)} {estimate.chargeableBasis}
-              {" · "}
-              {estimate.transitDisplay}
+              Based on {estimate.chargeableQty.toFixed(2)} {estimate.chargeableBasis} · {estimate.transitDisplay}
             </p>
             {estimate.minimumApplied && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Minimum charge applied.
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Minimum charge applied.</p>
             )}
           </div>
 
           <div className="text-xs text-muted-foreground border-t border-border pt-3">
             <p>{estimate.disclaimer}</p>
-            <p className="mt-2">
-              Reference: <code className="font-mono">{estimate.reference}</code>
-            </p>
+            <p className="mt-2">Reference: <code className="font-mono">{estimate.reference}</code></p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <a
-              href={whatsappLink(
-                `Hello Kisima Cargo. My estimate reference is ${estimate.reference}. I would like a confirmed quotation.`
-              )}
+              href={whatsappLink(`Hello Kisima Cargo. My estimate reference is ${estimate.reference}. I would like a confirmed quotation.`)}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("whatsapp_click", { source: "calculator" })}
@@ -432,9 +382,6 @@ export default function Calculator() {
   );
 }
 
-/* ---------------------------------------------------------------------------
- * Money formatting
- * ------------------------------------------------------------------------- */
 function formatMoney(amount: number, currency: string): string {
   try {
     return new Intl.NumberFormat("en-KE", {

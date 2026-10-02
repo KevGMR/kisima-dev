@@ -130,6 +130,20 @@
   status = 301
   force = true
 
+
+# /help -> /shipping-centre (article-level wildcard)
+[[redirects]]
+  from = "/help/:slug"
+  to = "/shipping-centre/:slug"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/help"
+  to = "/shipping-centre"
+  status = 301
+  force = true
+
 # ---------------------------------------------------------------------------
 # 404 handling
 #

@@ -1,7 +1,7 @@
 {
-  "$ref": "#/definitions/help",
+  "$ref": "#/definitions/shippingCentre",
   "definitions": {
-    "help": {
+    "shippingCentre": {
       "type": "object",
       "properties": {
         "category": {

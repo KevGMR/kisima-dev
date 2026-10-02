@@ -22,7 +22,7 @@ import {
   ArrowRight,
   CheckCircle,
 } from "lucide-react";
-import HeroSlider from "@/components/HeroSlider";
+import HeroSlider from "@/components/_legacy/HeroSlider";
 
 const services = [
   {

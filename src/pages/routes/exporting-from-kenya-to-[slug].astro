@@ -1,0 +1,295 @@
+---
+/**
+ * src/pages/routes/exporting-from-kenya-to-[slug].astro
+ * ===========================================================================
+ * Dynamic export route page — one per destination.
+ *
+ * URL: /routes/exporting-from-kenya-to-{uk,usa,uae,europe,africa}
+ *
+ * Structure parallels the import route template but adapted for export:
+ *   1.  Hero
+ *   2.  Calculator hint
+ *   3.  Who the service is for
+ *   4.  Air and sea context
+ *   5.  Air vs sea comparison
+ *   6.  How it works (export journey)
+ *   7.  Route notes
+ *   8.  Common export cargo
+ *   9.  Documents & export clearance
+ *   10. FAQ
+ *   11. Final CTA
+ * ===========================================================================
+ */
+
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { coreRoutes, toolRoutes, shippingCentreRoutes, shippingCentreLanding } from "@/config/routes";
+
+interface Props {
+  entry: import("astro:content").CollectionEntry<"exportRoutes">;
+}
+
+export async function getStaticPaths() {
+  const entries = await getCollection("exportRoutes");
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const data = entry.data;
+
+const canonicalPath = `/routes/exporting-from-kenya-to-${entry.id}`;
+const title = `Export from Kenya to ${data.destination} | Kisima Cargo`;
+const description = data.lede.slice(0, 155);
+
+const waHref = whatsappLink(
+  `Hello Kisima Cargo. I would like a quote for exporting goods from Kenya to ${data.destination}.`
+);
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: `Export from Kenya to ${data.destination}`,
+  serviceType: "International freight forwarding",
+  provider: { "@type": "Organization", name: site.name, url: site.productionUrl },
+  areaServed: [
+    { "@type": "Country", name: "Kenya" },
+    { "@type": "Place", name: data.destination },
+  ],
+  description: data.lede,
+};
+
+const faqSchema = data.faqs.length > 0
+  ? {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: data.faqs.map((f) => ({
+        "@type": "Question",
+        name: f.q,
+        acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    }
+  : null;
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: site.productionUrl },
+    { "@type": "ListItem", position: 2, name: "Export", item: `${site.productionUrl}/export` },
+    { "@type": "ListItem", position: 3, name: `Kenya to ${data.destination}`, item: `${site.productionUrl}${canonicalPath}` },
+  ],
+};
+
+const structuredData = [serviceSchema, breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])];
+
+const airVsSea = [
+  { label: "Best for", air: "Urgent exports, high-value goods, smaller consignments", sea: "Bulk cargo, heavy goods, cost-sensitive exports" },
+  { label: "Charging basis", air: "Chargeable weight (actual vs volumetric)", sea: "CBM (cubic metres)" },
+  { label: "Typical transit", air: "Days, depending on destination", sea: "Weeks, depending on destination" },
+  { label: "Relative cost", air: "Higher per kg", sea: "Lower per CBM" },
+];
+
+const howItWorks = [
+  { step: "01", title: "Tell us what you're exporting", body: "Cargo type, volume, destination and timeframe." },
+  { step: "02", title: "Prepare documentation", body: "Commercial invoice, packing list, certificate of origin and export declaration." },
+  { step: "03", title: "Deliver to Kisima", body: "Deliver to our Nairobi warehouse, or arrange supplier pickup." },
+  { step: "04", title: "Export clearance", body: "Export declaration filed and cleared at the Kenyan port or airport." },
+  { step: "05", title: "Air or sea freight", body: `Booked to ${data.destination}, tracked through transit.` },
+  { step: "06", title: "Destination delivery", body: "Delivery or handoff at the destination, where available." },
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+
+  <nav aria-label="Breadcrumb" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 text-xs text-muted-foreground">
+    <ol class="flex gap-2 items-center">
+      <li><a href="/" class="hover:text-primary">Home</a></li>
+      <li aria-hidden="true">›</li>
+      <li><a href="/export" class="hover:text-primary">Export</a></li>
+      <li aria-hidden="true">›</li>
+      <li class="text-foreground font-medium">Kenya to {data.destination}</li>
+    </ol>
+  </nav>
+
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">
+          Export from Kenya to {data.destination}
+        </h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">{data.lede}</p>
+        <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Calculate {data.destination} export</a>
+          <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Request a quote</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">WhatsApp Kisima</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-10 bg-muted/40 border-b border-border">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-xl md:text-2xl font-heading font-semibold mb-1">Estimate your {data.destination} export cost</h2>
+        <p class="text-muted-foreground text-sm">Use our calculator for an instant estimate.</p>
+      </div>
+      <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors shrink-0">Open calculator</a>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Who this service is for</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {data.whoFor.map((item) => (
+          <li class="rounded-lg border border-border px-4 py-3 text-sm">{item}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Air freight from Kenya to {data.destination}</h2>
+        <p class="text-muted-foreground leading-relaxed mb-4">
+          Air freight suits urgent exports, high-value goods and smaller consignments where speed matters more than cost. Charging is based on chargeable weight — the higher of actual weight or volumetric weight.
+        </p>
+        <a href={coreRoutes.airFreight.path} class="inline-flex items-center text-primary hover:underline font-medium">Learn about air freight →</a>
+      </div>
+      <div>
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Sea freight from Kenya to {data.destination}</h2>
+        <p class="text-muted-foreground leading-relaxed mb-4">
+          Sea freight suits larger, heavier or bulkier cargo where cost is more important than speed. Charging is based on CBM (cubic metres). Consolidation combines multiple suppliers into one shipment.
+        </p>
+        <a href={coreRoutes.seaFreight.path} class="inline-flex items-center text-primary hover:underline font-medium">Learn about sea freight →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8">Air vs sea — which fits your export?</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm md:text-base border-collapse">
+          <thead>
+            <tr class="border-b-2 border-border">
+              <th class="text-left py-3 pr-4 font-heading font-semibold"></th>
+              <th class="text-left py-3 pr-4 font-heading font-semibold">Air Freight</th>
+              <th class="text-left py-3 font-heading font-semibold">Sea Freight</th>
+            </tr>
+          </thead>
+          <tbody>
+            {airVsSea.map((row) => (
+              <tr class="border-b border-border">
+                <td class="py-4 pr-4 font-medium align-top">{row.label}</td>
+                <td class="py-4 pr-4 text-muted-foreground align-top">{row.air}</td>
+                <td class="py-4 text-muted-foreground align-top">{row.sea}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-10">How exporting to {data.destination} works</h2>
+      <ol class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {howItWorks.map((step) => (
+          <li>
+            <span class="block font-heading font-bold text-3xl text-accent mb-3">{step.step}</span>
+            <h3 class="text-lg font-heading font-semibold mb-2">{step.title}</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
+          </li>
+        ))}
+      </ol>
+
+      {data.routeNotes.length > 0 && (
+        <div class="mt-10 rounded-lg border border-border bg-background p-6">
+          <h3 class="font-heading font-semibold text-lg mb-3">Route notes</h3>
+          <ul class="space-y-2">
+            {data.routeNotes.map((note) => (
+              <li class="flex gap-3 text-sm text-muted-foreground">
+                <span class="text-accent shrink-0 mt-1">•</span>
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Common export cargo to {data.destination}</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {data.commonCargo.map((item) => (
+          <li class="rounded-lg border border-border px-4 py-3 text-sm">{item}</li>
+        ))}
+      </ul>
+      <p class="text-sm text-muted-foreground mt-6">
+        Exporting something else to {data.destination}?{" "}
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Ask us on WhatsApp</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Documents & export clearance</h2>
+      <p class="text-muted-foreground leading-relaxed mb-6">
+        These are the documents typically needed. Exact requirements vary by commodity and destination — we confirm before shipment.
+      </p>
+      <ul class="space-y-2 mb-8">
+        {data.documents.map((doc) => (
+          <li class="flex gap-3">
+            <span class="text-accent shrink-0 mt-1">•</span>
+            <span class="text-muted-foreground">{doc}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="flex flex-wrap gap-3">
+        <a href={shippingCentreRoutes["export-documents-kenya"]?.path || shippingCentreLanding.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Export documents guide</a>
+        <a href={shippingCentreRoutes["export-customs-clearance"]?.path || shippingCentreLanding.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">Export clearance guide</a>
+      </div>
+    </div>
+  </section>
+
+  {data.faqs.length > 0 && (
+    <section class="py-14 md:py-16 bg-background">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8">Export to {data.destination} — FAQ</h2>
+        <div class="space-y-6">
+          {data.faqs.map((item) => (
+            <div class="border-b border-border pb-6">
+              <h3 class="font-heading font-semibold text-lg mb-2">{item.q}</h3>
+              <p class="text-muted-foreground leading-relaxed">{item.a}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-8">
+          <a href={shippingCentreLanding.path} class="inline-flex items-center text-primary hover:underline font-medium">Browse the Shipping Centre →</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="py-14 md:py-16 bg-gradient-to-r from-primary to-secondary text-white">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-4">Ready to export to {data.destination}?</h2>
+      <p class="text-lg text-white/85 mb-8">Calculate an estimate or request a confirmed quote.</p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Calculate export</a>
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Request a quote</a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
