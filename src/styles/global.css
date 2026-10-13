@@ -27,81 +27,130 @@
  * Theme tokens
  * ------------------------------------------------------------------------- */
 @layer base {
+  /* =========================================================================
+   * THEME SYSTEM
+   * Three themes selected via a class on <html>:
+   *   theme-executive (default)
+   *   theme-ocean
+   *   theme-brand (current Kisima blue, kept for rollback)
+   * ======================================================================= */
+
+  /* Default = executive */
   :root {
-    /* Core Brand Colors */
-    --background: 0 0% 100%;
-    --foreground: 213 71% 22%;
-
+    --theme-name: "executive";
+    --background: 60 5% 96%;
+    --foreground: 210 25% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 213 71% 22%;
-
+    --card-foreground: 210 25% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 213 71% 22%;
-
-    /* Kisima Primary Blue #215dab */
-    --primary: 213 67% 40%;
+    --popover-foreground: 210 25% 12%;
+    --primary: 210 27% 13%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 213 67% 35%;
-
-    /* Kisima Deep Blue #133868 */
-    --secondary: 213 71% 22%;
+    --primary-hover: 210 27% 20%;
+    --secondary: 210 30% 27%;
     --secondary-foreground: 0 0% 100%;
-
-    /* Kisima Orange Accent #e57b25 */
-    --accent: 26 79% 52%;
+    --accent: 22 82% 54%;
     --accent-foreground: 0 0% 100%;
-    --accent-hover: 26 79% 47%;
-
-    --muted: 210 40% 96%;
-    --muted-foreground: 213 20% 45%;
-
+    --accent-hover: 22 82% 48%;
+    --muted: 60 5% 92%;
+    --muted-foreground: 210 15% 40%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 213 67% 40%;
-
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 22 82% 54%;
     --radius: 8px;
-
-    /* Logistics-specific semantic colors */
-    --trust: 213 67% 40%;
+    --trust: 210 27% 13%;
     --success: 120 60% 45%;
     --warning: 45 93% 58%;
     --info: 204 94% 58%;
-
-    /* Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(213 67% 40%), hsl(213 71% 22%));
-    --gradient-accent: linear-gradient(135deg, hsl(26 79% 52%), hsl(26 79% 47%));
-    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(213 67% 40% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(213 67% 40% / 0.1), 0 2px 4px -1px hsl(213 67% 40% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(213 67% 40% / 0.1), 0 4px 6px -2px hsl(213 67% 40% / 0.05);
-    --shadow-xl: 0 20px 25px -5px hsl(213 67% 40% / 0.1), 0 10px 10px -5px hsl(213 67% 40% / 0.04);
-
-    /* Typography */
+    --gradient-hero: linear-gradient(135deg, hsl(210 27% 13%), hsl(210 30% 27%));
+    --gradient-accent: linear-gradient(135deg, hsl(22 82% 54%), hsl(22 82% 48%));
+    --gradient-subtle: linear-gradient(180deg, hsl(0 0% 100%), hsl(60 5% 96%));
     --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-
-    /* Animation timing */
     --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
-    /* shadcn sidebar tokens (retained for shadcn/ui compatibility) */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2% 91.2% 59.8%;
+  .theme-executive {
+    --theme-name: "executive";
+    --background: 60 5% 96%;
+    --foreground: 210 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 25% 12%;
+    --primary: 210 27% 13%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 210 27% 20%;
+    --secondary: 210 30% 27%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 22 82% 54%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 22 82% 48%;
+    --muted: 60 5% 92%;
+    --muted-foreground: 210 15% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 22 82% 54%;
+  }
+
+  .theme-ocean {
+    --theme-name: "ocean";
+    --background: 180 32% 97%;
+    --foreground: 197 84% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 197 84% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 197 84% 15%;
+    --primary: 197 84% 16%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 197 84% 22%;
+    --secondary: 191 80% 34%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 22 89% 55%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 22 89% 49%;
+    --muted: 180 32% 93%;
+    --muted-foreground: 197 25% 42%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 191 30% 88%;
+    --input: 191 30% 88%;
+    --ring: 22 89% 55%;
+  }
+
+  .theme-brand {
+    --theme-name: "brand";
+    --background: 0 0% 100%;
+    --foreground: 213 71% 22%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 71% 22%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 71% 22%;
+    --primary: 213 67% 40%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 213 67% 35%;
+    --secondary: 213 71% 22%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 26 79% 52%;
+    --accent-foreground: 0 0% 100%;
+    --accent-hover: 26 79% 47%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 213 20% 45%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 213 67% 40%;
   }
 
   .dark {
+
     --background: 213 71% 22%;
     --foreground: 0 0% 100%;
 

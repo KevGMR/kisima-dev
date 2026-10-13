@@ -4,7 +4,19 @@
  * ===========================================================================
  * Root layout for every public page.
  *
- * Replaces the hardcoded <head> in the original index.html.
+ * Replaces the hardcoded <head>
+    <!-- Apply saved theme before first paint to prevent flash. -->
+    <script is:inline id="kisima-theme-init">
+      (function () {
+        try {
+          var t = localStorage.getItem("theme") || "executive";
+          if (["executive", "ocean", "brand"].indexOf(t) === -1) t = "executive";
+          document.documentElement.classList.add("theme-" + t);
+        } catch (e) {
+          document.documentElement.classList.add("theme-executive");
+        }
+      })();
+    </script> in the original index.html.
  *
  * Provides:
  *   - Per-page <title> and <meta description>

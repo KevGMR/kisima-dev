@@ -4,6 +4,7 @@
  * Reduced nav: 7 items. Resources consolidates Tools + Shipping Centre + Locations.
  */
 import { site, whatsappLink } from "@/config/site";
+import ThemeSwitcher from "@/components/astro/ThemeSwitcher.astro";
 import {
   coreRoutes,
   originRoutes,
@@ -167,6 +168,7 @@ const waHref = whatsappLink("Hello Kisima Cargo. I would like a shipping quote."
       </nav>
 
       <div class="flex items-center gap-2 shrink-0">
+        <ThemeSwitcher />
         <a href={toolRoutes.trackShipment.path} class="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors">
           Track Shipment
         </a>
@@ -269,6 +271,7 @@ const waHref = whatsappLink("Hello Kisima Cargo. I would like a shipping quote."
     </nav>
 
     <div class="px-4 py-4 border-t border-border space-y-2 shrink-0">
+      <ThemeSwitcher variant="drawer" />
       <a href={toolRoutes.trackShipment.path} class="flex items-center justify-center gap-2 rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-muted transition-colors" data-drawer-link>Track Shipment</a>
       <a href={coreRoutes.requestQuote.path} class="flex items-center justify-center gap-2 rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-4 py-3 text-sm font-semibold transition-colors" data-drawer-link>Get a Quote</a>
       <a href={waHref} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-md border border-accent text-accent hover:bg-accent hover:text-accent-foreground px-4 py-3 text-sm font-semibold transition-colors">WhatsApp us</a>

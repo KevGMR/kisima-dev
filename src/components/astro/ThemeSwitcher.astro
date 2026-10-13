@@ -1,0 +1,97 @@
+---
+/**
+ * src/components/astro/ThemeSwitcher.astro
+ * ===========================================================================
+ * Three-theme switcher (Executive | Ocean | Brand).
+ *
+ * Temporary comparison tool. Remove before production launch, or keep and
+ * adapt if the client wants permanent theme selection.
+ *
+ * Behaviour:
+ *   - Reads localStorage.theme on load (handled by BaseLayout's pre-paint script).
+ *   - Clicking a pill updates localStorage and swaps the class on <html>.
+ *   - No page reload.
+ * ===========================================================================
+ */
+
+interface Props {
+  variant?: "header" | "drawer";
+}
+
+const { variant = "header" } = Astro.props;
+
+const themes = [
+  { id: "executive", label: "Executive" },
+  { id: "ocean", label: "Ocean" },
+  { id: "brand", label: "Brand" },
+];
+
+const isDrawer = variant === "drawer";
+const wrapperClass = isDrawer
+  ? "rounded-lg border border-border p-1 grid grid-cols-3 gap-1"
+  : "hidden lg:flex rounded-lg border border-border p-0.5 gap-0.5";
+
+const btnClass = isDrawer
+  ? "rounded-md px-3 py-2 text-xs font-medium transition-colors"
+  : "rounded-md px-3 py-1.5 text-xs font-medium transition-colors";
+---
+
+<div class={wrapperClass} role="radiogroup" aria-label="Theme">
+  {themes.map((t) => (
+    <button
+      type="button"
+      role="radio"
+      aria-checked="false"
+      data-theme-btn={t.id}
+      class={btnClass + " text-muted-foreground hover:text-foreground"}
+    >
+      {t.label}
+    </button>
+  ))}
+</div>
+
+<script>
+  (function () {
+    function apply(theme: string) {
+      var html = document.documentElement;
+      ["theme-executive", "theme-ocean", "theme-brand"].forEach(function (c) {
+        html.classList.remove(c);
+      });
+      html.classList.add("theme-" + theme);
+      try { localStorage.setItem("theme", theme); } catch (e) { /* ignore */ }
+
+      // Update all toggle buttons across the page (header + drawer share state)
+      document.querySelectorAll("[data-theme-btn]").forEach(function (btn) {
+        var isActive = btn.getAttribute("data-theme-btn") === theme;
+        btn.setAttribute("aria-checked", isActive ? "true" : "false");
+        btn.classList.toggle("bg-accent", isActive);
+        btn.classList.toggle("text-accent-foreground", isActive);
+        btn.classList.toggle("text-muted-foreground", !isActive);
+        btn.classList.toggle("hover:text-foreground", !isActive);
+      });
+    }
+
+    function init() {
+      var buttons = document.querySelectorAll("[data-theme-btn]");
+      if (buttons.length === 0) return;
+
+      // Read the current theme (already set by BaseLayout's pre-paint script)
+      var current = "executive";
+      try { current = localStorage.getItem("theme") || "executive"; } catch (e) { /* ignore */ }
+      apply(current);
+
+      buttons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var theme = btn.getAttribute("data-theme-btn");
+          if (theme) apply(theme);
+        });
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>
