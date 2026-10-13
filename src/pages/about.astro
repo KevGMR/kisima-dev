@@ -1,10 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import aboutOfficeImg from "@/assets/about-office.jpeg";
+import aboutCargoImg from "@/assets/about-cargo.jpeg";
 import { site } from "@/config/site";
 import { coreRoutes, toolRoutes, originRoutes } from "@/config/routes";
 
-const title = "About Kisima Cargo | International Shipping to Kenya";
-const description = "Kisima Cargo provides air freight, sea freight, consolidation, customs support and delivery solutions into Kenya.";
+const title = "About Kisima Cargo | Global Import & Export Logistics";
+const description = "Kisima Cargo is a global import and export logistics company headquartered in East Africa, connecting Kenya with international markets.";
 const canonicalPath = "/about";
 
 const structuredData = {
@@ -22,15 +25,28 @@ const structuredData = {
 ---
 
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
-  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+  <section class="relative overflow-hidden text-white min-h-[60vh] md:min-h-[65vh] flex items-center">
+    <Image
+      src={aboutOfficeImg}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      widths={[800, 1200, 1600, 2000]}
+      sizes="100vw"
+      format="webp"
+      loading="eager"
+      quality={80}
+      aria-hidden="true"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-primary/85 to-primary/60" aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20 w-full">
       <div class="max-w-3xl">
         <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">About</p>
         <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">
-          International shipping into Kenya, made straightforward
+          Global import and export logistics, headquartered in East Africa
         </h1>
         <p class="text-lg text-white/90 leading-relaxed">
-          Kisima Cargo provides air freight, sea freight, consolidation, customs support and delivery into Kenya — from China, the UK, USA, UAE, South Africa and other supported markets.
+          Move goods into Kenya or export from Kenya to global markets with Kisima Cargo. We provide air freight, sea freight, customs clearance, cargo consolidation and door-to-door logistics for individuals and businesses.
         </p>
       </div>
     </div>
@@ -62,13 +78,26 @@ const structuredData = {
     </div>
   </section>
 
-  <section class="py-14 md:py-16 bg-background">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 text-muted-foreground leading-relaxed">
-      <h2 class="text-2xl md:text-3xl font-heading font-bold text-foreground">How we work</h2>
-      <p>
+  <section class="relative overflow-hidden text-white">
+    <Image
+      src={aboutCargoImg}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      widths={[800, 1200, 1600]}
+      sizes="100vw"
+      format="webp"
+      loading="lazy"
+      quality={80}
+      aria-hidden="true"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-primary/75" aria-hidden="true"></div>
+
+    <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-16 space-y-6">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold text-white">How we work</h2>
+      <p class="text-white/85 leading-relaxed">
         We keep the process transparent. Rates are quoted clearly with handling and any minimums shown separately. Customs duty and VAT are confirmed before release so there are no surprises. Any additional services are quoted before they're applied.
       </p>
-      <p>
+      <p class="text-white/85 leading-relaxed">
         Where we quote a transit window, it's realistic — not aspirational. If something changes, we tell you.
       </p>
     </div>

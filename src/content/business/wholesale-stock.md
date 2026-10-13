@@ -1,6 +1,6 @@
 ---
 label: Wholesale Stock
-lede: "Import wholesale stock to Kenya from China, the UK, USA, UAE and South Africa. Consolidation, air and sea freight, and customs support from Kisima Cargo."
+lede: "Import and export wholesale stock to and from Kenya. Consolidation, air and sea freight, and customs support from Kisima Cargo."
 examples:
   - "General merchandise for retail"
   - "Household goods and kitchenware"

@@ -1,5 +1,9 @@
 ---
-import { site } from "@/config/site";
+/**
+ * src/components/astro/Header.astro
+ * Reduced nav: 7 items. Resources consolidates Tools + Shipping Centre + Locations.
+ */
+import { site, whatsappLink } from "@/config/site";
 import {
   coreRoutes,
   originRoutes,
@@ -52,39 +56,90 @@ const routeItems = [
   { label: "Kenya to Africa", path: destinationRoutes.africa.path },
 ];
 
-const toolItems = [
+// Resources groups: Tools, Guides, Company
+const resourcesTools = [
   { label: "Shipping Calculator", path: toolRoutes.shippingCalculator.path },
   { label: "Volumetric Weight", path: toolRoutes.volumetricWeightCalculator.path },
   { label: "CBM Calculator", path: toolRoutes.cbmCalculator.path },
   { label: "Track Shipment", path: toolRoutes.trackShipment.path },
 ];
 
-const primaryNav = [
-  { label: "Home", path: "/", items: null },
-  { label: "Import", path: importLanding.path, items: importItems },
-  { label: "Export", path: exportLanding.path, items: exportItems },
-  { label: "Services", path: "#services", items: serviceItems },
-  { label: "Routes", path: "#routes", items: routeItems },
-  { label: "Tools", path: "#tools", items: toolItems },
-  { label: "Shipping Centre", path: shippingCentreLanding.path, items: null },
-  { label: "Locations", path: locationsLanding.path, items: null },
-  { label: "About", path: coreRoutes.about.path, items: null },
+const resourcesGuides = [
+  { label: "Shipping Centre", path: shippingCentreLanding.path },
 ];
+
+const resourcesCompany = [
+  { label: "Locations", path: locationsLanding.path },
+];
+
+const primaryNav = [
+  { label: "Home", path: "/", items: null, resources: null },
+  { label: "About", path: coreRoutes.about.path, items: null, resources: null },
+  { label: "Import", path: importLanding.path, items: importItems, resources: null },
+  { label: "Export", path: exportLanding.path, items: exportItems, resources: null },
+  { label: "Services", path: "#services", items: serviceItems, resources: null },
+  { label: "Routes", path: "#routes", items: routeItems, resources: null },
+  { label: "Resources", path: "#resources", items: null, resources: { tools: resourcesTools, guides: resourcesGuides, company: resourcesCompany } },
+];
+
+const waHref = whatsappLink("Hello Kisima Cargo. I would like a shipping quote.");
 ---
 
-<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
+<a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded">
+  Skip to content
+</a>
 
-<header class="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur">
+<header class="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/70">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex h-16 items-center justify-between gap-4">
+
+    <!-- Desktop layout: 3-column grid, nav centered -->
+    <div class="hidden lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-center lg:gap-6 lg:h-16">
+
       <a href="/" class="flex items-center shrink-0" aria-label={site.name + " home"}>
         <img src="/images/logo-transparent.png" alt={site.name} class="h-10 w-auto" width="160" height="40" loading="eager" />
       </a>
 
-      <nav class="hidden lg:flex items-center gap-1 flex-1 justify-center" aria-label="Primary navigation">
+      <nav class="flex items-center gap-1 justify-center" aria-label="Primary navigation">
         {primaryNav.map((item) => (
           <div class="relative group">
-            {item.items ? (
+            {item.resources ? (
+              <Fragment>
+                <a href={item.path} class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors">
+                  {item.label}
+                  <svg class="h-3 w-3 transition-transform group-hover:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </a>
+                <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 absolute left-0 top-full pt-1 transition-opacity duration-150 z-50" role="menu">
+                  <div class="min-w-[240px] bg-popover border border-border rounded-lg shadow-lg py-2">
+                    <p class="px-4 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Tools</p>
+                    <ul>
+                      {item.resources.tools.map((sub) => (
+                        <li role="none">
+                          <a href={sub.path} class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors" role="menuitem">{sub.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                    <p class="px-4 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground border-t border-border mt-2">Guides</p>
+                    <ul>
+                      {item.resources.guides.map((sub) => (
+                        <li role="none">
+                          <a href={sub.path} class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors" role="menuitem">{sub.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                    <p class="px-4 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground border-t border-border mt-2">Company</p>
+                    <ul>
+                      {item.resources.company.map((sub) => (
+                        <li role="none">
+                          <a href={sub.path} class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors" role="menuitem">{sub.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </Fragment>
+            ) : item.items ? (
               <Fragment>
                 <a href={item.path} class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors">
                   {item.label}
@@ -96,9 +151,7 @@ const primaryNav = [
                   <ul class="min-w-[220px] bg-popover border border-border rounded-lg shadow-lg py-2">
                     {item.items.map((sub) => (
                       <li role="none">
-                        <a href={sub.path} class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors" role="menuitem">
-                          {sub.label}
-                        </a>
+                        <a href={sub.path} class="block px-4 py-2 text-sm text-popover-foreground hover:bg-muted hover:text-primary transition-colors" role="menuitem">{sub.label}</a>
                       </li>
                     ))}
                   </ul>
@@ -113,7 +166,7 @@ const primaryNav = [
         ))}
       </nav>
 
-      <div class="hidden lg:flex items-center gap-2 shrink-0">
+      <div class="flex items-center gap-2 shrink-0">
         <a href={toolRoutes.trackShipment.path} class="inline-flex items-center rounded-md border border-border px-3 py-2 text-sm font-medium hover:bg-muted transition-colors">
           Track Shipment
         </a>
@@ -121,43 +174,150 @@ const primaryNav = [
           Get a Quote
         </a>
       </div>
+    </div>
 
-      <div class="flex lg:hidden items-center gap-2 shrink-0">
-        <a href={importLanding.path} class="inline-flex items-center rounded-md border border-border text-xs font-medium px-3 py-1.5 hover:bg-muted transition-colors">Import</a>
-        <a href={exportLanding.path} class="inline-flex items-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover text-xs font-semibold px-3 py-1.5 transition-colors">Export</a>
-      </div>
+    <!-- Mobile top bar -->
+    <div class="lg:hidden flex h-16 items-center justify-between gap-3">
+      <a href="/" class="flex items-center shrink-0" aria-label={site.name + " home"}>
+        <img src="/images/logo-transparent.png" alt={site.name} class="h-9 w-auto" width="140" height="36" loading="eager" />
+      </a>
+
+      <button
+        type="button"
+        id="kisima-menu-open"
+        class="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        aria-label="Open menu"
+        aria-controls="kisima-mobile-drawer"
+        aria-expanded="false"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round" />
+          <line x1="3" y1="12" x2="21" y2="12" stroke-linecap="round" />
+          <line x1="3" y1="18" x2="21" y2="18" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
   </div>
-
-  <nav class="lg:hidden border-t border-border/40 overflow-x-auto whitespace-nowrap" aria-label="Primary navigation (mobile)">
-    <ul class="flex items-center gap-1 px-4 py-2 min-w-max">
-      {primaryNav.map((item) => (
-        <li>
-          {item.items ? (
-            <details class="group">
-              <summary class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors cursor-pointer list-none">
-                {item.label}
-                <svg class="h-3 w-3 transition-transform group-open:rotate-180" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                  <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </summary>
-              <ul class="mt-1 ml-2 mb-2 space-y-0.5">
-                {item.items.map((sub) => (
-                  <li>
-                    <a href={sub.path} class="block px-3 py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors">
-                      {sub.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          ) : (
-            <a href={item.path} class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-foreground hover:text-primary rounded-md transition-colors">
-              {item.label}
-            </a>
-          )}
-        </li>
-      ))}
-    </ul>
-  </nav>
 </header>
+
+<!-- Mobile drawer -->
+<div id="kisima-mobile-drawer" class="kisima-drawer lg:hidden" aria-hidden="true">
+  <div id="kisima-menu-backdrop" class="kisima-drawer-backdrop absolute inset-0 bg-black/40"></div>
+
+  <aside class="kisima-drawer-panel absolute top-0 right-0 h-full w-[85%] max-w-sm bg-background border-l border-border shadow-2xl flex flex-col">
+    <div class="flex items-center justify-between px-4 h-16 border-b border-border shrink-0">
+      <img src="/images/logo-transparent.png" alt={site.name} class="h-9 w-auto" width="140" height="36" loading="eager" />
+      <button type="button" id="kisima-menu-close" class="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Close menu">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="6" y1="6" x2="18" y2="18" stroke-linecap="round" />
+          <line x1="18" y1="6" x2="6" y2="18" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-4 py-4" aria-label="Mobile navigation">
+      <ul class="space-y-1">
+        {primaryNav.map((item) => (
+          <li>
+            {item.resources ? (
+              <details class="group">
+                <summary class="flex items-center justify-between gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted cursor-pointer list-none">
+                  <span>{item.label}</span>
+                  <svg class="h-4 w-4 transition-transform group-open:rotate-180 text-muted-foreground" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </summary>
+                <div class="mt-1 ml-2 space-y-1 border-l border-border pl-3">
+                  <p class="px-3 pt-2 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Tools</p>
+                  {item.resources.tools.map((sub) => (
+                    <a href={sub.path} class="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-colors" data-drawer-link>{sub.label}</a>
+                  ))}
+                  <p class="px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Guides</p>
+                  {item.resources.guides.map((sub) => (
+                    <a href={sub.path} class="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-colors" data-drawer-link>{sub.label}</a>
+                  ))}
+                  <p class="px-3 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Company</p>
+                  {item.resources.company.map((sub) => (
+                    <a href={sub.path} class="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-colors" data-drawer-link>{sub.label}</a>
+                  ))}
+                </div>
+              </details>
+            ) : item.items ? (
+              <details class="group">
+                <summary class="flex items-center justify-between gap-2 rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted cursor-pointer list-none">
+                  <span>{item.label}</span>
+                  <svg class="h-4 w-4 transition-transform group-open:rotate-180 text-muted-foreground" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <path d="M3 5l3 3 3-3" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </summary>
+                <ul class="mt-1 ml-2 space-y-0.5 border-l border-border pl-3">
+                  {item.items.map((sub) => (
+                    <li>
+                      <a href={sub.path} class="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-primary hover:bg-muted transition-colors" data-drawer-link>{sub.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : (
+              <a href={item.path} class="block rounded-md px-3 py-2.5 text-base font-medium text-foreground hover:bg-muted hover:text-primary transition-colors" data-drawer-link>
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="px-4 py-4 border-t border-border space-y-2 shrink-0">
+      <a href={toolRoutes.trackShipment.path} class="flex items-center justify-center gap-2 rounded-md border border-border px-4 py-3 text-sm font-medium hover:bg-muted transition-colors" data-drawer-link>Track Shipment</a>
+      <a href={coreRoutes.requestQuote.path} class="flex items-center justify-center gap-2 rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-4 py-3 text-sm font-semibold transition-colors" data-drawer-link>Get a Quote</a>
+      <a href={waHref} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 rounded-md border border-accent text-accent hover:bg-accent hover:text-accent-foreground px-4 py-3 text-sm font-semibold transition-colors">WhatsApp us</a>
+    </div>
+  </aside>
+</div>
+
+<script>
+  function initDrawer() {
+    var drawer = document.getElementById("kisima-mobile-drawer");
+    var openBtn = document.getElementById("kisima-menu-open");
+    var closeBtn = document.getElementById("kisima-menu-close");
+    var backdrop = document.getElementById("kisima-menu-backdrop");
+    if (!drawer || !openBtn || !closeBtn || !backdrop) return;
+
+    function setOpen(open) {
+      drawer.setAttribute("data-open", open ? "true" : "false");
+      drawer.setAttribute("aria-hidden", open ? "false" : "true");
+      openBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) {
+        drawer.classList.add("kisima-drawer-open");
+        document.body.style.overflow = "hidden";
+        closeBtn.focus();
+      } else {
+        drawer.classList.remove("kisima-drawer-open");
+        document.body.style.overflow = "";
+      }
+    }
+
+    openBtn.addEventListener("click", function () { setOpen(true); });
+    closeBtn.addEventListener("click", function () { setOpen(false); });
+    backdrop.addEventListener("click", function () { setOpen(false); });
+    var links = drawer.querySelectorAll("[data-drawer-link]");
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener("click", function () { setOpen(false); });
+    }
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && drawer.getAttribute("data-open") === "true") setOpen(false);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initDrawer);
+  else initDrawer();
+</script>
+
+<style is:global>
+  .kisima-drawer { position: fixed; inset: 0; z-index: 9999; pointer-events: none; }
+  .kisima-drawer.kisima-drawer-open { pointer-events: auto; }
+  .kisima-drawer .kisima-drawer-backdrop { opacity: 0; transition: opacity 200ms ease-out; }
+  .kisima-drawer.kisima-drawer-open .kisima-drawer-backdrop { opacity: 1; }
+  .kisima-drawer .kisima-drawer-panel { transform: translateX(100%); transition: transform 200ms ease-out; }
+  .kisima-drawer.kisima-drawer-open .kisima-drawer-panel { transform: translateX(0) !important; }
+</style>

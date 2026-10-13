@@ -216,4 +216,37 @@ const exportRoutes = defineCollection({
   }),
 });
 
-export const collections = { routes, business, shippingCentre, locations, exportRoutes };
+
+/* ---------------------------------------------------------------------------
+ * countries
+ * ------------------------------------------------------------------------- */
+const countries = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/countries" }),
+  schema: z.object({
+    name: z.string(),
+    code: z.string(),
+    role: z.string(),
+    lede: z.string(),
+    importsFrom: z.array(z.string()),
+    exportsTo: z.array(z.string()),
+    freightOptions: z.array(
+      z.object({
+        mode: z.string(),
+        description: z.string(),
+      })
+    ),
+    commonCargoIn: z.array(z.string()).optional(),
+    commonCargoOut: z.array(z.string()).optional(),
+    documents: z.array(z.string()),
+    faqs: z.array(
+      z.object({
+        q: z.string(),
+        a: z.string(),
+      })
+    ),
+    lastReviewed: z.string().optional(),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { routes, business, shippingCentre, locations, exportRoutes, countries };

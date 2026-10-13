@@ -24,6 +24,9 @@
  */
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import heroImg from "@/assets/hero-logistics.jpeg";
+import globalNetworkImg from "@/assets/global-network.jpeg";
 import { site, whatsappLink } from "@/config/site";
 import {
   coreRoutes,
@@ -165,8 +168,21 @@ const structuredData = {
   <!-- =====================================================================
        1. HERO
        ===================================================================== -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-secondary text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28">
+  <section class="relative overflow-hidden text-white min-h-[70vh] md:min-h-[75vh] flex items-center">
+    <Image
+      src={heroImg}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      widths={[800, 1200, 1600, 2000]}
+      sizes="100vw"
+      format="webp"
+      loading="eager"
+      quality={80}
+      aria-hidden="true"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-primary/85 to-primary/60" aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28 w-full">
       <div class="max-w-3xl">
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
           Global Import &amp; Export Logistics, Simplified.
@@ -315,20 +331,33 @@ const structuredData = {
   <!-- =====================================================================
        5. GLOBAL NETWORK
        ===================================================================== -->
-  <section class="py-16 md:py-20 bg-secondary text-secondary-foreground">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="relative overflow-hidden text-white">
+    <Image
+      src={globalNetworkImg}
+      alt=""
+      class="absolute inset-0 w-full h-full object-cover"
+      widths={[800, 1200, 1600]}
+      sizes="100vw"
+      format="webp"
+      loading="lazy"
+      quality={80}
+      aria-hidden="true"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-primary/75" aria-hidden="true"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
       <div class="max-w-3xl mb-10">
         <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
           One network. Multiple markets.
         </h2>
-        <p class="text-lg text-secondary-foreground/80">
+        <p class="text-lg text-white/80">
           Kisima Cargo connects Kenya with global sourcing and destination markets through our international network.
         </p>
       </div>
 
       <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {globalNetwork.map((loc) => (
-          <li class="rounded-xl border border-white/15 bg-white/5 p-5">
+          <li class="rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm p-5">
             <p class="text-xs font-medium text-accent uppercase tracking-wide mb-1">{loc.role}</p>
             <p class="font-heading font-semibold text-lg">{loc.city}</p>
           </li>

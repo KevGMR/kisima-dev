@@ -1,0 +1,113 @@
+{
+  "$ref": "#/definitions/countries",
+  "definitions": {
+    "countries": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "lede": {
+          "type": "string"
+        },
+        "importsFrom": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exportsTo": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "freightOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "mode": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "mode",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "commonCargoIn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "commonCargoOut": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "faqs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "q": {
+                "type": "string"
+              },
+              "a": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "q",
+              "a"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "lastReviewed": {
+          "type": "string"
+        },
+        "order": {
+          "type": "number",
+          "default": 99
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "code",
+        "role",
+        "lede",
+        "importsFrom",
+        "exportsTo",
+        "freightOptions",
+        "documents",
+        "faqs"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

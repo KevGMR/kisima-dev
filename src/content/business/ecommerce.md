@@ -1,6 +1,6 @@
 ---
 label: E-commerce
-lede: "E-commerce shipping to Kenya from supported origins. Shop & Ship, consolidation, customs support and delivery for online sellers and buyers."
+lede: "E-commerce shipping to and from Kenya. Shop & Ship, consolidation, customs support and delivery for online sellers and buyers."
 examples:
   - "Online retail orders from UK, US, China or UAE stores"
   - "Marketplace orders (Amazon, eBay, AliExpress, etc.)"

@@ -1,6 +1,6 @@
 ---
 label: Clothing
-lede: "Ship clothing, footwear and textiles to Kenya from China, the UK, USA, UAE and South Africa. Air and sea freight, consolidation and customs support from Kisima Cargo."
+lede: "Ship clothing, footwear and textiles to and from Kenya. Air and sea freight, consolidation and customs support from Kisima Cargo."
 examples:
   - "Bulk apparel orders from manufacturers"
   - "Footwear and accessories"

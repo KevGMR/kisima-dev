@@ -1,6 +1,6 @@
 ---
 label: Electronics
-lede: "Ship electronics, phone accessories and small appliances to Kenya from supported origins. Air and sea freight, consolidation, customs support and delivery from Kisima Cargo."
+lede: "Ship electronics, phone accessories and small appliances to and from Kenya. Air and sea freight, consolidation, customs support and delivery from Kisima Cargo."
 examples:
   - "Mobile phones and accessories"
   - "Laptops, tablets and computer parts"

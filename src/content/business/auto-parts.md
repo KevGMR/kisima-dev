@@ -1,6 +1,6 @@
 ---
 label: Auto Parts
-lede: "Ship auto parts, vehicle components and accessories to Kenya. Air and sea freight, consolidation and customs support from Kisima Cargo."
+lede: "Ship auto parts, vehicle components and accessories to and from Kenya. Air and sea freight, consolidation and customs support from Kisima Cargo."
 examples:
   - "Vehicle spare parts and components"
   - "Tyres and wheels"

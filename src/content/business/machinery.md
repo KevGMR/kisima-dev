@@ -1,6 +1,6 @@
 ---
 label: Machinery
-lede: "Ship machinery, industrial equipment and heavy spares to Kenya. Sea and air freight, project handling and customs support from Kisima Cargo."
+lede: "Ship machinery, industrial equipment and heavy spares to and from Kenya. Sea and air freight, project handling and customs support from Kisima Cargo."
 examples:
   - "Industrial machinery and production equipment"
   - "Construction equipment and spares"

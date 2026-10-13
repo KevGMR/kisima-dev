@@ -281,16 +281,48 @@ export const destinationRoutes: Record<string, DestinationRoute> = Object.fromEn
 );
 
 /* ===========================================================================
+ * Country pages + routes matrix
+ * ======================================================================== */
+
+export const routesLanding: RouteDef = {
+  path: withSlash("/routes"),
+  title: "Route Network | Kisima Cargo",
+  description: "Kisima Cargo's freight network connects Kenya, China, the UK, USA, UAE and South Africa. See supported routes and freight options.",
+  label: "All Routes",
+};
+
+const countrySeeds: Array<{ slug: string; label: string; title: string; description: string }> = [
+  { slug: "china", label: "China", title: "Shipping to and from China | Kisima Cargo", description: "Freight to and from China — imports into Kenya and exports from Kenya to China." },
+  { slug: "uk", label: "United Kingdom", title: "Shipping to and from the UK | Kisima Cargo", description: "Freight to and from the United Kingdom — imports into Kenya and exports from Kenya to the UK." },
+  { slug: "usa", label: "United States", title: "Shipping to and from the USA | Kisima Cargo", description: "Freight to and from the United States — imports into Kenya and exports from Kenya to the USA." },
+  { slug: "uae", label: "United Arab Emirates", title: "Shipping to and from the UAE | Kisima Cargo", description: "Freight to and from the UAE — imports into Kenya and exports from Kenya to the UAE." },
+  { slug: "south-africa", label: "South Africa", title: "Shipping to and from South Africa | Kisima Cargo", description: "Freight to and from South Africa — imports into Kenya and exports from Kenya to South Africa." },
+  { slug: "kenya", label: "Kenya", title: "Shipping to and from Kenya | Kisima Cargo", description: "Kisima Cargo's home market and hub. Imports, exports, customs clearance." },
+];
+
+export const countryRoutes: Record<string, RouteDef> = Object.fromEntries(
+  countrySeeds.map((c) => [
+    c.slug,
+    {
+      path: withSlash(`/routes/countries/${c.slug}`),
+      title: c.title,
+      description: c.description,
+      label: c.label,
+    },
+  ])
+);
+
+/* ===========================================================================
  * Business category pages (unchanged)
  * ======================================================================== */
 
 const businessSeeds: Array<{ slug: string; label: string; title: string; description: string }> = [
-  { slug: "clothing", label: "Clothing", title: "Shipping Clothing to Kenya | Kisima Cargo", description: "Ship clothing and textiles to Kenya from China, the UK, USA, UAE and South Africa. Air, sea and consolidation options from Kisima Cargo." },
-  { slug: "electronics", label: "Electronics", title: "Shipping Electronics to Kenya | Kisima Cargo", description: "Ship electronics to Kenya safely. Air and sea freight, consolidation, customs support and delivery from Kisima Cargo." },
-  { slug: "machinery", label: "Machinery", title: "Shipping Machinery to Kenya | Kisima Cargo", description: "Ship machinery and industrial equipment to Kenya. Sea freight, project handling and customs support from Kisima Cargo." },
-  { slug: "auto-parts", label: "Auto Parts", title: "Shipping Auto Parts to Kenya | Kisima Cargo", description: "Ship auto parts and vehicle components to Kenya by air and sea. Consolidation, customs support and delivery with Kisima Cargo." },
-  { slug: "wholesale-stock", label: "Wholesale Stock", title: "Shipping Wholesale Stock to Kenya | Kisima Cargo", description: "Import wholesale stock to Kenya from supported markets. Consolidation, sea and air freight with Kisima Cargo." },
-  { slug: "ecommerce", label: "E-commerce", title: "E-commerce Shipping to Kenya | Kisima Cargo", description: "E-commerce shipping to Kenya — shop & ship, consolidation, customs support and delivery from Kisima Cargo." },
+  { slug: "clothing", label: "Clothing", title: "Shipping Clothing to Kenya | Kisima Cargo", description: "Ship clothing and textiles to and from Kenya. Air, sea and consolidation for imports into Kenya and exports from Kenya. Kisima Cargo." },
+  { slug: "electronics", label: "Electronics", title: "Shipping Electronics to Kenya | Kisima Cargo", description: "Ship electronics and appliances to and from Kenya. Air, sea, consolidation and customs support from Kisima Cargo." },
+  { slug: "machinery", label: "Machinery", title: "Shipping Machinery to Kenya | Kisima Cargo", description: "Ship machinery and industrial equipment to and from Kenya. Sea freight, project handling and customs support from Kisima Cargo." },
+  { slug: "auto-parts", label: "Auto Parts", title: "Shipping Auto Parts to Kenya | Kisima Cargo", description: "Ship auto parts and vehicle components to and from Kenya by air and sea. Consolidation, customs support and delivery." },
+  { slug: "wholesale-stock", label: "Wholesale Stock", title: "Shipping Wholesale Stock to Kenya | Kisima Cargo", description: "Import and export wholesale stock to and from Kenya. Consolidation, sea and air freight with Kisima Cargo." },
+  { slug: "ecommerce", label: "E-commerce", title: "E-commerce Shipping to Kenya | Kisima Cargo", description: "E-commerce shipping to and from Kenya — shop & ship, consolidation, customs support and delivery from Kisima Cargo." },
 ];
 
 export const businessRoutes: Record<string, RouteDef> = Object.fromEntries(
@@ -543,6 +575,9 @@ export function allIndexableRoutes(): RouteDef[] {
     ...Object.values(originRoutes),
     // Export routes
     ...Object.values(destinationRoutes),
+    // Route landing + countries
+    routesLanding,
+    ...Object.values(countryRoutes),
     // Business categories
     ...Object.values(businessRoutes),
     // Tools

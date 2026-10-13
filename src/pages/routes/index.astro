@@ -1,0 +1,121 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { site, whatsappLink } from "@/config/site";
+import { originRoutes, destinationRoutes, toolRoutes, coreRoutes } from "@/config/routes";
+
+const title = "Route Network | Kisima Cargo";
+const description = "Kisima Cargo's freight network connects Kenya, China, the UK, USA, UAE and South Africa. See supported routes, freight options and how to book.";
+const canonicalPath = "/routes";
+
+const countries = (await getCollection("countries")).sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99)
+);
+
+const waHref = whatsappLink("Hello Kisima Cargo. I would like information about your route network.");
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description,
+  url: `${site.productionUrl}/routes`,
+};
+---
+
+<BaseLayout title={title} description={description} canonicalPath={canonicalPath} structuredData={structuredData}>
+
+  <nav aria-label="Breadcrumb" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 text-xs text-muted-foreground">
+    <ol class="flex gap-2 items-center">
+      <li><a href="/" class="hover:text-primary">Home</a></li>
+      <li aria-hidden="true">›</li>
+      <li class="text-foreground font-medium">Routes</li>
+    </ol>
+  </nav>
+
+  <section class="bg-gradient-to-br from-primary via-primary to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Route network</p>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight mb-5">
+          Where Kisima Cargo ships
+        </h1>
+        <p class="text-lg text-white/90 leading-relaxed mb-8">
+          Our network connects Kenya, China, the UK, USA, UAE and South Africa. We handle freight to and from these markets through our international warehouses.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">Get shipping estimate</a>
+          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">Ask about a route</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Country pages -->
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Countries in our network</h2>
+        <p class="text-lg text-muted-foreground">Click a country to see what we ship to and from there.</p>
+      </div>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {countries.map((c) => (
+          <li>
+            <a href={`/routes/countries/${c.id}`} class="group block rounded-xl border border-border hover:border-accent hover:shadow-md p-6 h-full transition-all">
+              <p class="text-xs text-accent uppercase tracking-wide font-medium mb-2">{c.data.role}</p>
+              <h3 class="font-heading font-semibold text-xl mb-2 group-hover:text-primary transition-colors">{c.data.name}</h3>
+              <p class="text-sm text-muted-foreground leading-relaxed">{c.data.lede}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Popular pair pages -->
+  <section class="py-14 md:py-16 bg-muted/30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mb-10">
+        <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3">Popular routes</h2>
+        <p class="text-lg text-muted-foreground">Full route pages with pricing, cargo categories and FAQ.</p>
+      </div>
+
+      <h3 class="text-lg font-heading font-semibold mb-4">Import into Kenya</h3>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 mb-10">
+        {Object.values(originRoutes).map((r) => (
+          <li>
+            <a href={r.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-5 py-4 transition-all">
+              <span class="block text-sm font-medium group-hover:text-primary transition-colors">{r.label} → Kenya</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h3 class="text-lg font-heading font-semibold mb-4">Export from Kenya</h3>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {Object.values(destinationRoutes).map((d) => (
+          <li>
+            <a href={d.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-5 py-4 transition-all">
+              <span class="block text-sm font-medium group-hover:text-primary transition-colors">Kenya → {d.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Note about other pairs -->
+  <section class="py-14 md:py-16 bg-background">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-6">Other routes between network countries</h2>
+      <p class="text-muted-foreground leading-relaxed mb-4">
+        We also handle freight between the other countries in our network — for example, from China to the UK or from the UAE to South Africa. These routes are not featured on this page as full route pages, but they can be arranged.
+      </p>
+      <p class="text-muted-foreground leading-relaxed mb-6">
+        Contact us with the origin, destination and cargo details, and we'll come back with options and a quote.
+      </p>
+      <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">Request a route quote</a>
+    </div>
+  </section>
+
+</BaseLayout>
