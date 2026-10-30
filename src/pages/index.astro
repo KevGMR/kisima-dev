@@ -2,31 +2,29 @@
 /**
  * src/pages/index.astro
  * ===========================================================================
- * Homepage — global import/export positioning.
+ * Homepage — minimalist conversion-focused rebuild.
  *
- * Structure per Brief Rev 2, Section 5 (15-section scroll order):
- *   1.  Global import/export hero
- *   2.  Import or export selector
- *   3.  Quick shipping estimator
- *   4.  Core services
- *   5.  Global network
- *   6.  Popular import routes
- *   7.  Export from Kenya
- *   8.  How it works (import / export journeys)
- *   9.  Business logistics
- *   10. Why Kisima
- *   11. Kisima Shipping Centre
- *   12. Testimonials / case studies (placeholder)
- *   13. FAQ
- *   14. Final quote CTA
- *   15. Footer (handled by BaseLayout)
+ * Design brief: fewer paragraphs, more visuals, clear actions.
+ * Structural model: Kentex Cargo / Rolling Cargo.
+ *
+ * Structure:
+ *   1.  Hero (bold H1, single CTA, track input)
+ *   2.  Import / Export selector (compact)
+ *   3.  How it works (6-step visual grid)
+ *   4.  Core services (photo + icon cards)
+ *   5.  Pricing CTA
+ *   6.  Global network (one line)
+ *   7.  Popular routes (compact)
+ *   8.  Business logistics (icon grid)
+ *   9.  Shipping Centre (3 cards)
+ *   10. Testimonials placeholder
+ *   11. FAQ (3 items)
+ *   12. Final CTA
  * ===========================================================================
  */
 
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { Image } from "astro:assets";
-import heroImg from "@/assets/hero-logistics.jpeg";
-import globalNetworkImg from "@/assets/global-network.jpeg";
 import { site, whatsappLink } from "@/config/site";
 import {
   coreRoutes,
@@ -41,111 +39,101 @@ import {
   exportLanding,
 } from "@/config/routes";
 
+import heroImg from "@/assets/hero-minimal.jpg";
+import processImg from "@/assets/process-step.jpg";
+import serviceAirImg from "@/assets/service-air.jpg";
+import serviceSeaImg from "@/assets/service-sea.jpg";
+import serviceCustomsImg from "@/assets/service-customs.jpg";
+import serviceConsolidationImg from "@/assets/service-consolidation.jpg";
+import serviceDoorToDoorImg from "@/assets/service-door-to-door.jpg";
+import serviceBusinessImg from "@/assets/service-business.jpg";
+
 const title = "Global Import & Export Logistics | Air & Sea Freight | Kisima Cargo";
 const description = "Move goods into Kenya or export from Kenya to global markets. Air freight, sea freight, customs clearance, consolidation and door-to-door logistics from Kisima Cargo.";
 const canonicalPath = "/";
 
 const waHref = whatsappLink("Hello Kisima Cargo. I would like a shipping quote.");
+const TRACKING_URL = "https://app.kisimacargo.com";
 
-/* ---------------------------------------------------------------------------
- * Section data
- * ------------------------------------------------------------------------- */
+const importSteps = [
+  { icon: "cart", title: "Buy or source goods", body: "From any supported origin country." },
+  { icon: "box", title: "Deliver to our warehouse", body: "Supplier pickup available on request." },
+  { icon: "plane", title: "We ship and clear customs", body: "Air or sea, tracked end to end." },
+  { icon: "home", title: "Collect or we deliver", body: "Door-to-door across Kenya." },
+];
 
-const coreServices = [
+const exportSteps = [
+  { icon: "box", title: "Tell us what you're exporting", body: "Cargo type, volume, destination." },
+  { icon: "file", title: "We prepare documents", body: "Invoice, packing list, export declaration." },
+  { icon: "plane", title: "We clear and ship", body: "Export clearance in Nairobi, air or sea." },
+  { icon: "globe", title: "Destination handoff", body: "Delivery or pickup with your broker." },
+];
+
+const services = [
   {
     title: "Air Freight",
-    body: "Fast international import and export for time-sensitive cargo.",
+    body: "Fast, tracked air cargo.",
     path: coreRoutes.airFreight.path,
+    image: serviceAirImg,
+    alt: "Air cargo loading",
   },
   {
     title: "Sea Freight",
-    body: "Cost-effective logistics for heavy, bulky and high-volume shipments.",
+    body: "Cost-effective ocean freight.",
     path: coreRoutes.seaFreight.path,
+    image: serviceSeaImg,
+    alt: "Container ship",
   },
   {
     title: "Customs Clearance",
-    body: "Import and export customs support and documentation guidance.",
+    body: "Import and export clearance.",
     path: coreRoutes.customsClearance.path,
+    image: serviceCustomsImg,
+    alt: "Customs documentation",
   },
   {
     title: "Cargo Consolidation",
-    body: "Combine eligible shipments before international freight.",
+    body: "Combine multiple suppliers.",
     path: coreRoutes.cargoConsolidation.path,
+    image: serviceConsolidationImg,
+    alt: "Consolidated warehouse cargo",
   },
   {
-    title: "Door-to-Door Logistics",
-    body: "Origin-to-destination delivery where available.",
+    title: "Door-to-Door",
+    body: "Origin to final delivery.",
     path: coreRoutes.doorToDoor.path,
+    image: serviceDoorToDoorImg,
+    alt: "Last-mile cargo delivery",
   },
   {
     title: "Business Logistics",
-    body: "Freight solutions for commercial importers, exporters and wholesalers.",
+    body: "For importers and exporters.",
     path: coreRoutes.businessLogistics.path,
+    image: serviceBusinessImg,
+    alt: "Commercial freight operations",
   },
 ];
 
-const globalNetwork = [
-  { city: "Nairobi, Kenya", role: "Head Office" },
-  { city: "Hayes, United Kingdom", role: "Receiving Warehouse" },
-  { city: "Dubai, UAE", role: "Receiving Warehouse" },
-  { city: "Guangzhou, China", role: "Receiving Warehouse" },
-  { city: "Virginia, USA", role: "Receiving Warehouse" },
-  { city: "Johannesburg, South Africa", role: "Receiving Warehouse" },
-];
-
-const importJourney = [
-  { step: "01", title: "Source or buy goods", body: "Buy from a supplier or online store in a supported origin country." },
-  { step: "02", title: "Deliver to Kisima / supplier pickup", body: "Send cargo to our origin warehouse, or arrange supplier pickup." },
-  { step: "03", title: "Cargo processing & consolidation", body: "We receive, check and consolidate cargo for the next departure." },
-  { step: "04", title: "International freight", body: "Air or sea freight booked to Kenya, tracked through transit." },
-  { step: "05", title: "Kenya customs clearance", body: "Documentation and clearance handled in Nairobi." },
-  { step: "06", title: "Collection or final delivery", body: "Collect from our warehouse or choose door-to-door delivery." },
-];
-
-const exportJourney = [
-  { step: "01", title: "Tell us what you're exporting", body: "Cargo type, volume, destination and timeframe." },
-  { step: "02", title: "Prepare documentation", body: "Commercial invoice, packing list, certificate of origin and export declaration." },
-  { step: "03", title: "Cargo collection / delivery to Kisima", body: "Deliver to our Nairobi warehouse, or arrange supplier pickup." },
-  { step: "04", title: "Export clearance", body: "Export declaration filed and cleared at the Kenyan port or airport." },
-  { step: "05", title: "Air or sea freight", body: "Booked to the destination country, tracked through transit." },
-  { step: "06", title: "Destination delivery / handoff", body: "Delivery or handoff at destination, coordinated with your destination broker." },
+const faqs = [
+  {
+    q: "Do you handle both imports and exports?",
+    a: "Yes. We ship into Kenya from China, the UK, USA, UAE and South Africa, and out of Kenya to the UK, USA, UAE, Europe and other African markets.",
+  },
+  {
+    q: "How do I get a price?",
+    a: "Use the shipping calculator for an instant estimate, or request a quote for a confirmed price based on your exact cargo.",
+  },
+  {
+    q: "Can I track my shipment?",
+    a: "Yes. Use the tracking tool on this site with the reference we sent you, or message us on WhatsApp.",
+  },
 ];
 
 const shippingCentreCards = [
   shippingCentreRoutes["getting-started"],
   shippingCentreRoutes["how-to-export-from-kenya"],
   shippingCentreRoutes["shipping-costs"],
-  shippingCentreRoutes["customs-clearance-kenya"],
-  shippingCentreRoutes["export-documents-kenya"],
-  shippingCentreRoutes["what-is-cbm"],
 ].filter(Boolean);
-
-const faqs = [
-  {
-    q: "Does Kisima handle both imports and exports?",
-    a: "Yes. Kisima Cargo handles imports into Kenya and exports from Kenya. Supported import origins include China, the UK, USA, UAE and South Africa. Supported export destinations include the UK, USA, UAE, Europe and other African markets.",
-  },
-  {
-    q: "Which countries does Kisima Cargo ship to and from?",
-    a: "Imports into Kenya from China, the UK, USA, UAE and South Africa. Exports from Kenya to the UK, USA, UAE, Europe and other African destinations. Other origins or destinations may be possible — ask us on WhatsApp.",
-  },
-  {
-    q: "Can Kisima handle business cargo?",
-    a: "Yes. We handle commercial imports and exports across categories including clothing, electronics, machinery, auto parts, wholesale stock and e-commerce. See the Business Logistics page for detail.",
-  },
-  {
-    q: "Does Kisima arrange customs clearance?",
-    a: "Yes. We prepare documentation, file declarations, and coordinate customs clearance for both imports into Kenya and exports from Kenya.",
-  },
-  {
-    q: "How do I get a shipping estimate?",
-    a: "Use the shipping calculator for an instant estimate based on route, method, weight and dimensions. No sign-up required. Request a confirmed quote when you want an exact price.",
-  },
-  {
-    q: "Can I track my shipment?",
-    a: "Yes. Use the track shipment tool with your reference, or contact us on WhatsApp for an update.",
-  },
-];
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -165,162 +153,198 @@ const structuredData = {
   structuredData={structuredData}
 >
 
-  <!-- =====================================================================
-       1. HERO
-       ===================================================================== -->
-  <section class="relative overflow-hidden text-white min-h-[70vh] md:min-h-[75vh] flex items-center">
+  <!-- ============ 1. HERO ============ -->
+  <section class="relative overflow-hidden text-white min-h-[80vh] md:min-h-[85vh] flex items-center">
     <Image
       src={heroImg}
       alt=""
       class="absolute inset-0 w-full h-full object-cover"
-      widths={[800, 1200, 1600, 2000]}
+      widths={[800, 1200, 1600]}
       sizes="100vw"
       format="webp"
       loading="eager"
-      quality={80}
+      quality={70}
       aria-hidden="true"
     />
-    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-primary/85 to-primary/60" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-primary/90 to-primary/65" aria-hidden="true"></div>
 
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28 w-full">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 w-full">
       <div class="max-w-3xl">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-tight mb-6">
-          Global Import &amp; Export Logistics, Simplified.
+        <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-4">
+          Global Import &amp; Export Logistics
+        </p>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold leading-[1.05] mb-6">
+          Import to and from Kenya, and beyond.
         </h1>
-
-        <p class="text-lg md:text-xl text-white/90 leading-relaxed mb-8 max-w-2xl">
-          Move goods into Kenya or export from Kenya to global markets with Kisima Cargo. We provide air freight, sea freight, customs clearance, cargo consolidation and door-to-door logistics for individuals and businesses.
+        <p class="text-lg md:text-xl text-white/85 leading-relaxed mb-8 max-w-xl">
+          Air freight, sea freight, consolidation and customs — from supported international origins to Kenya, and from Kenya to global markets.
         </p>
 
-        <div class="flex flex-col sm:flex-row flex-wrap gap-3 pt-2">
-          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
-            Get shipping estimate
+        <!-- Primary CTA + track input side by side -->
+        <div class="flex flex-col sm:flex-row gap-3 max-w-xl">
+          <a
+            href={toolRoutes.shippingCalculator.path}
+            class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3.5 text-base font-semibold transition-colors shrink-0"
+          >
+            Get Shipping Estimate
           </a>
-          <a href={toolRoutes.trackShipment.path} class="inline-flex items-center justify-center rounded-md border-2 border-white/70 text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">
-            Track shipment
-          </a>
-          <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-md px-6 py-3 text-base font-semibold text-white underline underline-offset-4 decoration-white/50 hover:decoration-white transition-colors">
-            Talk to us on WhatsApp
-          </a>
-        </div>
 
-        <div class="pt-6 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/80">
-          <span class="inline-flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>Air Freight</span>
-          <span class="inline-flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>Sea Freight</span>
-          <span class="inline-flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>Consolidation</span>
-          <span class="inline-flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>Customs Support</span>
-          <span class="inline-flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-accent"></span>Door-to-Door</span>
+          <form
+            action={TRACKING_URL}
+            method="get"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex flex-1 rounded-md border border-white/30 overflow-hidden bg-white/10 backdrop-blur-sm"
+          >
+            <label for="hero-track-input" class="sr-only">Tracking number</label>
+            <input
+              id="hero-track-input"
+              name="ref"
+              type="text"
+              placeholder="Tracking number"
+              class="flex-1 bg-transparent text-white placeholder-white/60 px-4 py-3.5 text-sm outline-none"
+            />
+            <button
+              type="submit"
+              class="bg-white/10 hover:bg-white/20 text-white px-5 py-3.5 text-sm font-semibold border-l border-white/30 transition-colors"
+            >
+              Track
+            </button>
+          </form>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       2. IMPORT OR EXPORT SELECTOR
-       ===================================================================== -->
-  <section class="py-12 md:py-16 bg-background border-b border-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl md:text-3xl font-heading font-bold mb-3 text-center">
-        What are you shipping?
-      </h2>
-      <p class="text-lg text-muted-foreground text-center mb-10 max-w-2xl mx-auto">
-        Choose the direction that fits your shipment.
-      </p>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-        <a href={importLanding.path} class="group block rounded-2xl border-2 border-border hover:border-accent hover:shadow-lg p-8 transition-all">
-          <p class="text-xs font-medium text-accent uppercase tracking-wide mb-3">Import</p>
-          <h3 class="text-2xl font-heading font-bold mb-3 group-hover:text-primary transition-colors">Import to Kenya</h3>
-          <p class="text-muted-foreground leading-relaxed mb-5">
-            Bringing goods into Kenya? Ship personal cargo, commercial stock, machinery, electronics, clothing and more from supported international origins.
-          </p>
-          <span class="inline-flex items-center text-accent font-semibold group-hover:underline">
-            Explore imports →
-          </span>
+  <!-- ============ 2. IMPORT / EXPORT SELECTOR ============ -->
+  <section class="py-10 md:py-12 bg-background border-b border-border">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <a
+          href={importLanding.path}
+          class="group flex items-center justify-between gap-4 rounded-xl border-2 border-border hover:border-accent hover:bg-muted/40 px-6 py-5 transition-all"
+        >
+          <div>
+            <p class="text-xs font-semibold text-accent uppercase tracking-wide mb-1">Import</p>
+            <p class="text-lg font-heading font-semibold group-hover:text-primary transition-colors">Import to Kenya</p>
+          </div>
+          <svg class="h-6 w-6 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" />
+            <polyline points="12 5 19 12 12 19" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </a>
-
-        <a href={exportLanding.path} class="group block rounded-2xl border-2 border-border hover:border-accent hover:shadow-lg p-8 transition-all">
-          <p class="text-xs font-medium text-accent uppercase tracking-wide mb-3">Export</p>
-          <h3 class="text-2xl font-heading font-bold mb-3 group-hover:text-primary transition-colors">Export from Kenya</h3>
-          <p class="text-muted-foreground leading-relaxed mb-5">
-            Shipping goods from Kenya to the world? Send commercial cargo, products and personal shipments from Kenya to supported international destinations.
-          </p>
-          <span class="inline-flex items-center text-accent font-semibold group-hover:underline">
-            Explore exports →
-          </span>
+        <a
+          href={exportLanding.path}
+          class="group flex items-center justify-between gap-4 rounded-xl border-2 border-border hover:border-accent hover:bg-muted/40 px-6 py-5 transition-all"
+        >
+          <div>
+            <p class="text-xs font-semibold text-accent uppercase tracking-wide mb-1">Export</p>
+            <p class="text-lg font-heading font-semibold group-hover:text-primary transition-colors">Export from Kenya</p>
+          </div>
+          <svg class="h-6 w-6 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12" stroke-linecap="round" />
+            <polyline points="12 5 19 12 12 19" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       3. QUICK ESTIMATOR
-       ===================================================================== -->
-  <section class="py-12 md:py-16 bg-muted/40 border-b border-border">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-background rounded-2xl shadow-lg border border-border p-6 md:p-8">
-        <h2 class="text-2xl md:text-3xl font-heading font-semibold mb-2">
-          How much might my shipment cost?
-        </h2>
-        <p class="text-muted-foreground mb-6">
-          Get a quick estimate in under a minute. No sign-up required.
-        </p>
+  <!-- ============ 3. HOW IT WORKS ============ -->
+  <section class="py-16 md:py-24 bg-background">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <label class="block">
-            <span class="text-sm font-medium mb-1.5 block">Shipping from</span>
-            <select class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled>
-              <option>Select origin</option>
-              {Object.values(originRoutes).map((r) => (<option>{r.label}</option>))}
-            </select>
-          </label>
-          <label class="block">
-            <span class="text-sm font-medium mb-1.5 block">Method</span>
-            <select class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled>
-              <option>Air Freight</option>
-              <option>Sea Freight</option>
-            </select>
-          </label>
-          <label class="block">
-            <span class="text-sm font-medium mb-1.5 block">Approx. weight (kg)</span>
-            <input type="number" min="0" step="0.1" placeholder="e.g. 25" class="w-full rounded-md border border-input bg-background px-3 py-2.5 text-sm" disabled />
-          </label>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
+        <!-- Image anchor -->
+        <div class="lg:col-span-5 order-2 lg:order-1">
+          <Image
+            src={processImg}
+            alt="Cargo handling at Kisima Cargo"
+            class="w-full h-auto rounded-2xl shadow-xl"
+            widths={[600, 900, 1200]}
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            format="webp"
+            loading="lazy"
+            quality={75}
+          />
         </div>
 
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">
-            Calculate estimate
-          </a>
-          <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors">
-            Request a confirmed quote
-          </a>
+        <!-- Steps -->
+        <div class="lg:col-span-7 order-1 lg:order-2">
+          <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">How it works</p>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold mb-10">
+            From supplier to your door
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {importSteps.map((step, i) => (
+              <div class="flex gap-4">
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-accent/10 text-accent flex items-center justify-center font-heading font-bold text-base">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <div>
+                  <h3 class="font-heading font-semibold text-base mb-1">{step.title}</h3>
+                  <p class="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-8">
+            <a href={importLanding.path} class="inline-flex items-center text-primary hover:underline font-medium text-sm">
+              Full import process →
+            </a>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       4. CORE SERVICES
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-background">
+  <!-- ============ 4. CORE SERVICES ============ -->
+  <section class="py-16 md:py-24 bg-muted/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Core services
+      <div class="max-w-2xl mb-12">
+        <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">Services</p>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold">
+          What we do
         </h2>
-        <p class="text-lg text-muted-foreground">
-          Import and export logistics across air, sea, customs and delivery.
-        </p>
       </div>
 
       <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {coreServices.map((s) => (
+        {services.map((s) => (
           <li>
-            <a href={s.path} class="group block rounded-xl border border-border hover:border-accent hover:shadow-md p-6 h-full transition-all">
-              <h3 class="font-heading font-semibold text-xl mb-2 group-hover:text-primary transition-colors">
-                {s.title}
-              </h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">{s.body}</p>
+            <a href={s.path} class="group block rounded-2xl bg-background border border-border hover:border-accent hover:shadow-lg overflow-hidden transition-all h-full">
+
+              {s.image ? (
+                <div class="aspect-[16/10] overflow-hidden bg-muted">
+                  <Image
+                    src={s.image}
+                    alt={s.alt}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    widths={[400, 600, 800]}
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    format="webp"
+                    loading="lazy"
+                    quality={75}
+                  />
+                </div>
+              ) : (
+                <div class="aspect-[16/10] flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white">
+                  <svg class="h-14 w-14 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                    <rect x="3" y="6" width="18" height="13" rx="1" />
+                    <path d="M3 10h18 M8 6v13 M16 6v13" />
+                  </svg>
+                </div>
+              )}
+
+              <div class="p-6">
+                <h3 class="font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
+                  {s.title}
+                </h3>
+                <p class="text-sm text-muted-foreground">{s.body}</p>
+              </div>
             </a>
           </li>
         ))}
@@ -328,70 +352,59 @@ const structuredData = {
     </div>
   </section>
 
-  <!-- =====================================================================
-       5. GLOBAL NETWORK
-       ===================================================================== -->
-  <section class="relative overflow-hidden text-white">
-    <Image
-      src={globalNetworkImg}
-      alt=""
-      class="absolute inset-0 w-full h-full object-cover"
-      widths={[800, 1200, 1600]}
-      sizes="100vw"
-      format="webp"
-      loading="lazy"
-      quality={80}
-      aria-hidden="true"
-    />
-    <div class="absolute inset-0 bg-gradient-to-r from-secondary/95 via-secondary/85 to-primary/75" aria-hidden="true"></div>
-
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-      <div class="max-w-3xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          One network. Multiple markets.
-        </h2>
-        <p class="text-lg text-white/80">
-          Kisima Cargo connects Kenya with global sourcing and destination markets through our international network.
-        </p>
+  <!-- ============ 5. PRICING CTA ============ -->
+  <section class="py-16 md:py-24 bg-background">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">Pricing</p>
+      <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
+        Get a quote for exact pricing
+      </h2>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+        Rates vary by route, method and cargo. Get an instant estimate, or request a confirmed price for your shipment.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3.5 text-base font-semibold transition-colors">
+          Get Shipping Estimate
+        </a>
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-border hover:bg-muted px-6 py-3.5 text-base font-semibold transition-colors">
+          Request a Quote
+        </a>
       </div>
+    </div>
+  </section>
 
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {globalNetwork.map((loc) => (
-          <li class="rounded-xl border border-white/15 bg-white/5 backdrop-blur-sm p-5">
-            <p class="text-xs font-medium text-accent uppercase tracking-wide mb-1">{loc.role}</p>
-            <p class="font-heading font-semibold text-lg">{loc.city}</p>
-          </li>
-        ))}
-      </ul>
-
-      <div class="mt-8">
-        <a href={locationsLanding.path} class="inline-flex items-center text-accent hover:underline font-medium">
+  <!-- ============ 6. GLOBAL NETWORK (one line) ============ -->
+  <section class="py-12 bg-secondary text-secondary-foreground">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-sm md:text-base text-secondary-foreground/70">
+          <span class="font-heading font-semibold text-accent mr-2">Our network:</span>
+          Nairobi · Hayes · Dubai · Guangzhou · Virginia · Johannesburg
+        </p>
+        <a href={locationsLanding.path} class="text-sm font-medium text-accent hover:underline shrink-0">
           See all locations →
         </a>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       6. POPULAR IMPORT ROUTES
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-background">
+  <!-- ============ 7. POPULAR ROUTES (compact) ============ -->
+  <section class="py-16 md:py-24 bg-background">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Popular import routes
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Origins we support into Kenya.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+        <div>
+          <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">Routes</p>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold">Popular routes</h2>
+        </div>
+        <a href="/routes" class="text-sm font-medium text-primary hover:underline">All routes →</a>
       </div>
 
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {Object.values(originRoutes).map((route) => (
           <li>
-            <a href={route.path} class="group block rounded-xl border border-border bg-background hover:border-accent hover:shadow-md p-5 h-full transition-all">
-              <span class="block font-heading font-semibold text-lg mb-1 group-hover:text-primary transition-colors">{route.label}</span>
-              <span class="block text-sm text-muted-foreground">to Kenya</span>
+            <a href={route.path} class="group block rounded-xl border border-border hover:border-accent hover:shadow-md bg-background p-5 text-center transition-all">
+              <span class="block font-heading font-semibold text-base group-hover:text-primary transition-colors">{route.label}</span>
+              <span class="block text-xs text-muted-foreground mt-1">to Kenya</span>
             </a>
           </li>
         ))}
@@ -399,112 +412,15 @@ const structuredData = {
     </div>
   </section>
 
-  <!-- =====================================================================
-       7. EXPORT FROM KENYA
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-muted/30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        <div class="lg:col-span-5">
-          <p class="text-sm font-medium text-accent uppercase tracking-wide mb-3">Export</p>
-          <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
-            Export from Kenya
-          </h2>
-          <p class="text-lg text-muted-foreground leading-relaxed mb-6">
-            Send commercial cargo, agricultural products (where permitted), handicrafts, textiles and personal shipments from Kenya to supported international destinations.
-          </p>
-          <div class="flex flex-wrap gap-3">
-            <a href={exportLanding.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-5 py-2.5 text-sm font-semibold transition-colors">
-              Explore exports
-            </a>
-            <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border border-border px-5 py-2.5 text-sm font-medium hover:bg-background transition-colors">
-              Request a quote
-            </a>
-          </div>
-        </div>
-
-        <div class="lg:col-span-7">
-          <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {Object.values(destinationRoutes).map((dest) => (
-              <li>
-                <a href={dest.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-5 py-4 transition-all">
-                  <span class="block text-sm font-medium group-hover:text-primary transition-colors">Kenya to {dest.label}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       8. HOW IT WORKS (Import / Export journeys)
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-background">
+  <!-- ============ 8. BUSINESS LOGISTICS (icon grid) ============ -->
+  <section class="py-16 md:py-24 bg-muted/40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          How it works
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Two journeys, one process. Import or export.
-        </p>
+        <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">Business</p>
+        <h2 class="text-3xl md:text-4xl font-heading font-bold">For commercial importers and exporters</h2>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
-          <h3 class="text-xl font-heading font-semibold mb-6 pb-3 border-b-2 border-accent">
-            Import journey
-          </h3>
-          <ol class="space-y-5">
-            {importJourney.map((step) => (
-              <li class="flex gap-4">
-                <span class="font-heading font-bold text-2xl text-accent shrink-0">{step.step}</span>
-                <div>
-                  <h4 class="font-heading font-semibold mb-1">{step.title}</h4>
-                  <p class="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-
-        <div>
-          <h3 class="text-xl font-heading font-semibold mb-6 pb-3 border-b-2 border-accent">
-            Export journey
-          </h3>
-          <ol class="space-y-5">
-            {exportJourney.map((step) => (
-              <li class="flex gap-4">
-                <span class="font-heading font-bold text-2xl text-accent shrink-0">{step.step}</span>
-                <div>
-                  <h4 class="font-heading font-semibold mb-1">{step.title}</h4>
-                  <p class="text-sm text-muted-foreground leading-relaxed">{step.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       9. BUSINESS LOGISTICS
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-muted/30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Business logistics
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Commercial imports and exports across common categories.
-        </p>
-      </div>
-
-      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {Object.values(businessRoutes).map((cat) => (
           <li>
             <a href={cat.path} class="group block rounded-lg border border-border bg-background hover:border-accent hover:shadow-sm px-4 py-5 text-center transition-all">
@@ -514,70 +430,26 @@ const structuredData = {
         ))}
       </ul>
 
-      <a href={coreRoutes.businessLogistics.path} class="inline-flex items-center text-primary hover:underline font-medium">
-        Business logistics overview →
-      </a>
+      <div class="mt-8">
+        <a href={coreRoutes.businessLogistics.path} class="inline-flex items-center text-primary hover:underline font-medium text-sm">
+          Business logistics overview →
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       10. WHY KISIMA
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-background">
+  <!-- ============ 9. SHIPPING CENTRE ============ -->
+  <section class="py-16 md:py-24 bg-background">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Why Kisima
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Straightforward reasons, not slogans.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+        <div>
+          <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">Shipping Centre</p>
+          <h2 class="text-3xl md:text-4xl font-heading font-bold">Practical guides</h2>
+        </div>
+        <a href={shippingCentreLanding.path} class="text-sm font-medium text-primary hover:underline">All guides →</a>
       </div>
 
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Global network</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Warehouses and offices across Kenya, the UK, UAE, China, USA and South Africa.</p>
-        </li>
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Two-way logistics</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Both imports into Kenya and exports from Kenya handled with the same process.</p>
-        </li>
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Real consolidation</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Combine multiple suppliers or orders into one shipment and one clearance.</p>
-        </li>
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Customs handled</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Documentation and clearance prepared and filed on your behalf.</p>
-        </li>
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Air and sea</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Choose the mode that fits your timeline and cargo.</p>
-        </li>
-        <li class="rounded-xl border border-border p-6">
-          <h3 class="font-heading font-semibold text-lg mb-2">Direct contact</h3>
-          <p class="text-sm text-muted-foreground leading-relaxed">Talk to a person on WhatsApp, phone or email.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- =====================================================================
-       11. KISIMA SHIPPING CENTRE
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-muted/30">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Kisima Shipping Centre
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Practical guides for importing, exporting and moving cargo internationally.
-        </p>
-      </div>
-
-      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {shippingCentreCards.map((g) => (
           <li>
             <a href={g.path} class="group block rounded-xl border border-border bg-background hover:border-accent hover:shadow-md p-6 h-full transition-all">
@@ -585,58 +457,28 @@ const structuredData = {
               <h3 class="font-heading font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
                 {g.label}
               </h3>
-              <p class="text-sm text-muted-foreground leading-relaxed">
-                {g.description}
-              </p>
+              <p class="text-sm text-muted-foreground leading-relaxed">{g.description}</p>
             </a>
           </li>
         ))}
       </ul>
-
-      <div class="mt-8">
-        <a href={shippingCentreLanding.path} class="inline-flex items-center text-primary hover:underline font-medium">
-          Visit the full Shipping Centre →
-        </a>
-      </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       12. TESTIMONIALS / CASE STUDIES — placeholder
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-background">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Customer stories
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          Real customer proof — coming soon.
-        </p>
-      </div>
-
-      <div class="rounded-xl border border-dashed border-border bg-muted/30 p-8 text-center">
-        <p class="text-muted-foreground italic">
-          Verified customer stories and case studies will appear here once approved by Marketing.
-        </p>
-      </div>
+  <!-- ============ 10. TESTIMONIALS PLACEHOLDER ============ -->
+  <section class="py-12 bg-muted/40">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm text-muted-foreground italic">
+        Verified customer stories coming soon.
+      </p>
     </div>
   </section>
 
-  <!-- =====================================================================
-       13. FAQ
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-muted/30">
+  <!-- ============ 11. FAQ ============ -->
+  <section class="py-16 md:py-24 bg-background">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-10">
-        <h2 class="text-3xl md:text-4xl font-heading font-bold mb-3">
-          Frequently asked questions
-        </h2>
-        <p class="text-lg text-muted-foreground">
-          The questions we hear most often.
-        </p>
-      </div>
-
+      <p class="text-sm font-semibold text-accent uppercase tracking-widest mb-3">FAQ</p>
+      <h2 class="text-3xl md:text-4xl font-heading font-bold mb-10">Common questions</h2>
       <div class="space-y-6">
         {faqs.map((item) => (
           <div class="border-b border-border pb-6">
@@ -645,37 +487,32 @@ const structuredData = {
           </div>
         ))}
       </div>
-
       <div class="mt-8">
-        <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:underline font-medium">
-          Ask a different question on WhatsApp →
+        <a href={waHref} target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-primary hover:underline font-medium text-sm">
+          Ask a question on WhatsApp →
         </a>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       14. FINAL CTA
-       ===================================================================== -->
-  <section class="py-16 md:py-20 bg-gradient-to-r from-primary to-secondary text-white">
+  <!-- ============ 12. FINAL CTA ============ -->
+  <section class="py-16 md:py-24 bg-gradient-to-br from-primary via-primary to-secondary text-white">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4">
-        Ready to move goods into or out of Kenya?
+        Ready to ship?
       </h2>
       <p class="text-lg text-white/85 mb-8">
         Get an estimate, request a quote, or talk to us on WhatsApp.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
-        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3 text-base font-semibold transition-colors">
-          Get shipping estimate
+        <a href={toolRoutes.shippingCalculator.path} class="inline-flex items-center justify-center rounded-md bg-accent text-accent-foreground hover:bg-accent-hover px-6 py-3.5 text-base font-semibold transition-colors">
+          Get Shipping Estimate
         </a>
-        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3 text-base font-semibold transition-colors">
-          Request a quote
+        <a href={coreRoutes.requestQuote.path} class="inline-flex items-center justify-center rounded-md border-2 border-white text-white hover:bg-white hover:text-primary px-6 py-3.5 text-base font-semibold transition-colors">
+          Request a Quote
         </a>
       </div>
     </div>
   </section>
-
-  <!-- 15. Footer — rendered by BaseLayout -->
 
 </BaseLayout>
